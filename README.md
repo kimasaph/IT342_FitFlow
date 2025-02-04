@@ -6,5 +6,5 @@ Member1
 NAME: KIM ASAPH P BACALTOS
 COURSE & YEAR: BSIT-3
 
-hellooooo
+I like to go to the gym, play some instruments, and eat delicious asf food.
 
