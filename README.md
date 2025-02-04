@@ -6,4 +6,4 @@
 **Course and Year**: BSIT - 3
 
 
-HI, I am Kyle Ezekiel Moreno
+HI, I am Kyle Ezekiel Moreno and I like warm hugs uwu.
