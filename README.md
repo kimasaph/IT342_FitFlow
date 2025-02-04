@@ -1,19 +1,19 @@
-# 🏋️‍♂️ IT342 - FitFlow 🎸  
+# IT342 - FitFlow  
 
 ## 🚀 Team Members  
 
-### 🎯 Team Member 1  
-- **🆔 Name:** Kim Asaph P. Bacaltos  
+### 🧍🏻‍♂️ Team Member 1  
+- **🪪 Name:** Kim Asaph P. Bacaltos  
 - **📚 Course & Year:** BSIT - 3rd Year  
 
 ---
 
 ## 🌟 About Me  
-> *"I like to go to exercise, play some instruments, and eat delicious asf food like samyang or smth"*  
+> *"I like to go exercise, play some instruments, and eat delicious asf food like samyang or smth"*  
 
-🎸 **Hobbies & Interests:**  
+🎨 **Hobbies & Interests:**  
 - 🏋️‍♂️ Hitting the gym  
-- 🎶 Playing musical instruments  
+- 🎸 Playing musical instruments  
 - 🍕 Enjoying **delicious** food  
 
 ---
@@ -23,8 +23,3 @@
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)  
 ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)  
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)  
-
----
-
-## 🎵 ASCII Vibes 🎵  
-
