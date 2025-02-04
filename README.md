@@ -1,20 +1,30 @@
-# IT342 - FitFlow
+# 🏋️‍♂️ IT342 - FitFlow 🎸  
 
-## Team Members
+## 🚀 Team Members  
 
-### Team Member 1  
-- **Name:** Kim Asaph P. Bacaltos  
-- **Course & Year:** BSIT - 3rd Year  
+### 🎯 Team Member 1  
+- **🆔 Name:** Kim Asaph P. Bacaltos  
+- **📚 Course & Year:** BSIT - 3rd Year  
 
-### About Me  
-I like to go to the gym, play some instruments, and eat delicious asf food.
+---
 
+## 🌟 About Me  
+> *"I like to go to exercise, play some instruments, and eat delicious asf food like samyang or smth"*  
 
-### Team Member 2
+🎸 **Hobbies & Interests:**  
+- 🏋️‍♂️ Hitting the gym  
+- 🎶 Playing musical instruments  
+- 🍕 Enjoying **delicious** food  
 
-**Name**: Kyle Ezekiel D. Moreno
-**Course and Year**: BSIT - 3
+---
 
+## 🎯 Skills & Tech Stack  
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)  
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)  
+![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)  
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)  
 
-HI, I am Kyle Ezekiel Moreno
+---
+
+## 🎵 ASCII Vibes 🎵  
 
