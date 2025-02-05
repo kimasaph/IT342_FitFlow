@@ -1,7 +1,12 @@
 # IT342-FitFlow
 
+## Team Member 3: 
+**Name**: Kurt Bryan C. Navaja
+**Course and Year**: BSIT - 3
 
-##Team Member 2:
+What's up? 
+
+## Team Member 2:
 
 **Name**: Kyle Ezekiel D. Moreno
 **Course and Year**: BSIT - 3
@@ -16,5 +21,3 @@ HI, I am Kyle Ezekiel Moreno
 **Course & Year**: BSIT-3
 
 I like to go to the gym, play some instruments, and eat delicious asf food.
-
-
