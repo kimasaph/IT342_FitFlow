@@ -67,11 +67,11 @@ Start by cloning the repository to your local machine:
 ```bash
 git clone https://github.com/yourusername/FitFlow.git
 
----
+
 cd FitFlow
 npm install
----
 
+```
 ### 📜 License  
 FitFlow is an open-source project. Feel free to contribute!  
 
