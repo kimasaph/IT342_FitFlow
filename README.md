@@ -47,6 +47,31 @@ Explore the system architecture and workflows:
 
 ---
 
+## 🚀 Installation Instructions
+
+To get started with **FitFlow** locally, follow these steps:
+
+### Prerequisites:
+Ensure you have the following installed:
+- **Node.js** (version 14 or higher)
+- **npm** (Node Package Manager)
+- **Git** for version control
+- **A compatible emulator or device** (for mobile apps)
+
+---
+
+### 1. Clone the repository:
+
+Start by cloning the repository to your local machine:
+
+```bash
+git clone https://github.com/yourusername/FitFlow.git
+
+
+cd FitFlow
+npm install
+
+```
 ### 📜 License  
 FitFlow is an open-source project. Feel free to contribute!  
 
