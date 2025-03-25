@@ -45,6 +45,10 @@ Authenticates a user and returns a JWT token for authorized access to the applic
 | 401 Unauthorized | Incorrect credentials | Email or password is incorrect    |
 | 500 Internal Server Error | Server error | Unexpected error on the server    |
 
+## Rate Limiting
+- **Limit**: 100 requests per hour per user.
+- **Response Code**: 429 Too Many Requests.
+
 ---
 
 # 2. Signup API
@@ -95,6 +99,10 @@ Registers a new user in the FitFlow application.
 | 400 Bad Request | Invalid input or email already exists | Validation error or duplicate email |
 | 500 Internal Server Error | Server error | Unexpected error on the server    |
 
+## Rate Limiting
+- **Limit**: 50 requests per hour per user.
+- **Response Code**: 429 Too Many Requests.
+
 ---
 
 # 3. Password Recovery API
@@ -138,6 +146,10 @@ Sends a password reset link to the user's email address.
 | 400 Bad Request | Invalid email format     | Email format is incorrect         |
 | 404 Not Found | Email not registered      | No account associated with email  |
 | 500 Internal Server Error | Server error | Unexpected error on the server    |
+
+## Rate Limiting
+- **Limit**: 20 requests per hour per user.
+- **Response Code**: 429 Too Many Requests.
 
 ---
 
@@ -184,6 +196,10 @@ Resets the user's password using a valid reset token.
 | 400 Bad Request | Invalid input or passwords don't match | Validation error                 |
 | 401 Unauthorized | Invalid or expired token | Token is invalid or expired       |
 | 500 Internal Server Error | Server error | Unexpected error on the server    |
+
+## Rate Limiting
+- **Limit**: 10 requests per hour per user.
+- **Response Code**: 429 Too Many Requests.
 
 ---
 
@@ -235,6 +251,14 @@ Retrieves the current settings for the authenticated user.
 | 404 Not Found | User not found            | No user associated with request    |
 | 500 Internal Server Error | Server error | Unexpected error on the server    |
 
+## Authentication
+- **Required**: Yes.
+- **Method**: Bearer token in the `Authorization` header.
+
+## Rate Limiting
+- **Limit**: 200 requests per hour per user.
+- **Response Code**: 429 Too Many Requests.
+
 ---
 
 # 6. Update User Settings API
@@ -272,6 +296,15 @@ Updates the settings for the authenticated user.
   "bodyTypeGoal": "Lean"
 }
 ```
+
+## Authentication
+- **Required**: Yes.
+- **Method**: Bearer token in the `Authorization` header.
+
+## Rate Limiting
+- **Limit**: 100 requests per hour per user.
+- **Response Code**: 429 Too Many Requests.
+
 ---
 
 ---
@@ -329,6 +362,17 @@ Retrieves a list of workout plans, allowing filtering by exercise type, difficul
 | 400 Bad Request | Invalid input format  | Malformed invalid parameters      |
 | 401 Unauthorized | Autentication Failed | Missing or invalid credentials    |
 | 500 Internal Server Error | Server error | Unexpected error on the server    |
+
+## Query Parameters
+| Parameter       | Type     | Description                          |
+|-----------------|----------|--------------------------------------|
+| `exercise_type` | `string` | Filter by exercise type (e.g., Strength, Cardio). |
+| `difficulty`    | `string` | Filter by difficulty level (e.g., Beginner, Advanced). |
+| `duration`      | `number` | Filter by workout duration in minutes. |
+
+## Rate Limiting
+- **Limit**: 300 requests per hour per user.
+- **Response Code**: 429 Too Many Requests.
 
 ---
 
@@ -393,6 +437,14 @@ Creates a new workout plan by specifying its details and exercises.
 | 401 Unauthorized | Autentication Failed | Missing or invalid credentials    |
 | 500 Internal Server Error | Server error | Unexpected error on the server    |
 
+## Authentication
+- **Required**: Yes.
+- **Method**: Bearer token in the `Authorization` header.
+
+## Rate Limiting
+- **Limit**: 50 requests per hour per user.
+- **Response Code**: 429 Too Many Requests.
+
 ---
 
 
@@ -452,6 +504,14 @@ Updates an existing workout plan by modifying its details.
 | 404 Not Found | ID does not exist | The specified workout plan ID does not exist.    |
 | 500 Internal Server Error | Server error | Unexpected error on the server    |
 
+## Authentication
+- **Required**: Yes.
+- **Method**: Bearer token in the `Authorization` header.
+
+## Rate Limiting
+- **Limit**: 50 requests per hour per user.
+- **Response Code**: 429 Too Many Requests.
+
 ---
 
 # 4. Delete a Workout Plan
@@ -494,5 +554,13 @@ Deletes a workout plan by its ID.
 | 401 Unauthorized | Autentication Failed | Missing or invalid credentials    |
 | 404 Not Found | ID does not exist | The specified workout plan ID does not exist.    |
 | 500 Internal Server Error | Server error | Unexpected error on the server    |
+
+## Authentication
+- **Required**: Yes.
+- **Method**: Bearer token in the `Authorization` header.
+
+## Rate Limiting
+- **Limit**: 20 requests per hour per user.
+- **Response Code**: 429 Too Many Requests.
 
 ---
