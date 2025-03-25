@@ -307,6 +307,179 @@ Updates the settings for the authenticated user.
 
 ---
 
+# 7. Tracking & Analytics API
+
+## Endpoint Name
+**User Activity Tracking**
+
+## HTTP Method
+**POST**
+
+## URL
+`https://fitflow-api.com/api/tracking/activity`
+
+## Description
+Logs user activities such as workouts, steps, and calories burned.
+
+## Request Headers
+| Header         | Value             | Description                        |
+|---------------|------------------|------------------------------------|
+| Authorization | Bearer <jwt_token> | Required for authentication       |
+| Content-Type  | application/json  | Specifies request body format     |
+
+## Request Body
+```json
+{
+  "userId": "12345",
+  "activityType": "Running",
+  "durationMinutes": 30,
+  "caloriesBurned": 250,
+  "distanceKm": 5.2,
+  "heartRateAvg": 140
+}
+```
+
+## Response Example
+```json
+{
+  "status": "success",
+  "message": "Activity logged successfully"
+}
+```
+
+## Response Codes
+| Status Code | Meaning                     | Description                        |
+|------------|----------------------------|------------------------------------|
+| 201 Created | Activity logged successfully | Activity saved to tracking database |
+| 400 Bad Request | Invalid input format     | Malformed request payload         |
+| 401 Unauthorized | Invalid or missing token | Authentication failure            |
+| 500 Internal Server Error | Server error | Unexpected error on the server    |
+
+## Rate Limiting
+- **Limit**: 300 requests per hour per user.
+- **Response Code**: 429 Too Many Requests.
+
+---
+
+# 8. Exercise Details API
+
+## Endpoint Name
+**Retrieve Exercise Details**
+
+## HTTP Method
+**GET**
+
+## URL
+`https://fitflow-api.com/api/exercises/{exerciseId}`
+
+## Description
+Fetches detailed information about a specific exercise, including instructions and benefits.
+
+## Request Headers
+| Header         | Value             | Description                        |
+|---------------|------------------|------------------------------------|
+| Authorization | Bearer <jwt_token> | Required for authentication       |
+| Content-Type  | application/json  | Specifies request body format     |
+
+## Response Example
+```json
+{
+  "status": "success",
+  "data": {
+    "exerciseId": "ex12345",
+    "name": "Push-Ups",
+    "category": "Strength Training",
+    "difficulty": "Medium",
+    "instructions": "Start in a plank position, lower your body until your chest nearly touches the floor, then push yourself back up.",
+    "musclesTargeted": ["Chest", "Triceps", "Shoulders"],
+    "equipmentRequired": "None",
+    "caloriesBurnedPerMin": 8
+  }
+}
+```
+
+## Response Codes
+| Status Code | Meaning                     | Description                        |
+|------------|----------------------------|------------------------------------|
+| 200 OK     | Exercise details retrieved successfully | Exercise information returned     |
+| 401 Unauthorized | Invalid or missing token | Authentication failure            |
+| 404 Not Found | Exercise not found        | No exercise with given ID exists  |
+| 500 Internal Server Error | Server error | Unexpected error on the server    |
+
+## Rate Limiting
+- **Limit**: 500 requests per hour per user.
+- **Response Code**: 429 Too Many Requests.
+
+---
+
+
+# 9. Home Dashboard API
+
+## Endpoint Name
+**Retrieve Home Dashboard Overview**
+
+## HTTP Method
+**GET**
+
+## URL
+`https://fitflow-api.com/api/dashboard/home`
+
+## Description
+Fetches an overview of the user's workouts, progress tracking, and quick access to key features.
+
+## Request Headers
+| Header         | Value             | Description                        |
+|---------------|------------------|------------------------------------|
+| Authorization | Bearer <jwt_token> | Required for authentication       |
+| Content-Type  | application/json  | Specifies request body format     |
+
+## Response Example
+```json
+{
+  "status": "success",
+  "data": {
+    "totalWorkouts": 45,
+    "caloriesBurned": 12000,
+    "weeklyProgress": {
+      "week": "2025-03-W3",
+      "workoutsCompleted": 5,
+      "caloriesBurned": 3500,
+      "activeMinutes": 300
+    },
+    "recentActivities": [
+      {
+        "activity": "Running",
+        "durationMinutes": 30,
+        "caloriesBurned": 250,
+        "date": "2025-03-22"
+      },
+      {
+        "activity": "Strength Training",
+        "durationMinutes": 45,
+        "caloriesBurned": 400,
+        "date": "2025-03-21"
+      }
+    ],
+    "quickAccess": [
+      "Start Workout",
+      "View Progress",
+      "Set Goals"
+    ]
+  }
+}
+```
+
+## Response Codes
+| Status Code | Meaning                     | Description                        |
+|------------|----------------------------|------------------------------------|
+| 200 OK     | Dashboard data retrieved successfully | Overview information returned     |
+| 401 Unauthorized | Invalid or missing token | Authentication failure            |
+| 500 Internal Server Error | Server error | Unexpected error on the server    |
+
+## Rate Limiting
+- **Limit**: 300 requests per hour per user.
+- **Response Code**: 429 Too Many Requests.
+
 ---
 ## API DOCUMENTATION FOR WORKOUT PLAN
 ---
