@@ -273,3 +273,226 @@ Updates the settings for the authenticated user.
 }
 ```
 ---
+
+---
+## API DOCUMENTATION FOR WORKOUT PLAN
+---
+# 1. Retrieve Workout Plans
+
+## Endpoint Name
+**GET Workout Plans**
+
+## HTTP Method
+**GET**
+
+## URL
+`https://fitflow-api.com/api/workouts/workout_plan`
+
+## Description
+Retrieves a list of workout plans, allowing filtering by exercise type, difficulty level, or duration.
+
+## Request Headers
+| Header           | Value                 | Description                      |
+|-----------------|----------------------|----------------------------------|
+| Content-Type    | application/json     | Specifies request body format   |
+
+## Request Body
+```json
+
+```
+
+## Response Example
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "id": 1,
+      "name": "Full Body Workout",
+      "exercise_type": "Strength",
+      "difficulty": "Intermediate",
+      "duration": 45,
+      "exercises": [
+        { "name": "Squats", "reps": 15 },
+        { "name": "Push-ups", "reps": 10 }
+      ]
+    }
+  ]
+}
+
+```
+
+## Response Codes
+| Status Code | Meaning                     | Description                        |
+|------------|----------------------------|------------------------------------|
+| 200 OK     | Successful Response           | Retrieved Workout Plan   |
+| 400 Bad Request | Invalid input format  | Malformed invalid parameters      |
+| 401 Unauthorized | Autentication Failed | Missing or invalid credentials    |
+| 500 Internal Server Error | Server error | Unexpected error on the server    |
+
+---
+
+# 2. Create a Workout Plan
+
+## Endpoint Name
+**CREATE Workout Plans**
+
+## HTTP Method
+**POST**
+
+## URL
+`https://fitflow-api.com/api/workouts/workout_plan`
+
+## Description
+Creates a new workout plan by specifying its details and exercises.
+
+## Request Headers
+| Header           | Value                 | Description                      |
+|-----------------|----------------------|----------------------------------|
+| Content-Type    | application/json     | Specifies request body format   |
+
+## Request Body
+```json
+{
+  "name": "Upper Body Strength",
+  "exercise_type": "Strength",
+  "difficulty": "Advanced",
+  "duration": 60,
+  "exercises": [
+    { "name": "Bench Press", "reps": 12 },
+    { "name": "Pull-ups", "reps": 8 }
+  ]
+}
+
+```
+
+## Response Example
+```json
+{
+  "status": "success",
+  "data": {
+    "id": 2,
+    "name": "Upper Body Strength",
+    "exercise_type": "Strength",
+    "difficulty": "Advanced",
+    "duration": 60,
+    "exercises": [
+      { "name": "Bench Press", "reps": 12 },
+      { "name": "Pull-ups", "reps": 8 }
+    ]
+  }
+}
+
+```
+
+## Response Codes
+| Status Code | Meaning                     | Description                        |
+|------------|----------------------------|------------------------------------|
+| 200 OK     | Successful Response           | Workout plan successfully created.   |
+| 400 Bad Request | Invalid input format  | The request body contained invalid data or was improperly formatted.      |
+| 401 Unauthorized | Autentication Failed | Missing or invalid credentials    |
+| 500 Internal Server Error | Server error | Unexpected error on the server    |
+
+---
+
+
+# 3. Update a Workout Plan
+
+## Endpoint Name
+**UPDATE Workout Plans**
+
+## HTTP Method
+**PUT**
+
+## URL
+`https://fitflow-api.com/api/workouts/workout_plan/{id}`
+
+## Description
+Updates an existing workout plan by modifying its details.
+
+## Request Headers
+| Header           | Value                 | Description                      |
+|-----------------|----------------------|----------------------------------|
+| Content-Type    | application/json     | Specifies request body format   |
+
+## Request Body
+```json
+{
+  "name": "Full Body Strength",
+  "duration": 50
+}
+
+```
+
+## Response Example
+```json
+{
+  "status": "success",
+  "data": {
+    "id": 1,
+    "name": "Full Body Strength",
+    "exercise_type": "Strength",
+    "difficulty": "Intermediate",
+    "duration": 50,
+    "exercises": [
+      { "name": "Squats", "reps": 15 },
+      { "name": "Push-ups", "reps": 10 }
+    ]
+  }
+}
+
+```
+
+## Response Codes
+| Status Code | Meaning                     | Description                        |
+|------------|----------------------------|------------------------------------|
+| 200 OK     | Successful Response           | Workout plan successfully updated.   |
+| 400 Bad Request | Invalid input format  | The request body contained invalid data or was improperly formatted.      |
+| 401 Unauthorized | Autentication Failed | Missing or invalid credentials    |
+| 404 Not Found | ID does not exist | The specified workout plan ID does not exist.    |
+| 500 Internal Server Error | Server error | Unexpected error on the server    |
+
+---
+
+# 3. Delete a Workout Plan
+
+## Endpoint Name
+**DELETE Workout Plans**
+
+## HTTP Method
+**DELETE**
+
+## URL
+`https://fitflow-api.com/api/workouts/workout_plan/{id}`
+
+## Description
+Deletes a workout plan by its ID.
+
+## Request Headers
+| Header           | Value                 | Description                      |
+|-----------------|----------------------|----------------------------------|
+| Content-Type    | application/json     | Specifies request body format   |
+
+## Request Body
+```json
+
+```
+
+## Response Example
+```json
+{
+  "status": "success",
+  "message": "Workout plan deleted successfully."
+}
+
+```
+
+## Response Codes
+| Status Code | Meaning                     | Description                        |
+|------------|----------------------------|------------------------------------|
+| 200 OK     | Successful Response           | Workout plan successfully updated.   |
+| 401 Unauthorized | Autentication Failed | Missing or invalid credentials    |
+| 404 Not Found | ID does not exist | The specified workout plan ID does not exist.    |
+| 500 Internal Server Error | Server error | Unexpected error on the server    |
+
+---
