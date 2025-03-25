@@ -454,7 +454,7 @@ Updates an existing workout plan by modifying its details.
 
 ---
 
-# 3. Delete a Workout Plan
+# 4. Delete a Workout Plan
 
 ## Endpoint Name
 **DELETE Workout Plans**
