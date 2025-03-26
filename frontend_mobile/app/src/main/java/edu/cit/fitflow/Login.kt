@@ -1,21 +1,34 @@
 package edu.cit.fitflow
 
+import android.net.Uri
 import android.os.Bundle
+import android.widget.MediaController
+import android.widget.VideoView
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_login)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        val videoView = findViewById<VideoView>(R.id.vidGetStarted1)
+        // Direct URL of the video
+        val uri = Uri.parse("android.resource://$packageName/${R.raw.get_started}")
+        videoView.setVideoURI(uri)
+
+        // Add MediaController (Play, Pause, Seek)
+        val mediaController = MediaController(this)
+        mediaController.setAnchorView(videoView)
+        videoView.setMediaController(mediaController)
+
+        // Start video automatically
+        videoView.start()
+
+        videoView.setOnCompletionListener {
+            videoView.start() // Restart video
         }
+
     }
 
 
