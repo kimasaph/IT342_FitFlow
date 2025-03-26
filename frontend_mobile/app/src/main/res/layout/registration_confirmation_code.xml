@@ -7,7 +7,7 @@
     android:background="#16A1FE">
 
     <ImageView
-        android:id="@+id/imgLeft1"
+        android:id="@+id/imgLeft"
         android:layout_width="36dp"
         android:layout_height="34dp"
         android:src="@drawable/chevron_left"
@@ -58,11 +58,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.259" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnConfirm"
-        android:layout_width="177dp"
-        android:layout_height="44dp"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:background="@drawable/button_white_color"
         android:text="Confirm"
+        android:textColor="#03A9F4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -19,7 +19,7 @@ class RegistrationConfirmationCode : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val v1 = findViewById<ImageView>(R.id.imgLeft1)
+        val v1 = findViewById<ImageView>(R.id.imgLeft)
 
         v1.setOnClickListener{
             val intent = Intent(this,Registration::class.java)

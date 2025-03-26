@@ -13,13 +13,11 @@ class RegistrationSuccess : AppCompatActivity() {
         setContentView(R.layout.registration_success_prompt)
 
 
-//        val btnGetStarted = findViewById<Button>(R.id.btnGetStarted)
-//
-//
-//        btnGetStarted.setOnClickListener{
-//            val intent = Intent(this, Registration::class.java)
-//            startActivity(intent)
-//        }
+        val val1 = findViewById<Button>(R.id.btnContinue1)
+        val1.setOnClickListener{
+            val intent = Intent(this, Login::class.java)
+            startActivity(intent)
+        }
 
 
 

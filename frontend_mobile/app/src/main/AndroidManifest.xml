@@ -11,23 +11,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitFlow"
         tools:targetApi="31">
-
+        <activity
+            android:name=".GetStarted"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Add this line for your Registration activity -->
-        <activity android:name=".Registration" android:exported="true"
+        </activity> <!-- Add this line for your Registration activity -->
+        <activity
+            android:name=".Registration"
+            android:exported="true"
             tools:ignore="Instantiatable" />
+        <activity
+            android:name=".RegistrationConfirmationCode"
+            android:exported="true" />
+        <activity
+            android:name=".RegistrationForm"
+            android:exported="true" />
+        <activity
+            android:name=".RegistrationSuccess"
+            android:exported="true" />
 
-        <activity android:name=".RegistrationConfirmationCode" android:exported="true"/>
-        <activity android:name=".RegistrationForm" android:exported="true"/>
-        <activity android:name=".RegistrationSuccess" android:exported="true"/>
+
 
     </application>
 
