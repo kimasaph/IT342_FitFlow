@@ -12,6 +12,21 @@
         android:theme="@style/Theme.FitFlow"
         tools:targetApi="31">
         <activity
+            android:name=".FitFlowDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".PasswordChangeSuccessful"
+            android:exported="false" />
+        <activity
+            android:name=".SetNewPassword"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPasswordConfirmationCode"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPassword1"
+            android:exported="false" />
+        <activity
             android:name=".GetStarted"
             android:exported="false" />
         <activity
@@ -39,9 +54,6 @@
         <activity
             android:name=".RegistrationSuccess"
             android:exported="true" />
-
-
-
     </application>
 
 </manifest>
