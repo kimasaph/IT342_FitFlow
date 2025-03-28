@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import Dashboard from './Components/Dashboard'
-import './App.css';
+import './App.css'
+import DashboardTemplate from './Components/DashboardTemplate'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -8,8 +8,8 @@ function App() {
   return (
     <div className="App">
       <div>
-        <Dashboard />
-      </div>
+        <DashboardTemplate />
+    </div>
     </div>
   )
 }
