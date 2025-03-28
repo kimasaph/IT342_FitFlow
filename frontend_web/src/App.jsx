@@ -1,12 +1,17 @@
+import { useState } from 'react'
+import Dashboard from './Components/Dashboard'
 import './App.css';
-import { DesktopLoginPage } from './FeaturesPage/Login'; // Updated import
 
 function App() {
+  const [count, setCount] = useState(0)
+
   return (
     <div className="App">
-        <DesktopLoginPage /> {/* Updated component */}
+      <div>
+        <Dashboard />
+      </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
