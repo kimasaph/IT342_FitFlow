@@ -32,8 +32,9 @@ import {
   import SettingsIcon from "@mui/icons-material/Settings";
   
   // Import images
-  import avatarWPhoto from "../Images/Avatar w. photo.png";
-  import fitFlowLogo from "../Images/FitFlowLogo.png";
+  import avatarWPhoto from "../assets/images/default-profile.png";
+  import fitFlowLogo from "../assets/images/logoFitFlow.png";
+
   
   const menuItems = [
     { text: "Overview", icon: <DashboardIcon />, selected: false },
