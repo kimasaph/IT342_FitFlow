@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
+import { EyeClosed, Eye } from 'lucide-react';
 
 const LoginPage = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
@@ -8,9 +10,23 @@ const LoginPage = ({ onLoginSuccess }) => {
     password: ''
   });
   const [errorMessages, setErrorMessages] = useState([]);
-  // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google'
+  };
+  const handleGithubLogin = () => {
+    window.location.href = 'http://localhost:8080/oauth2/authorization/github'
+  };
+  const handleFacebookLogin = () => {
+    window.location.href = 'http://localhost:8080/oauth2/authorization/facebook'
+  };
+
+  useEffect(() => {
+    document.title = 'Login - FitFlow';
+  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,48 +42,45 @@ const LoginPage = ({ onLoginSuccess }) => {
     setErrorMessages([]);
 
     try {
-      const response = await fetch('http://localhost:3001/api/login', {
+      const response = await fetch('http://localhost:8080/api/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json', // This is important to tell the server what content type we accept
         },
+        credentials: 'include',
         body: JSON.stringify({
           email: formData.email,
           password: formData.password
-        }),
+        })
       });
 
       const data = await response.json();
-      
+  
       if (!response.ok) {
-        throw new Error(data.error || 'Invalid credentials');
+        throw new Error(data.error || 'Login failed');
       }
 
-      // Store the token
-      if (data.token) {
+      // Success case
+      if (data.token && data.user) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         localStorage.setItem('isAuthenticated', 'true');
-
-        // Store remember me preference
-        if (rememberMe) {
-          localStorage.setItem('rememberedEmail', formData.email);
-        } else {
-          localStorage.removeItem('rememberedEmail');
+        
+        if (onLoginSuccess) {
+          onLoginSuccess();
         }
-      }
 
-      // Call the success handler if provided
-      if (onLoginSuccess) {
-        onLoginSuccess();
+        const storedToken = localStorage.getItem('token');
+        console.log('Stored token:', storedToken);
+        
+        navigate('/dashboard');
+      } else {
+        throw new Error('Invalid response format from server');
       }
-
-      // Navigate to dashboard
-      navigate('/dashboard');
-      
     } catch (error) {
-      setErrorMessages([error.message || 'Invalid email or password. Please try again.']);
-    } finally {
+      console.error('Login error:', error);
+      setErrorMessages([error.message || 'Invalid email or password']);
       setIsLoading(false);
     }
   };
@@ -97,7 +110,7 @@ const LoginPage = ({ onLoginSuccess }) => {
                   }}>
               <img
                 src="/src/assets/images/whiteWordsLogo.png"
-                alt="Creative Clarity"
+                alt="FitFlow"
                 className="w-2/3 max-w-md"
               />
             </div>
@@ -153,8 +166,9 @@ const LoginPage = ({ onLoginSuccess }) => {
                   />
                 </div>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
+                  autoComplete='current-password'
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder="Password"
@@ -167,8 +181,15 @@ const LoginPage = ({ onLoginSuccess }) => {
                   }}
                   required
                 />
+                <div
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                  onClick={() => setShowPassword(prev => !prev)}
+                >
+                  {showPassword ? <Eye className="h-4 w-4 opacity-60" /> : <EyeClosed className="h-4 w-4 opacity-60" />}
+                </div>
               </div>
 
+              {/*CHECKBOX*/}
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <input
@@ -176,18 +197,19 @@ const LoginPage = ({ onLoginSuccess }) => {
                     id="rememberMe"
                     checked={rememberMe}
                     onChange={() => setRememberMe(!rememberMe)}
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-0 focus:outline-none"
+                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-0 focus:outline-none cursor-pointer"
                   />
                   <label 
                     htmlFor="rememberMe" 
-                    className="ml-2 block text-sm text-gray-900"
+                    className="ml-2 block text-sm text-gray-900 cursor-pointer"
                   >
                     Remember me
                   </label>
                 </div>
+
                 <Link
                   to="/forgot1"
-                  className="text-sm text-blue-600 hover:text-blue-500 transition duration-200"
+                  className="text-sm text-blue-600 hover:text-blue-500 transition duration-200 cursor-pointer"
                 >
                   Forgot Password?
                 </Link>
@@ -195,9 +217,10 @@ const LoginPage = ({ onLoginSuccess }) => {
 
               <button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-800 transition duration-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                disabled={isLoading}
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-800 transition duration-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400 disabled:cursor-not-allowed cursor-pointer"
               >
-                Login
+                {isLoading ? 'Logging in...' : 'Login'}
               </button>
 
               {errorMessages.length > 0 && (
@@ -222,21 +245,30 @@ const LoginPage = ({ onLoginSuccess }) => {
               </div>
 
               <div className="mt-6 grid grid-cols-3 gap-3">
-                <button className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50">
+                <button 
+                  onClick={handleFacebookLogin}
+                  className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 cursor-pointer"
+                >
                   <img
                     src="/src/assets/images/facebookIcon2.png"
                     alt="Facebook"
                     className="h-7 w-7"
                   />
                 </button>
-                <button className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50">
-                  <img
-                    src="/src/assets/images/appleIcon2.png"
-                    alt="Apple"
-                    className="h-7 w-7"
-                  />
+                <button 
+                    onClick={handleGithubLogin}
+                    className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 cursor-pointer"
+                  >
+                    <img
+                      src="/src/assets/images/github.png"
+                      alt="Github"
+                      className="h-7 w-7"
+                    />
                 </button>
-                <button className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50">
+                <button 
+                onClick={handleGoogleLogin}
+                className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 cursor-pointer"
+                >
                   <img
                     src="/src/assets/images/googleIcon2.png"
                     alt="Google"
@@ -249,9 +281,9 @@ const LoginPage = ({ onLoginSuccess }) => {
             <div className="mt-6 text-center">
               <Link
                 to="/signup"
-                className="text-sm text-blue-600 hover:text-blue-500"
+                className="text-sm text-blue-600 hover:text-blue-500 cursor-pointer"
               >
-                Don't have an account? Sign Up
+                Don&apos;t have an account? Sign Up
               </Link>
             </div>
           </div>
@@ -259,6 +291,9 @@ const LoginPage = ({ onLoginSuccess }) => {
       </div>
     </div>
   );
+};
+LoginPage.propTypes = {
+  onLoginSuccess: PropTypes.func,
 };
 
 export default LoginPage;

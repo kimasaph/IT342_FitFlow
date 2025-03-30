@@ -2,6 +2,9 @@ import React, { useState, useCallback } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Dashboard from "./components/DashboardTemplate";
 import LoginPage from "./components/LoginPage";
+import SignupPage from "./components/SignupPage";
+import SignupSuccessPage from "./components/SignupSuccess";
+import ForgotPassPage1 from "./components/ForgotPassPage1.jsx";
 
 // Custom 404 component
 const NotFound = () => {
@@ -39,6 +42,15 @@ const App = () => {
         <Routes>
           {/* Public Route - Login Page */}
           <Route path="/login" element={<LoginPage />} />
+
+          {/* Public Route - Signup Page */}
+          <Route path="/signup" element={<SignupPage />} />
+
+          {/* Public Route - Signup Success Page */}
+          <Route path="/signup-success" element={<SignupSuccessPage />} />
+
+          {/* Public Route - Forgot Password Page */}
+          <Route path="/forgot1" element={<ForgotPassPage1 />} />
 
           {/* Protected Route - Dashboard (now accessible without authentication) */}
           <Route path="/dashboard" element={<Dashboard />} />
