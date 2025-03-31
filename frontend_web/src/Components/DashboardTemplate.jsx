@@ -15,7 +15,8 @@ import {
     Toolbar,
     Typography,
   } from "@mui/material";
-  import React, { useState } from "react";
+  import React, { useState, useEffect } from "react"; // Import useEffect
+  import { useNavigate } from "react-router-dom"; // Import useNavigate
   
   import BarChartIcon from "@mui/icons-material/BarChart";
   import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -36,26 +37,61 @@ import {
   import fitFlowLogo from "../assets/images/logoFitFlow.png";
 
   
-  const menuItems = [
-    { text: "Overview", icon: <DashboardIcon />, selected: false },
-    { text: "Workout", icon: <FitnessCenterIcon /> },
-    { text: "Diet Plan", icon: <RestaurantIcon /> },
-    { text: "Goals", icon: <FlagIcon /> },
-    { text: "My Schedule", icon: <CalendarMonthIcon /> },
-    { text: "Progress", icon: <BarChartIcon />, hasArrow: true },
-  ];
-  
-  const Dashboard = () => {
+  const Dashboard = ({ children, notifications = [], notificationCount = 0, stopAlarm }) => {
     const [isModalOpen, setModalOpen] = useState(false);
-    const [notificationCount, setNotificationCount] = useState(3);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [currentPage, setCurrentPage] = useState("Overview"); // Track the current page
+    const [menuItemsState, setMenuItemsState] = useState([
+      { text: "Overview", icon: <DashboardIcon />, route: "/dashboard" },
+      { text: "Workout", icon: <FitnessCenterIcon />, route: "/workout" },
+      { text: "Diet Plan", icon: <RestaurantIcon />, route: "/diet-plan" },
+      { text: "Goals", icon: <FlagIcon />, route: "/goals" },
+      { text: "My Schedule", icon: <CalendarMonthIcon />, route: "/my-schedule" },
+      { text: "Progress", icon: <BarChartIcon />, route: "/progress", hasArrow: true },
+    ]); // Manage menuItems as state
+    const navigate = useNavigate(); // Initialize useNavigate
+
+    const features = [
+      "Workout Tracker",
+      "Goals Tracker",
+      "Meal Plan Tracker",
+      "Overview",
+      "My Schedule",
+      "Progress",
+      "Help",
+    ];
+
+    useEffect(() => {
+      const currentPath = window.location.pathname; // Get the current route
+      setMenuItemsState((prevItems) =>
+        prevItems.map((item) => ({
+          ...item,
+          selected: item.route === currentPath, // Automatically select the tab based on the route
+        }))
+      );
+    }, []); // Run only on component mount
 
     const handleNotificationClick = () => {
       setModalOpen(true);
-      setNotificationCount(0); // Reset badge content to 0
     };
 
-    const handleCloseModal = () => {
-      setModalOpen(false);
+    const handleSearchChange = (event) => {
+      setSearchQuery(event.target.value);
+    };
+
+    const filteredFeatures = features.filter((feature) =>
+      feature.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const handleMenuClick = (page, route) => {
+      setCurrentPage(page); // Update the current page
+      setMenuItemsState((prevItems) =>
+        prevItems.map((item) => ({
+          ...item,
+          selected: item.text === page, // Ensure only the clicked tab is selected
+        }))
+      );
+      navigate(route); // Navigate to the corresponding route
     };
 
     return (
@@ -104,27 +140,28 @@ import {
           </Box>
   
           <List sx={{ flexGrow: 1, p: 2 }}>
-            {menuItems.map((item) => (
+            {menuItemsState.map((item) => (
               <ListItem
                 key={item.text}
                 button
-                onClick={() => {}}
+                onClick={() => handleMenuClick(item.text, item.route)} // Single click triggers the function
                 sx={{
                   borderRadius: 2,
                   mb: 1,
-                  bgcolor: item.selected ? "#12417f" : "transparent",
+                  bgcolor: item.selected ? "#12417F" : "transparent", // Set background color to #12417F if selected
                   "&:hover": {
-                    bgcolor: "#12417f", // Consistent hover color
+                    bgcolor: "#12417F", // Consistent hover color
                     "& .MuiListItemIcon-root": { color: "white" }, // Change icon color to white
                     "& .MuiListItemText-primary": { color: "white" }, // Change text color to white
                     "& .MuiSvgIcon-root": { color: "white" }, // Change arrow color to white
                   },
                   py: 1.5,
+                  width: "100%", // Ensure the background fills the entire tab
                 }}
               >
                 <ListItemIcon
                   sx={{
-                    color: item.selected ? "white" : "rgba(100, 116, 139, 1)", // Default color
+                    color: item.selected ? "white" : "rgba(100, 116, 139, 1)", // Use 'selected' to determine icon color
                     minWidth: 40,
                   }}
                 >
@@ -135,12 +172,12 @@ import {
                   primaryTypographyProps={{
                     fontWeight: 600,
                     fontSize: 16, // Increased font size
-                    color: item.selected ? "white" : "rgba(100, 116, 139, 1)", // Default color
+                    color: item.selected ? "white" : "rgba(100, 116, 139, 1)", // Use 'selected' to determine text color
                     fontFamily: "'Outfit', sans-serif",
                   }}
                 />
                 {item.hasArrow && (
-                  <ChevronRightIcon sx={{ color: "rgba(100, 116, 139, 1)" }} />
+                  <ChevronRightIcon sx={{ color: item.selected ? "white" : "rgba(100, 116, 139, 1)" }} />
                 )}
               </ListItem>
             ))}
@@ -224,12 +261,14 @@ import {
               <Box sx={{ flexGrow: 1, mx: 3 }}>
                 <Autocomplete
                   freeSolo
-                  options={[]}
+                  options={filteredFeatures}
                   renderInput={(params) => (
                     <TextField
                       {...params}
                       placeholder="Search"
                       variant="outlined"
+                      value={searchQuery}
+                      onChange={handleSearchChange}
                       InputProps={{
                         ...params.InputProps,
                         startAdornment: (
@@ -279,7 +318,7 @@ import {
           {/* Notification Modal */}
           <Modal
             open={isModalOpen}
-            onClose={handleCloseModal}
+            onClose={() => setModalOpen(false)}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -295,7 +334,6 @@ import {
                 right: 130,
                 top: 100,
                 p: 4,
-                borderRadius: 2,
                 boxShadow: 24,
                 width: 250,
               }}
@@ -303,20 +341,25 @@ import {
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
                 Notifications
               </Typography>
-              <Typography variant="body2" sx={{ mb: 1 }}>
-                - You have 3 new messages.
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 1 }}>
-                - Your workout plan has been updated.
-              </Typography>
-              <Typography variant="body2">
-                - Don't forget to log your meals today!
-              </Typography>
+              {notifications.length > 0 ? (
+                notifications.map((notification) => (
+                  <Typography
+                    key={notification.id}
+                    variant="body2"
+                    sx={{ mb: 1 }}
+                  >
+                    - {notification.message}
+                  </Typography>
+                ))
+              ) : (
+                <Typography variant="body2">No new notifications.</Typography>
+              )}
             </Box>
           </Modal>
-  
-          {/* Main content area */}
-          <Box sx={{ p: 3 }}>{/* Content */}</Box>
+                
+    
+            {/* Main content area, also a template for all*/}
+          <Box sx={{ p: 3 }}>{children}</Box>
         </Box>
       </Box>
     );
