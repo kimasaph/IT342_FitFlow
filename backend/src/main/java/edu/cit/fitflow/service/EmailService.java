@@ -21,7 +21,7 @@ public class EmailService {
         
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("asaphbacaltos@gmail.com");
+            message.setFrom("fitflow0000@gmail.com");
             message.setTo(toEmail);
             message.setSubject("Your FitFlow Verification Code");
             message.setText("Hello,\n\nYour verification code is: " + code + 
