@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const ForgotPage1 = () => {
+const ForgotPassPage1 = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: ''
@@ -23,9 +23,8 @@ const ForgotPage1 = () => {
     setErrorMessages([]);
 
     try {
-      console.log('Sending request to /api/forgot1 with email:', formData.email);
-      
-      const response = await fetch('http://localhost:8080/api/user/forgot1', {
+      // Step 1: Check if the email exists in the database
+      const checkEmailResponse = await fetch('http://localhost:8080/api/user/forgot1', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,30 +36,43 @@ const ForgotPage1 = () => {
         })
       });
       
-      console.log('Response status:', response.status);
-      
-      const data = await response.json();
-      console.log('Response data:', data);
-      
-      if (response.status === 404) {
+      if (checkEmailResponse.status === 404) {
         throw new Error('Email not found. Please check your email address.');
       }
       
-      if (!response.ok) {
-        throw new Error(data.error || 'Email verification failed');
+      if (!checkEmailResponse.ok) {
+        const errorData = await checkEmailResponse.json();
+        throw new Error(errorData.error || 'Email verification failed');
       }
       
-      // If we get here, email exists in database
+      // Step 2: Send verification email (similar to SignupPage)
+      const verificationResponse = await fetch('http://localhost:8080/api/verification/send-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ email: formData.email }),
+      });
+      
+      if (!verificationResponse.ok) {
+        console.warn('Verification email could not be sent');
+        throw new Error('Failed to send verification code. Please try again later.');
+      }
+      
+      console.log('Verification email sent successfully');
+      
+      // Step 3: Store email in localStorage and redirect
       localStorage.setItem('resetEmail', formData.email);
-      navigate('/forgot2');
+      navigate('/forgot-verify', { state: { email: formData.email } });
       
     } catch (error) {
-      console.error('Email verification error:', error);
+      console.error('Password reset process error:', error);
       setErrorMessages([`Error: ${error.message}`]);
     } finally {
       setIsLoading(false);
     }
-};
+  };
 
   const inputClasses = "w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition duration-200 placeholder:text-gray-500 placeholder:opacity-60";
 
@@ -95,7 +107,18 @@ const ForgotPage1 = () => {
         </div>
 
         {/* Right side with forgot password form */}
-        <div className="w-full md:w-1/2 flex flex-col items-center justify-center">
+        <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative">
+        <button
+            type="button"
+            onClick={() => navigate('/login')}
+            className="absolute top-6 left-6 inline-flex items-center text-gray-500 hover:text-blue-600 transition-colors"
+            disabled={isLoading}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+            <span className="text-sm">Back</span>
+          </button>
           <img
             src="/src/assets/images/logoFitFlow.png"
             alt="Logo"
@@ -104,7 +127,7 @@ const ForgotPage1 = () => {
           <form onSubmit={handleSubmit} className="w-full max-w-md p-8 space-y-6">
             <h2 className="text-4xl font-bold text-gray-900 text-center" style={{ marginTop: '-20px' }}>Forgot Password</h2>
             <p className="text-[0.90rem] text-gray-600 text-center" style={{ marginBottom: '-25px' }}>Enter your email address and we will</p>
-            <p className="text-[0.90rem] text-gray-600 text-center" style={{ marginBottom: '50px' }}>send you a link to reset your password</p>
+            <p className="text-[0.90rem] text-gray-600 text-center" style={{ marginBottom: '50px' }}>send you a code to reset your password</p>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <img
@@ -125,9 +148,9 @@ const ForgotPage1 = () => {
               />
             </div>
             {errorMessages.length > 0 && (
-              <div className="text-red-500">
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
                 {errorMessages.map((msg, index) => (
-                  <p key={index}>{msg}</p>
+                  <p key={index} className="text-sm">{msg}</p>
                 ))}
               </div>
             )}
@@ -150,4 +173,4 @@ const ForgotPage1 = () => {
   );
 };
 
-export default ForgotPage1;
+export default ForgotPassPage1;

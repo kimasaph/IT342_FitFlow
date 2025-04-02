@@ -9,13 +9,11 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import edu.cit.fitflow.service.UserService;
 import edu.cit.fitflow.entity.UserEntity;
 import java.util.Collections;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,8 +26,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private UserService userService;
     
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+    @Autowired
+    private JwtUtil jwtUtil;  // Inject JwtUtil instead of jwtSecret
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -38,10 +36,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = extractTokenFromRequest(request);
             
             if (token != null) {
-                Claims claims = validateAndParseToken(token);
+                Claims claims = jwtUtil.validateAndParseToken(token);  // Use JwtUtil
                 
                 if (claims != null) {
-                    String userId = claims.getSubject(); // This now contains the user ID
+                    String userId = claims.getSubject();
                     
                     UserEntity user = userService.findById(Integer.parseInt(userId));
                     
@@ -70,16 +68,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
-
-    private Claims validateAndParseToken(String token) {
-        try {
-            return Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-        } catch (Exception e) {
-            logger.error("Token validation failed", e);
-            return null;
-        }
-    }
+    
+    // Remove the validateAndParseToken method as it's now in JwtUtil
 }

@@ -35,6 +35,8 @@ import java.util.HashMap;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
 
 @Configuration
 @EnableWebSecurity
@@ -48,8 +50,8 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+    @Autowired
+    private JwtUtil jwtUtil;
     
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -82,26 +84,21 @@ public class SecurityConfig {
         return source;
     }
 
+    // Remove the generateToken method that takes OAuth2User
     private String generateToken(OAuth2User oauth2User) {
         String email = oauth2User.getAttribute("email");
         UserEntity user = userService.findByEmail(email);
-        return generateToken(user);
+        return jwtUtil.generateToken(user);  // Use JwtUtil instead
     }
 
-    private String generateToken(UserEntity user) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + 86400000); // 24 hours
+    private SecretKey getSigningKey() {
+        // If you want to keep using your application.properties secret but make it secure:
+        // (Note: this will only work if your secret is sufficiently long)
+        // return Keys.hmacShaKeyFor(jwtSecretString.getBytes(StandardCharsets.UTF_8));
         
-        String userId = String.valueOf(user.getId()); // Convert ID to string
-    
-        return Jwts.builder()
-            .setSubject(userId) // Use ID instead of email
-            .setIssuedAt(now)
-            .setExpiration(expiryDate)
-            .signWith(SignatureAlgorithm.HS512, jwtSecret)
-            .compact();
+        // Or, better approach: generate a secure key
+        return Keys.secretKeyFor(SignatureAlgorithm.HS512);
     }
-
 
     @Bean
     public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
@@ -203,9 +200,9 @@ public class SecurityConfig {
                     return;
                 }
                 
-                String token = generateToken(user);
+                String token = jwtUtil.generateToken(user);  // Use JwtUtil here
                 logger.info("Generated token for user: " + email);
-
+    
                 response.sendRedirect(
                 String.format("http://localhost:5173/oauth2/redirect?token=%s&userId=%s&email=%s", 
                     token, 

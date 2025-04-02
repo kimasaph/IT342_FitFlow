@@ -19,6 +19,7 @@ const SignupPage = ({ onSignupSuccess }) => {
   const [phoneError, setPhoneError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === 'phoneNumber') {
@@ -29,16 +30,53 @@ const SignupPage = ({ onSignupSuccess }) => {
         setPhoneError('');
       }
     }
+    
     setFormData(prevState => ({
       ...prevState,
       [name]: value
     }));
   };
 
+  // Check password complexity
+  const validatePassword = (password) => {
+    const errors = [];
+    
+    if (!/[A-Z]/.test(password)) {
+      errors.push('Password must contain at least one capital letter');
+    }
+    
+    if (!/[a-z]/.test(password)) {
+      errors.push('Password must contain at least one lowercase letter');
+    }
+    
+    if (!/[0-9]/.test(password)) {
+      errors.push('Password must contain at least one number');
+    }
+    
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+      errors.push('Password must contain at least one special character (e.g., !@#$%)');
+    }
+    
+    if (password.length < 8) {
+      errors.push('Password must be at least 8 characters long');
+    }
+    
+    return errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setErrorMessages([]);
+    
+    // Validate password
+    const passwordErrors = validatePassword(formData.password);
+    
+    if (passwordErrors.length > 0) {
+      setErrorMessages(passwordErrors);
+      setIsLoading(false);
+      return;
+    }
 
     if (!/^\d+$/.test(formData.phoneNumber)) {
       setErrorMessages(['Phone number must contain only numbers']);
@@ -61,6 +99,7 @@ const SignupPage = ({ onSignupSuccess }) => {
     };
     
     try {
+      // Step 1: Create the user account
       const response = await fetch('http://localhost:8080/api/user/signupuser', {
         method: 'POST',
         headers: {
@@ -106,11 +145,31 @@ const SignupPage = ({ onSignupSuccess }) => {
         localStorage.setItem('user', JSON.stringify(data.user));
       }
       
+      // Store the email for the verification page
+      localStorage.setItem('signupEmail', formData.email);
+      
+      // Step 2: Send verification email
+      const verificationResponse = await fetch('http://localhost:8080/api/verification/send-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ email: formData.email }),
+      });
+      
+      if (!verificationResponse.ok) {
+        console.warn('Verification email could not be sent, but account was created');
+      } else {
+        console.log('Verification email sent successfully');
+      }
+      
       if (onSignupSuccess) {
         onSignupSuccess();
       }
       
-      navigate('/signup-success');
+      // Redirect to the verification page
+      navigate('/signup-verify', { state: { email: formData.email } });
       
     } catch (error) {
       console.error('Signup error:', error);
@@ -153,8 +212,21 @@ const SignupPage = ({ onSignupSuccess }) => {
         </div>
 
         {/* Right side with signup form */}
-        <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-8">
-          <div className="w-full max-w-md">
+        <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-8 relative">
+            {/* Back button positioned at top-left */}
+            <button
+              type="button"
+              onClick={() => navigate('/login')}
+              className="absolute top-6 left-6 inline-flex items-center text-gray-500 hover:text-blue-600 transition-colors"
+              disabled={isLoading}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                <path d="m15 18-6-6 6-6"/>
+              </svg>
+              <span className="text-sm">Back</span>
+            </button>
+
+            <div className="w-full max-w-md">
             <img
               src="/src/assets/images/logoFitFlow.png"
               alt="Logo"
@@ -222,10 +294,8 @@ const SignupPage = ({ onSignupSuccess }) => {
                   className={inputClasses}
                   required
                 />
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center" onClick={() => setShowPassword(prev => !prev)}>
-                  
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onClick={() => setShowPassword(prev => !prev)}>
                   {showPassword ? <Eye className="h-4 w-4 opacity-60" /> : <EyeClosed className="h-4 w-4 opacity-60" />}
-              
                 </div>
               </div>
 
@@ -246,10 +316,8 @@ const SignupPage = ({ onSignupSuccess }) => {
                   className={inputClasses}
                   required
                 />
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center" onClick={() => setShowConfirmPassword(prev => !prev)}>
-                  
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onClick={() => setShowConfirmPassword(prev => !prev)}>
                   {showConfirmPassword ? <Eye className="h-4 w-4 opacity-60" /> : <EyeClosed className="h-4 w-4 opacity-60" />}
-              
                 </div>
               </div>
 

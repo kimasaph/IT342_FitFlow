@@ -53,6 +53,11 @@ public class UserService {
       user.setFirstName(newUserDetails.getFirstName());
       user.setLastName(newUserDetails.getLastName());
       user.setPhoneNumber(newUserDetails.getPhoneNumber());
+      user.setGender(newUserDetails.getGender());
+      user.setHeight(newUserDetails.getHeight());
+      user.setWeight(newUserDetails.getWeight());
+      user.setAge(newUserDetails.getAge());
+      user.setBodyGoal(newUserDetails.getBodyGoal());
     } catch (NoSuchElementException e) {
       System.out.println("User not found");
     } finally {
