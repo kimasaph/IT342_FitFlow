@@ -11,6 +11,7 @@ import SignupSetupPage from "./components/SignupSetupPage.jsx";
 import ForgotPassVerification from "./components/ForgotPassVerificationPage.jsx";
 import ForgotPassSuccess from "./components/ForgotPassSuccess.jsx";
 import SignupSetupSuccess from "./components/SignupSetupSuccess.jsx";
+import Workout from "./components/Workout.jsx";
 
 // Custom 404 component
 const NotFound = () => {

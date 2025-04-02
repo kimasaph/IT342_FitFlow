@@ -46,18 +46,22 @@ const LoginPage = ({ onLoginSuccess }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json', // This is important to tell the server what content type we accept
+          'Accept': 'application/json',
         },
         credentials: 'include',
         body: JSON.stringify({
           email: formData.email,
-          password: formData.password
-        })
+          password: formData.password,
+        }),
       });
 
       const data = await response.json();
-  
+
       if (!response.ok) {
+        // Check if the error is related to admin credentials
+        if (data.error === 'Invalid credentials for admin') {
+          throw new Error('Admin login failed. Please check the credentials.');
+        }
         throw new Error(data.error || 'Login failed');
       }
 
