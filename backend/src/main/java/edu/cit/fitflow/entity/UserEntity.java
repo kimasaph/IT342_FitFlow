@@ -31,11 +31,26 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-		@Column(nullable = false)
-		private String firstName;
+    @Column(nullable = false)
+    private String firstName;
 
-		@Column(nullable = false)
-		private String lastName;
-    
-		private Date created_at;
+    @Column(nullable = false)
+    private String lastName;
+
+    @Column(nullable = false)
+    private String gender;
+
+    @Column(nullable = false)
+    private Float height;
+
+    @Column(nullable = false)
+    private Float weight;
+
+    @Column(nullable = false)
+    private Integer age;
+
+    @Column(nullable = false)
+    private String bodyGoal;
+
+    private Date created_at;
 }

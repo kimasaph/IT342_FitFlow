@@ -5,7 +5,12 @@ import LoginPage from "./components/LoginPage";
 import SignupPage from "./components/SignupPage";
 import SignupSuccessPage from "./components/SignupSuccess";
 import ForgotPassPage1 from "./components/ForgotPassPage1.jsx";
-import Workout from "./components/Workout";
+import ForgotPassPage2 from "./components/ForgotPassPage2.jsx";
+import SignupVerifyPage from "./components/SignupVerifyPage.jsx";
+import SignupSetupPage from "./components/SignupSetupPage.jsx";
+import ForgotPassVerification from "./components/ForgotPassVerificationPage.jsx";
+import ForgotPassSuccess from "./components/ForgotPassSuccess.jsx";
+import SignupSetupSuccess from "./components/SignupSetupSuccess.jsx";
 
 // Custom 404 component
 const NotFound = () => {
@@ -50,8 +55,26 @@ const App = () => {
           {/* Public Route - Signup Success Page */}
           <Route path="/signup-success" element={<SignupSuccessPage />} />
 
+          {/* Public Route - Signup Verification Page */}
+          <Route path="/signup-verify" element={<SignupVerifyPage />} />
+
+          {/* Public Route - Signup Setup Page */}
+          <Route path="/signup-setup" element={<SignupSetupPage />} />
+
+          {/* Public Route - Signup Setup Success Page */}
+          <Route path="/signup-setup-success" element={<SignupSetupSuccess />} />
+
           {/* Public Route - Forgot Password Page */}
           <Route path="/forgot1" element={<ForgotPassPage1 />} />
+
+          {/* Public Route - Forgot Password Verification Page */}
+          <Route path="/forgot-verify" element={<ForgotPassVerification />} />
+
+          {/* Public Route - Forgot Password Page 2 */}
+          <Route path="/forgot2" element={<ForgotPassPage2 />} />
+
+          {/* Public Route - Forgot Password Success Page */}
+          <Route path="/forgot-success" element={<ForgotPassSuccess />} />
 
           {/* Protected Route - Dashboard (now accessible without authentication) */}
           <Route path="/dashboard" element={<Dashboard />} />
@@ -60,7 +83,7 @@ const App = () => {
           <Route path="/workout" element={<Workout />} />
 
           {/* Redirect root path to dashboard for quick testing */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
 
           {/* 404 Not Found */}
           <Route path="*" element={<NotFound />} />
