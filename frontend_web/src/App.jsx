@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import Dashboard from "./components/DashboardTemplate";
+import Dashboard from "./components/Dashboard";
 import LoginPage from "./components/LoginPage";
 import SignupPage from "./components/SignupPage";
 import SignupSuccessPage from "./components/SignupSuccess";
 import ForgotPassPage1 from "./components/ForgotPassPage1.jsx";
+import Workout from "./components/Workout";
 
 // Custom 404 component
 const NotFound = () => {
@@ -54,6 +55,9 @@ const App = () => {
 
           {/* Protected Route - Dashboard (now accessible without authentication) */}
           <Route path="/dashboard" element={<Dashboard />} />
+
+          {/* Route for Workout */}
+          <Route path="/workout" element={<Workout />} />
 
           {/* Redirect root path to dashboard for quick testing */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
