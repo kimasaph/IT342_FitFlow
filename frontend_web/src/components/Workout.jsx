@@ -40,24 +40,24 @@ const Workout = () => {
           bgcolor: "#ffffff",
           borderRadius: "0 100px 100px 0",
           boxShadow: "0px 20px 20px rgba(0,0,0,0.1)",
-          maxWidth: 850, // Reduced width
-          height: 950, // Reduced height
+          maxWidth: 650, // Reduced width
+          height: 781, // Reduced height
           mx: "auto",
           position: "relative",
           zIndex: 1,
-          left: -420,
-          top: -24,
+          left: -340,
+          top: -25,
         }}
       >
         <Typography
           variant="h3" // Adjusted size
           fontWeight="600" // Adjusted weight
-          color="#12417f" 
+          color="#12417f"
           sx={{ mb: 3, fontFamily: "'Outfit', sans-serif" }}
         >
           Describe Yourself
         </Typography>
-          <br />
+
         <Box
           sx={{
             display: "grid",
@@ -83,7 +83,7 @@ const Workout = () => {
               <FormControlLabel value="Large" control={<Radio />} label="Large" />
             </RadioGroup>
           </Box>
-          
+
           <Box>
             <Typography variant="subtitle2" fontWeight="600" sx={{ mb: 1 }}>
               Fitness Goal
@@ -109,7 +109,7 @@ const Workout = () => {
               />
             </RadioGroup>
           </Box>
-          
+
           <Box>
             <Typography variant="subtitle2" fontWeight="600" sx={{ mb: 1 }}>
               Fitness Level
@@ -157,7 +157,7 @@ const Workout = () => {
               />
             </RadioGroup>
           </Box>
-          <br /> <br />
+
           <Box sx={{ gridColumn: "span 2" }}>
             <Typography variant="subtitle2" fontWeight="600" sx={{ mb: 1 }}>
               Health Concerns
@@ -197,7 +197,7 @@ const Workout = () => {
           top: 135,
           right: 0,
           width: "55%",
-          height: 950, 
+          height: "780px", 
           objectFit: "cover",
           zIndex: 0,
         }}
