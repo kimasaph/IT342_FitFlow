@@ -12,8 +12,6 @@ import ForgotPassVerification from "./components/ForgotPassVerificationPage.jsx"
 import ForgotPassSuccess from "./components/ForgotPassSuccess.jsx";
 import SignupSetupSuccess from "./components/SignupSetupSuccess.jsx";
 import Workout from "./components/Workout.jsx";
-<<<<<<< HEAD
-=======
 import OAuth2RedirectHandler from "./Components/OAuth2RedirectHandler.jsx";
 import axios from 'axios';
 
@@ -47,7 +45,6 @@ const setupAxiosInterceptors = () => {
 
 // Call this in your app initialization
 setupAxiosInterceptors();
->>>>>>> origin/main
 
 // Custom 404 component
 const NotFound = () => {
