@@ -12,6 +12,42 @@ import ForgotPassVerification from "./components/ForgotPassVerificationPage.jsx"
 import ForgotPassSuccess from "./components/ForgotPassSuccess.jsx";
 import SignupSetupSuccess from "./components/SignupSetupSuccess.jsx";
 import Workout from "./components/Workout.jsx";
+<<<<<<< HEAD
+=======
+import OAuth2RedirectHandler from "./Components/OAuth2RedirectHandler.jsx";
+import axios from 'axios';
+
+const setupAxiosInterceptors = () => {
+  // Store axios instance globally so other components can access it
+  window.axios = axios;
+  
+  // Get token from localStorage
+  const token = localStorage.getItem('token');
+  
+  if (token) {
+    // Set default headers for all requests
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  }
+  
+  // Add response interceptor to handle auth errors
+  axios.interceptors.response.use(
+    response => response,
+    error => {
+      if (error.response && error.response.status === 401) {
+        // If unauthorized, clear localStorage and redirect to login
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('isAuthenticated');
+        window.location.href = '/login';
+      }
+      return Promise.reject(error);
+    }
+  );
+};
+
+// Call this in your app initialization
+setupAxiosInterceptors();
+>>>>>>> origin/main
 
 // Custom 404 component
 const NotFound = () => {
@@ -82,6 +118,9 @@ const App = () => {
 
           {/* Route for Workout */}
           <Route path="/workout" element={<Workout />} />
+
+          {/* OAuth2 Redirect Handler */}
+          <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
 
           {/* Redirect root path to dashboard for quick testing */}
           <Route path="/" element={<Navigate to="/login" replace />} />

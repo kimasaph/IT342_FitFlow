@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="92dp"
         android:ems="10"
-        android:hint="+63"
+        android:hint="Enter phone number"
         android:inputType="phone"
         android:textColor="#000000"
         android:textColorHint="#4D4EB2F6"

@@ -28,6 +28,42 @@ const LoginPage = ({ onLoginSuccess }) => {
     document.title = 'Login - FitFlow';
   });
 
+  // Add this function to handle OAuth2 redirect
+useEffect(() => {
+  // Check if we have query parameters from OAuth2 redirect
+  const queryParams = new URLSearchParams(window.location.search);
+  const token = queryParams.get('token');
+  const userId = queryParams.get('userId');
+  const email = queryParams.get('email');
+  
+  if (token && userId) {
+    // We have OAuth2 login data
+    try {
+      // Store the token and user data
+      localStorage.setItem('token', token);
+      
+      // Create a basic user object from redirect params
+      const user = {
+        id: userId,
+        email: email
+      };
+      
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('isAuthenticated', 'true');
+      
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
+      
+      // Clear the URL parameters and navigate to dashboard
+      navigate('/dashboard', { replace: true });
+    } catch (error) {
+      console.error('Error handling OAuth redirect:', error);
+      setErrorMessages(['Failed to process login information']);
+    }
+  }
+}, [navigate, onLoginSuccess]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
