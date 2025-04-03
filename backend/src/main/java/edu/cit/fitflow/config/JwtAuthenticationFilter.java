@@ -68,6 +68,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
-    
-    // Remove the validateAndParseToken method as it's now in JwtUtil
 }
