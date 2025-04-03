@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -61,6 +62,7 @@ public class OAuth2Config {
             String profilePicture = null;
             
             try {
+              Map<String, Object> attributes = new HashMap<>(oauth2User.getAttributes());
                 // Extract user details based on provider
                 switch (registrationId) {
                     case "google":
@@ -73,6 +75,7 @@ public class OAuth2Config {
                         if (email == null) {
                             String login = oauth2User.getAttribute("login");
                             email = login + "@github.com";
+                            attributes.put("email", email);
                         }
                         name = oauth2User.getAttribute("name") != null 
                             ? oauth2User.getAttribute("name") 
@@ -130,7 +133,6 @@ public class OAuth2Config {
                 }
 
                 // Create a custom OAuth2User that includes our user details
-                Map<String, Object> attributes = new HashMap<>(oauth2User.getAttributes());
                 attributes.put("userId", user.getId());
                 attributes.put("firstName", user.getFirstName());
                 attributes.put("lastName", user.getLastName());
@@ -152,15 +154,61 @@ public class OAuth2Config {
         return (request, response, authentication) -> {
             OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
             String email = oauth2User.getAttribute("email");
+            String registrationId = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
+            
+            // Add the same fallback for GitHub users with private emails
+            if (email == null && "github".equals(registrationId)) {
+                String login = oauth2User.getAttribute("login");
+                if (login != null) {
+                    email = login + "@github.com";
+                    logger.info("Using fallback email for GitHub user: " + email);
+                } else {
+                    logger.error("Both email and login are null for OAuth2 GitHub user");
+                    response.sendRedirect("http://localhost:5173/login?error=no_email_or_login");
+                    return;
+                }
+            } else if (email == null) {
+                logger.error("Email is null for OAuth2 user");
+                response.sendRedirect("http://localhost:5173/login?error=no_email");
+                return;
+            }
             
             try {
                 UserEntity user = userService.findByEmail(email);
                 if (user == null) {
-                    logger.error("No user found for email: " + email);
-                    response.sendRedirect("http://localhost:5173/login?error=no_user");
-                    return;
+                    // Create a new user with the provided email
+                    user = new UserEntity();
+                    user.setEmail(email);
+                    user.setUsername(email);
+                    user.setPassword(passwordEncoder.encode("oauth2user"));
+                    user.setCreated_at(new Date());
+                    
+                    // Set name from OAuth data
+                    String name = oauth2User.getAttribute("name");
+                    if (name == null && "github".equals(registrationId)) {
+                        name = oauth2User.getAttribute("login");
+                    }
+                    
+                    if (name != null) {
+                        String[] nameParts = name.split(" ", 2);
+                        user.setFirstName(nameParts[0]);
+                        if (nameParts.length > 1) {
+                            user.setLastName(nameParts[1]);
+                        }
+                    }
+                    
+                    // Set default values for required non-nullable fields
+                    user.setPhoneNumber("");
+                    user.setAge(0);
+                    user.setGender("");
+                    user.setHeight(0.0F);
+                    user.setWeight(0.0F);
+                    user.setBodyGoal("");
+                    
+                    userService.createUser(user);
+                    logger.info("Created new user for OAuth2 login: " + email);
                 }
-                
+                            
                 String token = jwtUtil.generateToken(user);
                 logger.info("Generated token for user: " + email);
                 
