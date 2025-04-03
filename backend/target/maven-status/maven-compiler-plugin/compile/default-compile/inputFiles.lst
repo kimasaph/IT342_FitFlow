@@ -1,10 +1,12 @@
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/FitflowApplication.java
+/Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/config/CommonSecurityConfig.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/config/FileStorageConfig.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/config/JwtAuthenticationFilter.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/config/JwtUtil.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/config/OAuth2Config.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/config/SecurityConfig.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/config/WebConfig.java
+/Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/controller/AuthController.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/controller/UserController.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/controller/VerificationController.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/entity/UserEntity.java

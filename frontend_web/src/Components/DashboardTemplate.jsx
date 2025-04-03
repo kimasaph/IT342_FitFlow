@@ -51,6 +51,15 @@ import {
     ]); // Manage menuItems as state
     const navigate = useNavigate(); // Initialize useNavigate
 
+    const handleLogout = () => {
+      // Clear any stored authentication tokens
+      localStorage.removeItem("token"); // Adjust based on your token storage method
+      sessionStorage.removeItem("token");
+    
+      // Redirect to login page
+      navigate("/login");
+    };    
+
     const features = [
       "Workout Tracker",
       "Goals Tracker",
@@ -208,7 +217,7 @@ import {
               />
             </ListItem>
             <Divider sx={{ my: 1 }} />
-            <ListItem button onClick={() => {}} sx={{
+            <ListItem button onClick={handleLogout} sx={{
               borderRadius: 2,
               "&:hover": {
                 bgcolor: "#ffe3e0", // Updated hover background color
