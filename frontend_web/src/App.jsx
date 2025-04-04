@@ -13,6 +13,10 @@ import ForgotPassSuccess from "./components/ForgotPassSuccess.jsx";
 import SignupSetupSuccess from "./components/SignupSetupSuccess.jsx";
 import Workout from "./components/Workout.jsx";
 import OAuth2RedirectHandler from "./Components/OAuth2RedirectHandler.jsx";
+import Exercises from "./components/Exercises.jsx";
+import StrengthTraining from "./components/StrengthTraining.jsx";
+import Cardio from "./components/Cardio.jsx";
+import FlexiYoga from "./components/FlexiYoga.jsx";
 import axios from 'axios';
 
 const setupAxiosInterceptors = () => {
@@ -115,6 +119,15 @@ const App = () => {
 
           {/* Route for Workout */}
           <Route path="/workout" element={<Workout />} />
+
+          {/* Route for Exercises */}
+          <Route path="/exercises" element={<Exercises />} />
+
+          <Route path="/strength-training" element={<StrengthTraining />} />
+
+          <Route path="/cardio" element={<Cardio />} />
+
+          <Route path="/flexi-yoga" element={<FlexiYoga />} />
 
           {/* OAuth2 Redirect Handler */}
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />

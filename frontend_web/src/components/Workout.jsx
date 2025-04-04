@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Added import
 import {
   Box,
   Typography,
@@ -12,13 +13,19 @@ import Dashboard from "./DashboardTemplate";
 import workoutbg from "../assets/videos/workout.mp4";
 
 const Workout = () => {
-  const [bodyType, setBodyType] = useState("Slim");
-  const [fitnessGoal, setFitnessGoal] = useState("Build Muscle");
-  const [fitnessLevel, setFitnessLevel] = useState("Beginner");
-  const [workoutStyle, setWorkoutStyle] = useState("Strength Training");
+  const [bodyType, setBodyType] = useState("");
+  const [fitnessGoal, setFitnessGoal] = useState("");
+  const [fitnessLevel, setFitnessLevel] = useState("");
+  const [workoutStyle, setWorkoutStyle] = useState("");
   const [healthConcerns, setHealthConcerns] = useState("");
 
+  const navigate = useNavigate(); // Added useNavigate hook
+
   const handleNext = () => {
+    if (!bodyType || !fitnessGoal || !fitnessLevel || !workoutStyle) {
+      alert("Please fill out all required fields before submitting.");
+      return;
+    }
     console.log({
       bodyType,
       fitnessGoal,
@@ -26,6 +33,13 @@ const Workout = () => {
       workoutStyle,
       healthConcerns,
     });
+
+    // Ensure proper encoding of workoutStyle, including "Flexibility/Yoga"
+    navigate(`/exercises?workoutStyle=${encodeURIComponent(workoutStyle)}`);
+  };
+
+  const clearSelection = (setter) => {
+    setter("");
   };
 
   return (
@@ -45,8 +59,8 @@ const Workout = () => {
           mx: "auto",
           position: "relative",
           zIndex: 1,
-          left: -340,
-          top: -25,
+          left: -315,
+          top: 0,
         }}
       >
         <Typography
@@ -82,6 +96,16 @@ const Workout = () => {
               />
               <FormControlLabel value="Large" control={<Radio />} label="Large" />
             </RadioGroup>
+            {bodyType && (
+              <Button
+                variant="text"
+                color="secondary"
+                onClick={() => clearSelection(setBodyType)}
+                sx={{ mt: 1 }}
+              >
+                Clear
+              </Button>
+            )}
           </Box>
 
           <Box>
@@ -108,6 +132,16 @@ const Workout = () => {
                 label="Maintain Fitness"
               />
             </RadioGroup>
+            {fitnessGoal && (
+              <Button
+                variant="text"
+                color="secondary"
+                onClick={() => clearSelection(setFitnessGoal)}
+                sx={{ mt: 1 }}
+              >
+                Clear
+              </Button>
+            )}
           </Box>
 
           <Box>
@@ -134,6 +168,16 @@ const Workout = () => {
                 label="Advance"
               />
             </RadioGroup>
+            {fitnessLevel && (
+              <Button
+                variant="text"
+                color="secondary"
+                onClick={() => clearSelection(setFitnessLevel)}
+                sx={{ mt: 1 }}
+              >
+                Clear
+              </Button>
+            )}
           </Box>
 
           <Box>
@@ -156,6 +200,16 @@ const Workout = () => {
                 label="Flexibility/Yoga"
               />
             </RadioGroup>
+            {workoutStyle && (
+              <Button
+                variant="text"
+                color="secondary"
+                onClick={() => clearSelection(setWorkoutStyle)}
+                sx={{ mt: 1 }}
+              >
+                Clear
+              </Button>
+            )}
           </Box>
 
           <Box sx={{ gridColumn: "span 2" }}>
@@ -183,7 +237,7 @@ const Workout = () => {
             fontWeight: "600",
             mt: 3,
           }}
-          onClick={handleNext}
+          onClick={handleNext} // Updated to use handleNext
         >
           Submit
         </Button>
