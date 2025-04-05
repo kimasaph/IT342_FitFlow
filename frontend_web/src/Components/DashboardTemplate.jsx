@@ -75,7 +75,7 @@ import {
       setMenuItemsState((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          selected: item.route === currentPath, // Automatically select the tab based on the route
+          selected: item.route === currentPath || (currentPath === "/exercises" && item.route === "/workout"), // Ensure "Workout" is selected on Exercises page
         }))
       );
     }, []); // Run only on component mount
@@ -368,7 +368,7 @@ import {
                 
     
             {/* Main content area, also a template for all*/}
-          <Box sx={{ p: 3 }}>{children}</Box>
+          <Box>{children}</Box>
         </Box>
       </Box>
     );
