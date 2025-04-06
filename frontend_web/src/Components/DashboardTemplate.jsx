@@ -243,7 +243,6 @@ import {
           </List>
         </Drawer>
   
-        {/* Main content */}
         <Box sx={{ flexGrow: 1 }}>
           <AppBar
             position="static"
@@ -266,7 +265,7 @@ import {
                   Welcome Back!
                 </Typography>
               </Box>
-  
+
               <Box sx={{ flexGrow: 1, mx: 3 }}>
                 <Autocomplete
                   freeSolo
@@ -308,7 +307,7 @@ import {
                   </Badge>
                 </IconButton>
   
-                <IconButton>
+                <IconButton onClick={() => navigate("/sidebar-settings")}>
                   <SettingsIcon sx={{ color: "white" }} />
                 </IconButton>
   
