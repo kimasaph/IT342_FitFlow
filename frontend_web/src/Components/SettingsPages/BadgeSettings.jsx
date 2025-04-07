@@ -48,13 +48,13 @@ const BadgeSettings = () => {
         <div className="mt-6">
           <button
             onClick={handleReset}
-            className="bg-red-500 hover:bg-red-600 text-white text-sm py-2 px-4 rounded-xl transition"
+            className="bg-red-500 hover:bg-red-600 text-white text-sm py-2 px-4 rounded-xl transition ml-2"
           >
             Reset Achievements
           </button>
         </div>
 
-        <div className="mt-5 text-[13px] text-gray-600 space-y-2">
+        <div className="mt-5 text-[12px] text-gray-600 space-y-2">
           <p>
             You can choose whether to show your badges on your profile and if new achievements will be automatically visible.
           </p>

@@ -41,12 +41,14 @@ const LanguageSettings = () => {
             </select>
           </div>
 
+          <div className= "text-right">
           <button
             onClick={handleSave}
-            className="bg-black text-white text-sm py-2 px-4 rounded-xl hover:bg-gray-800 transition"
+            className="bg-[#3797EF] text-white text-sm py-2 px-4 rounded-xl hover:bg-[#318ce7] transition mr-5"
           >
             Save Language
           </button>
+          </div>
         </div>
 
         <div className="mt-4 text-[13px] text-gray-600 space-y-2">

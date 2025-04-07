@@ -31,9 +31,19 @@ import ScheduleSettings from "./SettingsPages/ScheduleSettings";
 import StreakSettings from "./SettingsPages/StreakSettings";
 import ThemeSettings from "./SettingsPages/ThemeSettings";
 import LanguageSettings from "./SettingsPages/LanguageSettings";
+import BodyMetricsSettings from "./SettingsPages/BodyMetricsSettings";
+import GoalPreferencesSettings from "./SettingsPages/GoalPreferencesSettings";
+import WorkoutSettings from "./SettingsPages/WorkoutSettings";
+import NutritionSettings from "./SettingsPages/NutritionSettings";
+import WaterSettings from "./SettingsPages/WaterSettings";
+import RecoverySettings from "./SettingsPages/RecoverySettings";
+import HelpSettings from "./SettingsPages/HelpSettings";
+import TermsSettings from "./SettingsPages/TermsSettings";
+import PrivacySettings from "./SettingsPages/PrivacySettings";
+import ContactsSettings from "./SettingsPages/ContactsSettings";
 
 // React Icons (used in Tailwind section)
-import { UserCircle, Lock, CalendarCheck2, Bell, SunMoon, Goal, Dumbbell, Salad, User, ShieldCheck, MonitorPlay, Globe, Carrot, Activity, GlassWater, Droplet, Bed, LifeBuoy, Handshake, ScrollText, Contact, Phone, Podcast, Medal, Flame} from "lucide-react";
+import { UserCircle, Lock, CalendarCheck2, Bell, SunMoon, Goal, Dumbbell, User, ShieldCheck, MonitorPlay, Globe, Carrot, Activity, Droplet, Bed, LifeBuoy, Handshake, ScrollText, Phone, Podcast, Medal, Flame} from "lucide-react";
 
 // Import images
 import fitFlowLogo from "../assets/images/logoFitFlow.png";
@@ -352,15 +362,15 @@ const SidebarSettings = () => {
           <div className="mb-6">
             <h3 className="text-gray-500 text-[13px] font-bold mb-2 ml-3 mt-[-10px]">Fitness Personalization</h3>
             <div 
-              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'body-metrics' ? "bg-gray-200" : "hover:bg-gray-200"}`}
-              onClick={() => handleSettingClick('body-metrics')}
+              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'body-metric-settings' ? "bg-gray-200" : "hover:bg-gray-200"}`}
+              onClick={() => handleSettingClick('body-metric-settings')}
             >
               <Activity size={26} />
               <span className="text-sm font-medium">Body Metrics</span>
             </div>
             <div 
-              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'goal-preferences' ? "bg-gray-200" : "hover:bg-gray-200"}`}
-              onClick={() => handleSettingClick('goal-preferences')}
+              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'goal-preference-settings' ? "bg-gray-200" : "hover:bg-gray-200"}`}
+              onClick={() => handleSettingClick('goal-preference-settings')}
             >
               <Goal size={25} />
               <span className="text-sm font-medium">Goal Preferences</span>
@@ -373,22 +383,22 @@ const SidebarSettings = () => {
               <span className="text-sm font-medium">Workout Settings</span>
             </div>
             <div 
-              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'nutrition' ? "bg-gray-200" : "hover:bg-gray-200"}`}
-              onClick={() => handleSettingClick('nutrition')}
+              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'nutrition-settings' ? "bg-gray-200" : "hover:bg-gray-200"}`}
+              onClick={() => handleSettingClick('nutrition-settings')}
             >
               <Carrot size={25} />
               <span className="text-sm font-medium">Nutrition</span>
             </div>
             <div 
-              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'water-tracking' ? "bg-gray-200" : "hover:bg-gray-200"}`}
-              onClick={() => handleSettingClick('water-tracking')}
+              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'water-settings' ? "bg-gray-200" : "hover:bg-gray-200"}`}
+              onClick={() => handleSettingClick('water-settings')}
             >
               <Droplet size={25} />
               <span className="text-sm font-medium">Water Tracking</span>
             </div>
             <div 
-              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'recovery' ? "bg-gray-200" : "hover:bg-gray-200"}`}
-              onClick={() => handleSettingClick('recovery')}
+              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'recovery-settings' ? "bg-gray-200" : "hover:bg-gray-200"}`}
+              onClick={() => handleSettingClick('recovery-settings')}
             >
               <Bed size={25} />
               <span className="text-sm font-medium">Recovery</span>
@@ -399,29 +409,29 @@ const SidebarSettings = () => {
           <div className="mb-0">
             <h3 className="text-gray-500 text-[13px] font-bold mb-2 ml-3 mt-[-10px]">More Info and Support</h3>
             <div 
-              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'help-center' ? "bg-gray-200" : "hover:bg-gray-200"}`}
-              onClick={() => handleSettingClick('help-center')}
+              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'help-settings' ? "bg-gray-200" : "hover:bg-gray-200"}`}
+              onClick={() => handleSettingClick('help-settings')}
             >
               <LifeBuoy size={25} />
               <span className="text-sm font-medium">Help center</span>
             </div>
             <div 
-              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'terms' ? "bg-gray-200" : "hover:bg-gray-200"}`}
-              onClick={() => handleSettingClick('terms')}
+              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'terms-settings' ? "bg-gray-200" : "hover:bg-gray-200"}`}
+              onClick={() => handleSettingClick('terms-settings')}
             >
               <Handshake size={25} />
               <span className="text-sm font-medium">Terms</span>
             </div>
             <div 
-              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'privacy-policy' ? "bg-gray-200" : "hover:bg-gray-200"}`}
-              onClick={() => handleSettingClick('privacy-policy')}
+              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'privacy-settings' ? "bg-gray-200" : "hover:bg-gray-200"}`}
+              onClick={() => handleSettingClick('privacy-settings')}
             >
               <ScrollText size={26} />
               <span className="text-sm font-medium">Privacy policy</span>
             </div>
             <div 
-              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'contact' ? "bg-gray-200" : "hover:bg-gray-200"}`}
-              onClick={() => handleSettingClick('contact')}
+              className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer ${selectedSetting === 'contacts-settings' ? "bg-gray-200" : "hover:bg-gray-200"}`}
+              onClick={() => handleSettingClick('contacts-settings')}
             >
               <Phone size={25} />
               <span className="text-sm font-medium">Contact</span>
@@ -450,6 +460,26 @@ const SidebarSettings = () => {
           <ThemeSettings />
         ) : selectedSetting === 'language-settings' ? (
           <LanguageSettings />
+        ) : selectedSetting === 'body-metric-settings' ? (
+          <BodyMetricsSettings />
+        ) : selectedSetting === 'goal-preference-settings' ? (
+          <GoalPreferencesSettings />
+        ) : selectedSetting === 'workout-settings' ? (
+          <WorkoutSettings />
+        ) : selectedSetting === 'nutrition-settings' ? (
+          <NutritionSettings />
+        ) : selectedSetting === 'water-settings' ? (
+          <WaterSettings />
+        ) : selectedSetting === 'recovery-settings' ? (
+          <RecoverySettings />
+        ) : selectedSetting === 'help-settings' ? (
+          <HelpSettings />
+        ) : selectedSetting === 'terms-settings' ? (
+          <TermsSettings />
+        ) : selectedSetting === 'privacy-settings' ? (
+          <PrivacySettings />
+        ) : selectedSetting === 'contacts-settings' ? (
+          <ContactsSettings />
         ) : (
           <div className="p-6">
             <h1 className="text-2xl font-semibold">Select a setting from the sidebar</h1>

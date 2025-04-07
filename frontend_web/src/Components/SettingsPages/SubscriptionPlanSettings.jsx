@@ -29,7 +29,7 @@ const SubscriptionPlanSettings = () => {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 flex flex-col justify-between hover:shadow-md transition"
+              className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 flex flex-col justify-between hover:shadow-lg transition"
             >
               <div>
                 <h2 className="text-lg font-semibold mb-2">{plan.name}</h2>
