@@ -29,6 +29,13 @@ class RegistrationForm : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val toLogin = findViewById<TextView>(R.id.btnSignIn)
+        toLogin.setOnClickListener {
+            val intent = Intent(this, Login::class.java)
+            startActivity(intent)
+        }
+
+
         // Input Fields
         val firstName = findViewById<EditText>(R.id.editTextText)
         val lastName = findViewById<EditText>(R.id.editTextText2)
@@ -86,7 +93,8 @@ class RegistrationForm : AppCompatActivity() {
 
                         db.collection("users").document(userId).set(user)
                             .addOnSuccessListener {
-                                Toast.makeText(this, "Registration Successful!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this, "Registration Successful!", Toast.LENGTH_SHORT)
+                                    .show()
 
                                 // Navigate to Login Activity
                                 val intent = Intent(this, Login::class.java)
@@ -94,15 +102,27 @@ class RegistrationForm : AppCompatActivity() {
                                 finish()
                             }
                             .addOnFailureListener { e ->
-                                Toast.makeText(this, "Failed to save user data: ${e.message}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this,
+                                    "Failed to save user data: ${e.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                     } else {
                         // Handle specific Firebase Auth error: email already in use
                         if (task.exception is FirebaseAuthUserCollisionException) {
-                            Toast.makeText(this, "Registration Failed: Email is already in use", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                "Registration Failed: Email is already in use",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } else {
                             val errorMessage = task.exception?.message ?: "Registration failed"
-                            Toast.makeText(this, "Registration Failed: $errorMessage", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                "Registration Failed: $errorMessage",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -140,7 +160,13 @@ class RegistrationForm : AppCompatActivity() {
         }
     }
 
-    private fun saveUserToFirestore(userId: String?, firstName: String, lastName: String, email: String, gender: String) {
+    private fun saveUserToFirestore(
+        userId: String?,
+        firstName: String,
+        lastName: String,
+        email: String,
+        gender: String
+    ) {
         if (userId == null) return
 
         val user = hashMapOf(
@@ -161,4 +187,6 @@ class RegistrationForm : AppCompatActivity() {
                 Toast.makeText(this, "Failed to save user data", Toast.LENGTH_SHORT).show()
             }
     }
+
+
 }
