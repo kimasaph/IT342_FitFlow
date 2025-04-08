@@ -17,6 +17,7 @@ import Exercises from "./components/Exercises.jsx";
 import StrengthTraining from "./components/StrengthTraining.jsx";
 import Cardio from "./components/Cardio.jsx";
 import FlexiYoga from "./components/FlexiYoga.jsx";
+import SettingsRoutes from "./SettingsRoutes.jsx";
 import axios from 'axios';
 
 const setupAxiosInterceptors = () => {
@@ -47,10 +48,8 @@ const setupAxiosInterceptors = () => {
   );
 };
 
-// Call this in your app initialization
 setupAxiosInterceptors();
 
-// Custom 404 component
 const NotFound = () => {
   const navigate = useNavigate();
   
@@ -128,6 +127,8 @@ const App = () => {
           <Route path="/cardio" element={<Cardio />} />
 
           <Route path="/flexi-yoga" element={<FlexiYoga />} />
+          
+          {SettingsRoutes}
 
           {/* OAuth2 Redirect Handler */}
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
