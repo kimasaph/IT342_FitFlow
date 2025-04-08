@@ -6,13 +6,19 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 
 class RegistrationForm : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +27,13 @@ class RegistrationForm : AppCompatActivity() {
         // Initialize Firebase Authentication & Firestore
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+
+        // Initialize Google Sign-In
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         // Back Button
         val backButton = findViewById<ImageView>(R.id.imgLeft2)
@@ -34,7 +47,6 @@ class RegistrationForm : AppCompatActivity() {
             val intent = Intent(this, Login::class.java)
             startActivity(intent)
         }
-
 
         // Input Fields
         val firstName = findViewById<EditText>(R.id.editTextText)
@@ -64,7 +76,6 @@ class RegistrationForm : AppCompatActivity() {
                 else -> "Not specified"
             }
 
-            // Basic validation
             if (fName.isEmpty() || lName.isEmpty() || emailText.isEmpty() || passText.isEmpty() || confirmPassText.isEmpty()) {
                 Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -75,73 +86,55 @@ class RegistrationForm : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val auth = FirebaseAuth.getInstance()
-            val db = FirebaseFirestore.getInstance()
+            //signUpButton.isEnabled = false
 
             auth.createUserWithEmailAndPassword(emailText, passText)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        // User creation successful in FirebaseAuth, proceed to store data in Firestore
-                        val userId = auth.currentUser?.uid ?: return@addOnCompleteListener
-
-                        val user = hashMapOf(
-                            "firstName" to fName,
-                            "lastName" to lName,
-                            "email" to emailText,
-                            "gender" to gender
-                        )
-
-                        db.collection("users").document(userId).set(user)
-                            .addOnSuccessListener {
-                                Toast.makeText(this, "Registration Successful!", Toast.LENGTH_SHORT)
-                                    .show()
-
-                                // Navigate to Login Activity
-                                val intent = Intent(this, Login::class.java)
-                                startActivity(intent)
-                                finish()
-                            }
-                            .addOnFailureListener { e ->
-                                Toast.makeText(
-                                    this,
-                                    "Failed to save user data: ${e.message}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                    } else {
-                        // Handle specific Firebase Auth error: email already in use
-                        if (task.exception is FirebaseAuthUserCollisionException) {
-                            Toast.makeText(
-                                this,
-                                "Registration Failed: Email is already in use",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            val errorMessage = task.exception?.message ?: "Registration failed"
-                            Toast.makeText(
-                                this,
-                                "Registration Failed: $errorMessage",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                .addOnSuccessListener { result ->
+                    val userId = result.user?.uid
+                    if (userId == null) {
+                        Toast.makeText(this, "Unexpected error: No user ID", Toast.LENGTH_SHORT).show()
+                        signUpButton.isEnabled = true
+                        return@addOnSuccessListener
                     }
+
+                    val user = hashMapOf(
+                        "firstName" to fName,
+                        "lastName" to lName,
+                        "email" to emailText,
+                        "gender" to gender
+                    )
+
+                    db.collection("users").document(userId).set(user)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Registration Successful!", Toast.LENGTH_SHORT).show()
+                            Log.d("Registration", "Navigating to Login activity") //test
+                            startActivity(Intent(this, Login::class.java))
+                            finish()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Firestore error: ${e.message}", Toast.LENGTH_SHORT).show()
+                            signUpButton.isEnabled = true
+                        }
+                }
+                .addOnFailureListener { e ->
+                    if (e is FirebaseAuthUserCollisionException) {
+                        Toast.makeText(this, "Email already in use", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Registration Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                    signUpButton.isEnabled = true
                 }
         }
 
-        // Social Media Sign-Up Buttons
+        // Google Sign-In Button
         findViewById<Button>(R.id.btnGoogle).setOnClickListener {
-            Toast.makeText(this, "Google Sign-Up clicked", Toast.LENGTH_SHORT).show()
-            // TODO: Integrate Google sign-in
+            val signInIntent = googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, RC_SIGN_IN)
         }
 
-        findViewById<Button>(R.id.btnFacebook).setOnClickListener {
-            Toast.makeText(this, "Facebook Sign-Up clicked", Toast.LENGTH_SHORT).show()
-            // TODO: Integrate Facebook sign-in
-        }
-
+        // Apple Sign-In Button (not natively supported)
         findViewById<Button>(R.id.btnApple).setOnClickListener {
-            Toast.makeText(this, "Apple Sign-Up clicked", Toast.LENGTH_SHORT).show()
-            // TODO: Integrate Apple sign-in
+            Toast.makeText(this, "Apple sign-in is not supported on Android.", Toast.LENGTH_SHORT).show()
         }
 
         // Video Background
@@ -154,39 +147,40 @@ class RegistrationForm : AppCompatActivity() {
         videoView.setMediaController(mediaController)
 
         videoView.start()
-
         videoView.setOnCompletionListener {
-            videoView.start() // Restart video
+            videoView.start()
         }
     }
 
-    private fun saveUserToFirestore(
-        userId: String?,
-        firstName: String,
-        lastName: String,
-        email: String,
-        gender: String
-    ) {
-        if (userId == null) return
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-        val user = hashMapOf(
-            "firstName" to firstName,
-            "lastName" to lastName,
-            "email" to email,
-            "gender" to gender
-        )
-
-        db.collection("users").document(userId).set(user)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Registration Successful!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, RegistrationSuccess::class.java))
-                finish()
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)!!
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                Log.w("GoogleSignIn", "Google sign in failed", e)
             }
-            .addOnFailureListener { e ->
-                Log.e("Firebase", "Error saving user", e)
-                Toast.makeText(this, "Failed to save user data", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Google sign-in successful", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, FitFlowDashboard::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show()
+                }
             }
     }
 
-
+    companion object {
+        private const val RC_SIGN_IN = 9001
+    }
 }

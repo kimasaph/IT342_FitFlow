@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FitFlow</string>
+    <string name="default_web_client_id">1:467981087973:android:d6a8c03f74aeb92d4bd00c</string>
+
 </resources>

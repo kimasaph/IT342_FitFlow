@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#16A1FE">
+    android:background="#16A1FE"
+    android:outlineProvider="none">
 
 
     <VideoView
@@ -68,6 +69,7 @@
         android:ems="10"
         android:hint="First Name"
         android:inputType="text"
+        android:outlineProvider="background"
         android:paddingLeft="15dp"
         android:textColorHint="#FFFFFF"
         android:textSize="10sp"
