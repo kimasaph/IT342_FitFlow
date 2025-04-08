@@ -19,7 +19,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import edu.cit.fitflow.service.UserService; // Ensure this matches the actual package of UserService
 import edu.cit.fitflow.entity.UserEntity; // Ensure this matches the actual package of UserEntity
-
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
