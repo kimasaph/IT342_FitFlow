@@ -166,7 +166,7 @@
                     android:id="@+id/percentage_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="80%"
+                    android:text="0%"
                     android:textSize="14sp"
                     android:textColor="#42C0FB"
                     android:layout_marginTop="8dp"
@@ -178,7 +178,7 @@
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="0dp"
                     android:layout_height="8dp"
-                    android:progress="80"
+                    android:progress="0"
                     android:progressTint="#42C0FB"
                     android:background="#E0E0E0"
                     android:layout_marginTop="8dp"
@@ -218,7 +218,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="420"
+                                android:text="0"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 android:layout_marginTop="8dp" />
@@ -258,7 +258,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="42:24"
+                                android:text="0"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 android:layout_marginTop="8dp" />
@@ -297,7 +297,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="124"
+                                android:text="0"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 android:layout_marginTop="8dp" />
@@ -640,8 +640,8 @@
                     android:gravity="center">
 
                     <View
-                        android:layout_width="24dp"
-                        android:layout_height="60dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="#E0E0E0" />
 
                     <TextView
@@ -661,8 +661,8 @@
                     android:gravity="center">
 
                     <View
-                        android:layout_width="24dp"
-                        android:layout_height="40dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="#E0E0E0" />
 
                     <TextView
@@ -682,8 +682,8 @@
                     android:gravity="center">
 
                     <View
-                        android:layout_width="24dp"
-                        android:layout_height="30dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="#E0E0E0" />
 
                     <TextView
@@ -703,8 +703,8 @@
                     android:gravity="center">
 
                     <View
-                        android:layout_width="24dp"
-                        android:layout_height="50dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="#E0E0E0" />
 
                     <TextView
@@ -724,8 +724,8 @@
                     android:gravity="center">
 
                     <View
-                        android:layout_width="24dp"
-                        android:layout_height="45dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="#E0E0E0" />
 
                     <TextView
@@ -745,8 +745,8 @@
                     android:gravity="center">
 
                     <View
-                        android:layout_width="24dp"
-                        android:layout_height="20dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="#E0E0E0" />
 
                     <TextView
@@ -766,8 +766,8 @@
                     android:gravity="center">
 
                     <View
-                        android:layout_width="24dp"
-                        android:layout_height="100dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="#42C0FB" />
 
                     <TextView

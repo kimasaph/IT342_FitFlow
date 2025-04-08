@@ -49,11 +49,11 @@ class RegistrationForm : AppCompatActivity() {
         }
 
         // Input Fields
-        val firstName = findViewById<EditText>(R.id.editTextText)
-        val lastName = findViewById<EditText>(R.id.editTextText2)
-        val email = findViewById<EditText>(R.id.editTextTextEmailAddress)
-        val password = findViewById<EditText>(R.id.editTextTextPassword)
-        val confirmPassword = findViewById<EditText>(R.id.editTextTextPassword2)
+        val firstName = findViewById<EditText>(R.id.editTextFirstName)
+        val lastName = findViewById<EditText>(R.id.editTextLastName)
+        val email = findViewById<EditText>(R.id.editTextEmail)
+        val password = findViewById<EditText>(R.id.editTextPassword)
+        val confirmPassword = findViewById<EditText>(R.id.editTextConfirmPassword)
 
         // Gender RadioButtons
         val radioMale = findViewById<RadioButton>(R.id.radioButton)
