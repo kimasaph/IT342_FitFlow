@@ -6,6 +6,9 @@ import edu.cit.fitflow.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -15,13 +18,19 @@ public class UserService {
   @Autowired
   private UserRepository urepo;
 
+  private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
   public UserService() {
 		super();
 	}
 
   public UserEntity findByEmail(String email) {
-		return urepo.findByEmail(email);
-	}
+    UserEntity user = urepo.findByEmail(email);
+    if (user == null) {
+        logger.warn("No user found with email: {}", email);
+    }
+    return user;
+  }
 
   //find by ID
 	public UserEntity findById(int userId) {

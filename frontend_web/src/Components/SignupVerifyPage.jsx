@@ -29,74 +29,60 @@ const SignupVerifyPage = () => {
     setErrorMessages([]);
 
     try {
-      console.log('Sending verification code:', verificationCode, 'for email:', email);
-      
-      // Updated endpoint to match your backend API
-      const response = await fetch('http://localhost:8080/api/verification/verify-code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: email,
-          code: verificationCode  // Changed to match backend parameter name
-        })
-      });
-      
-      console.log('Response status:', response.status);
-      
-      const data = await response.json();
-      console.log('Response data:', data);
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Invalid verification code');
-      }
-      
-      // If verification successful, proceed to dashboard or welcome page
-      localStorage.removeItem('signupEmail'); // Clear the stored email
-      navigate('/signup-success');
-      
-    } catch (error) {
-      console.error('Verification error:', error);
-      setErrorMessages([`Error: ${error.message}`]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        const response = await fetch('http://localhost:8080/api/verification/verify-code', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                code: verificationCode,
+            }),
+        });
 
-  const handleResendCode = async () => {
-    try {
-      setIsLoading(true);
-      
-      // Updated endpoint to match your backend API
-      const response = await fetch('http://localhost:8080/api/verification/send-code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: email
-        })
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to resend verification code');
-      }
-      
-      setErrorMessages(['A new verification code has been sent to your email.']);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Invalid verification code');
+        }
+
+        // If verification is successful, navigate to the success page
+        localStorage.removeItem('signupEmail');
+        navigate('/signup-success');
     } catch (error) {
-      console.error('Resend code error:', error);
-      setErrorMessages([`Error: ${error.message}`]);
+        setErrorMessages([error.message || 'Verification failed']);
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  };
+};
+
+const handleResendCode = async () => {
+    try {
+        setIsLoading(true);
+
+        const response = await fetch('http://localhost:8080/api/verification/send-code', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to resend verification code');
+        }
+
+        setErrorMessages(['A new verification code has been sent to your email.']);
+    } catch (error) {
+        setErrorMessages([error.message || 'Failed to resend verification code']);
+    } finally {
+        setIsLoading(false);
+    }
+};
 
   const inputClasses = "w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition duration-200 placeholder:text-gray-500 placeholder:opacity-60 text-center tracking-widest text-xl";
 

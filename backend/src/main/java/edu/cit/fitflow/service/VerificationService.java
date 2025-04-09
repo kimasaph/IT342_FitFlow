@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import edu.cit.fitflow.entity.VerificationCodeEntity;
 import edu.cit.fitflow.repository.UserVerificationRepository;
+import edu.cit.fitflow.entity.UserEntity;
+import edu.cit.fitflow.repository.UserRepository;
+import edu.cit.fitflow.entity.Role;
 
 @Service
 public class VerificationService {
@@ -22,6 +25,9 @@ public class VerificationService {
     
     @Autowired
     private EmailService emailService;
+    
+    @Autowired
+    private UserRepository userRepository;
     
     // Generate a random 6-digit code
     public String generateVerificationCode() {
@@ -70,6 +76,12 @@ public class VerificationService {
         
         if (verificationCode.isPresent()) {
             VerificationCodeEntity savedCode = verificationCode.get();
+            
+            // Ensure role is checked if needed
+            UserEntity user = userRepository.findByEmail(email);
+            if (user != null && user.getRole() == Role.TRAINER) {
+                logger.info("Trainer role verified for email: {}", email);
+            }
             
             // Check if code has expired
             if (LocalDateTime.now().isAfter(savedCode.getExpiryDate())) {

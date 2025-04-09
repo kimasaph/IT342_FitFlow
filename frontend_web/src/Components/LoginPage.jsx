@@ -113,13 +113,21 @@ useEffect(() => {
         localStorage.setItem('isAuthenticated', 'true');
         
         if (onLoginSuccess) {
-          onLoginSuccess();
+          onLoginSuccess(); 
         }
 
         const storedToken = localStorage.getItem('token');
         console.log('Stored token:', storedToken);
         
-        navigate('/dashboard');
+        // Redirect based on user role
+        const userRole = data.user.role;
+        if (userRole === 'admin') {
+          navigate('/admin-dashboard');
+        } else if (userRole === 'trainer') {
+          navigate('/trainer-dashboard');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
         throw new Error('Invalid response format from server');
       }

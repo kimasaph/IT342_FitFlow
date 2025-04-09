@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import Dashboard from "./components/Dashboard";
-import LoginPage from "./components/LoginPage";
-import SignupPage from "./components/SignupPage";
+import Dashboard from "./Components/Dashboard";
+import LoginPage from "./Components/LoginPage";
+import SignupPage from "./Components/SignupPage";
 import SignupSuccessPage from "./components/SignupSuccess";
 import ForgotPassPage1 from "./components/ForgotPassPage1.jsx";
 import ForgotPassPage2 from "./components/ForgotPassPage2.jsx";
@@ -69,10 +69,6 @@ const NotFound = () => {
   );
 };
 
-// Disable authentication for development
-const ProtectedRoute = ({ children }) => {
-  return children; // Allows direct access to /dashboard
-};
 
 const PublicRoute = ({ children }) => {
   return children; // Allows direct access to /login
@@ -133,7 +129,7 @@ const App = () => {
           {/* OAuth2 Redirect Handler */}
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
 
-          {/* Redirect root path to dashboard for quick testing */}
+          {/* Redirect root path to login page */}
           <Route path="/" element={<Navigate to="/login" replace />} />
 
           {/* 404 Not Found */}

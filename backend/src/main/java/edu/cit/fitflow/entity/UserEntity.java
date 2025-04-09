@@ -51,6 +51,18 @@ public class UserEntity {
 
     @Column(nullable = false)
     private String bodyGoal;
-
+    
     private Date created_at;
+
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER; // Default role set to USER
+
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }

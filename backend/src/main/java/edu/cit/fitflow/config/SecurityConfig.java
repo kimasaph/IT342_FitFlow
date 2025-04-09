@@ -1,19 +1,24 @@
 package edu.cit.fitflow.config;
 
 import java.util.Arrays;
+import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import edu.cit.fitflow.entity.UserEntity;
+import edu.cit.fitflow.entity.Role;
 import edu.cit.fitflow.service.UserService;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -72,5 +77,30 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    @Bean
+    public CommandLineRunner createDefaultAdmin(UserService userService, BCryptPasswordEncoder passwordEncoder) {
+        return args -> {
+            String adminEmail = "admin@fitflow.com";
+            if (userService.findByEmail(adminEmail) == null) {
+                UserEntity admin = new UserEntity();
+                admin.setEmail(adminEmail);
+                admin.setUsername("admin");
+                admin.setPassword(passwordEncoder.encode("Admin1234!")); // Ensure password is hashed
+                admin.setRole(Role.ADMIN); // Set role as ADMIN
+                admin.setFirstName("Admin");
+                admin.setLastName("Admin");
+                admin.setPhoneNumber("0000000000"); // Default phone number
+                admin.setGender("Not Specified"); // Default gender
+                admin.setHeight(0.0F); // Default height
+                admin.setWeight(0.0F); // Default weight
+                admin.setAge(0); // Default age
+                admin.setBodyGoal("Not Specified"); // Default body goal
+                admin.setCreated_at(new Date());
+                userService.createUser(admin);
+                System.out.println("Default admin account created: " + adminEmail);
+            }
+        };
     }
 }

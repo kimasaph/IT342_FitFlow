@@ -10,7 +10,8 @@ const SignupPage = ({ onSignupSuccess }) => {
     email: '',
     phoneNumber: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: 'USER', // Default role
   });
 
   const [errorMessages, setErrorMessages] = useState([]);
@@ -95,6 +96,7 @@ const SignupPage = ({ onSignupSuccess }) => {
       email: formData.email,
       phoneNumber: formData.phoneNumber,
       password: formData.password,
+      role: formData.role, // Ensure role is included
       created_at: new Date()
     };
     
@@ -239,6 +241,27 @@ const SignupPage = ({ onSignupSuccess }) => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Role Dropdown */}
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <img
+                    src="/src/assets/images/Role.png"
+                    alt="Role"
+                    className="h-4 w-4 opacity-60"
+                  />
+                </div>
+                <select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleInputChange}
+                  className={inputClasses}
+                  required
+                >
+                  <option value="USER">User</option>
+                  <option value="TRAINER">Trainer</option>
+                </select>
+              </div>
+
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <img

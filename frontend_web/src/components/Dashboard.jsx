@@ -5,7 +5,7 @@ import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import FlagIcon from "@mui/icons-material/Flag";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
-import alarmSoundFile from "/src/assets/sounds/sound2.mp3";
+import alarmSoundFile from "/src/assets/sounds/Alarm.wav";
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());

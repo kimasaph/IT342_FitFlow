@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import edu.cit.fitflow.config.FileStorageConfig;
+import edu.cit.fitflow.entity.Role;
 import edu.cit.fitflow.entity.UserEntity;
 import edu.cit.fitflow.service.UserService;
 import io.jsonwebtoken.Jwts;
@@ -70,6 +73,13 @@ public class UserController {
                     .body(Map.of("error", "Invalid email or password"));
             }
 
+            // Ensure the role is valid
+            if (user.getRole() == null) {
+                logger.error("User role is null for email: {}", email);
+                return ResponseEntity.status(403)
+                    .body(Map.of("error", "User role is not defined"));
+            }
+
             // Generate JWT token
             String token = generateToken(user);
             logger.info("Successfully generated token for user: {}", email);
@@ -78,6 +88,7 @@ public class UserController {
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("user", getUserResponseMap(user));
+            response.put("role", user.getRole().name()); // Include role in the response
 
             return ResponseEntity.ok(response);
 
@@ -95,7 +106,7 @@ public class UserController {
         userMap.put("username", user.getUsername());
         userMap.put("firstName", user.getFirstName() != null ? user.getFirstName() : "");
         userMap.put("lastName", user.getLastName() != null ? user.getLastName() : "");
-        
+        userMap.put("role", user.getRole().name()); // Include role in the response
         return userMap;
     }
 
@@ -113,51 +124,58 @@ public class UserController {
 
     //Create of CRUD
     @PostMapping("/signupuser")
-      public ResponseEntity<?> postStudentRecord(@RequestBody UserEntity user) {
-          try {
-              logger.info("Received registration request for email: {}", user.getEmail());
-              
-              // Validate required fields
-              if (user.getEmail() == null || user.getEmail().isEmpty()) {
-                  return ResponseEntity.badRequest().body("Email is required");
-              }
-              if (user.getPassword() == null || user.getPassword().isEmpty()) {
-                  return ResponseEntity.badRequest().body("Password is required");
-              }
-              if (user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty()) {
-                  return ResponseEntity.badRequest().body("Phone number is required");
-              }
-              
-              // Encrypt the password before saving
-              String encryptedPassword = passwordEncoder.encode(user.getPassword());
-              user.setPassword(encryptedPassword);
-              
-              // Set username and created_at
-              user.setUsername(user.getEmail());
-              user.setCreated_at(new Date());
+    public ResponseEntity<?> postStudentRecord(@RequestBody UserEntity user) {
+        try {
+            logger.info("Received registration request for email: {}", user.getEmail());
+            
+            // Validate required fields
+            if (user.getEmail() == null || user.getEmail().isEmpty()) {
+                return ResponseEntity.badRequest().body("Email is required");
+            }
+            if (user.getPassword() == null || user.getPassword().isEmpty()) {
+                return ResponseEntity.badRequest().body("Password is required");
+            }
+            if (user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty()) {
+                return ResponseEntity.badRequest().body("Phone number is required");
+            }
+            
+            // Encrypt the password before saving
+            String encryptedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encryptedPassword);
+            
+            // Set username and created_at
+            user.setUsername(user.getEmail());
+            user.setCreated_at(new Date());
 
-              // Initialize profile fields with default values
-              user.setFirstName(user.getFirstName() != null ? user.getFirstName() : "");
-              user.setLastName(user.getLastName() != null ? user.getLastName() : "");
-              user.setGender(user.getGender() != null ? user.getGender() : "");
-              user.setHeight(user.getHeight() != null ? user.getHeight() : 0.0f);
-              user.setWeight(user.getWeight() != null ? user.getWeight() : 0.0f);
-              user.setAge(user.getAge() != null ? user.getAge() : 0);
-              user.setBodyGoal(user.getBodyGoal() != null ? user.getBodyGoal() : "");
-              
-              UserEntity savedUser = userv.createUser(user);
-              
-              // Don't send the encrypted password back in the response
-              savedUser.setPassword(null);
-              
-              return ResponseEntity.ok(savedUser);
-              
-          } catch (Exception e) {
-              logger.error("Error creating user: ", e);
-              return ResponseEntity.badRequest()
-                  .body("Error creating user: " + e.getMessage());
-          }
-      }
+            // Initialize profile fields with default values
+            user.setFirstName(user.getFirstName() != null ? user.getFirstName() : "");
+            user.setLastName(user.getLastName() != null ? user.getLastName() : "");
+            user.setGender(user.getGender() != null ? user.getGender() : "");
+            user.setHeight(user.getHeight() != null ? user.getHeight() : 0.0f);
+            user.setWeight(user.getWeight() != null ? user.getWeight() : 0.0f);
+            user.setAge(user.getAge() != null ? user.getAge() : 0);
+            user.setBodyGoal(user.getBodyGoal() != null ? user.getBodyGoal() : "");
+
+            // Set role dynamically based on the signup request
+            if (user.getRole() == null) {
+                user.setRole(Role.USER); // Default role if not provided
+            }
+            // Ensure the role is saved correctly
+            logger.info("User role set to: {}", user.getRole());
+
+            UserEntity savedUser = userv.createUser(user);
+            
+            // Don't send the encrypted password back in the response
+            savedUser.setPassword(null);
+            
+            return ResponseEntity.ok(savedUser);
+            
+        } catch (Exception e) {
+            logger.error("Error creating user: ", e);
+            return ResponseEntity.badRequest()
+                .body("Error creating user: " + e.getMessage());
+        }
+    }
 
       @PutMapping("/update-profile")
       public ResponseEntity<?> updateProfile(@RequestBody UserEntity updatedUserDetails, @RequestParam("userId") int userId) {
@@ -177,6 +195,10 @@ public class UserController {
               user.setHeight(updatedUserDetails.getHeight());
               user.setAge(updatedUserDetails.getAge());
               user.setBodyGoal(updatedUserDetails.getBodyGoal());
+              
+              if (updatedUserDetails.getRole() != null) {
+                  user.setRole(updatedUserDetails.getRole());
+              }
 
               // Save updated user
               UserEntity updatedUser = userv.createUser(user);
