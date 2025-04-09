@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const ForgotPassPage1 = () => {
@@ -17,6 +17,10 @@ const ForgotPassPage1 = () => {
     }));
   };
 
+  useEffect(() => {
+    document.title = 'Forgot Password | FitFlow';
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -24,7 +28,7 @@ const ForgotPassPage1 = () => {
 
     try {
       // Step 1: Check if the email exists in the database
-      const checkEmailResponse = await fetch('http://localhost:8080/api/user/forgot1', {
+      const checkEmailResponse = await fetch('http://localhost:8080/api/auth/forgot-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

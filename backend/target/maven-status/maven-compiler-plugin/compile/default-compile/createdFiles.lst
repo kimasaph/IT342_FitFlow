@@ -5,8 +5,11 @@ edu/cit/fitflow/controller/AuthController.class
 edu/cit/fitflow/service/UserService.class
 edu/cit/fitflow/entity/VerificationCodeEntity.class
 edu/cit/fitflow/service/VerificationService.class
+edu/cit/fitflow/repository/WorkoutRepository.class
 edu/cit/fitflow/FitflowApplication.class
+edu/cit/fitflow/entity/WorkoutEntity.class
 edu/cit/fitflow/config/FileStorageConfig.class
+edu/cit/fitflow/service/WorkoutService.class
 edu/cit/fitflow/config/JwtAuthenticationFilter.class
 edu/cit/fitflow/config/CommonSecurityConfig.class
 edu/cit/fitflow/entity/UserEntity.class
@@ -15,4 +18,5 @@ edu/cit/fitflow/config/OAuth2Config.class
 edu/cit/fitflow/config/SecurityConfig.class
 edu/cit/fitflow/repository/UserRepository.class
 edu/cit/fitflow/service/EmailService.class
+edu/cit/fitflow/controller/WorkoutController.class
 edu/cit/fitflow/config/WebConfig.class

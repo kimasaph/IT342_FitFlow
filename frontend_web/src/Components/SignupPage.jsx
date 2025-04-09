@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { EyeClosed, Eye } from 'lucide-react';
@@ -36,6 +36,10 @@ const SignupPage = ({ onSignupSuccess }) => {
       [name]: value
     }));
   };
+
+  useEffect(() => {
+    document.title = 'Signup | FitFlow';
+  }, []);
 
   // Check password complexity
   const validatePassword = (password) => {
@@ -100,7 +104,7 @@ const SignupPage = ({ onSignupSuccess }) => {
     
     try {
       // Step 1: Create the user account
-      const response = await fetch('http://localhost:8080/api/user/signupuser', {
+      const response = await fetch('http://localhost:8080/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

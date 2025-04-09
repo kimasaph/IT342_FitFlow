@@ -89,7 +89,7 @@ const ForgotPassPage2 = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:8080/api/user/forgot2', {
+      const response = await fetch('http://localhost:8080/api/auth/reset-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ const ForgotPassPage2 = () => {
         {/* Back button positioned at top-left */}
         <button
             type="button"
-            onClick={() => navigate('/forgot1')}
+            onClick={() => navigate('/forgot-password')}
             className="absolute top-6 left-6 inline-flex items-center text-gray-500 hover:text-blue-600 transition-colors"
             disabled={isLoading}
           >

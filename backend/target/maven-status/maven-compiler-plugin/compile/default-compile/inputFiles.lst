@@ -9,10 +9,14 @@
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/controller/AuthController.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/controller/UserController.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/controller/VerificationController.java
+/Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/controller/WorkoutController.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/entity/UserEntity.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/entity/VerificationCodeEntity.java
+/Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/entity/WorkoutEntity.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/repository/UserRepository.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/repository/UserVerificationRepository.java
+/Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/repository/WorkoutRepository.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/service/EmailService.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/service/UserService.java
 /Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/service/VerificationService.java
+/Users/asaphb/Downloads/Github/FitFlow/IT342_FitFlow/backend/src/main/java/edu/cit/fitflow/service/WorkoutService.java
