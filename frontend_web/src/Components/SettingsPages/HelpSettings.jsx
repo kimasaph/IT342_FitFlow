@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const HelpItem = ({ label, onClick }) => (
   <div
     onClick={onClick}
-    className="flex justify-between items-center px-4 py-3 hover:bg-gray-100 cursor-pointer rounded-xl transition"
+    className="flex justify-between items-center px-4 py-3 hover:bg-gray-100 cursor-pointer rounded-md transition"
   >
     <span className="text-base font-medium">{label}</span>
     <ChevronRight className="h-5 w-5 text-gray-400" />
@@ -23,13 +23,13 @@ const HelpSettings = () => {
 
         <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm text-[13px]">
           <HelpItem label="FAQs" onClick={() => navigate("/help/faqs")} />
-          <hr className="border-gray-100" />
+          <hr className="border-gray-50" />
           <HelpItem label="Account Issues" onClick={() => navigate("/help/account")} />
-          <hr className="border-gray-100" />
+          <hr className="border-gray-50" />
           <HelpItem label="Report a Bug" onClick={() => navigate("/help/report")} />
-          <hr className="border-gray-100" />
+          <hr className="border-gray-50" />
           <HelpItem label="Feedback & Suggestions" onClick={() => navigate("/help/feedback")} />
-          <hr className="border-gray-100" />
+          <hr className="border-gray-50" />
           <HelpItem label="Contact Support" onClick={() => navigate("/help/contact")} />
         </div>
 

@@ -31,6 +31,10 @@ const Dashboard = () => {
     };
   }, []);
 
+  useEffect (() => {
+    document.title = "Dashboard | FitFlow";
+  }, []);
+
   useEffect(() => {
     const clockInterval = setInterval(() => {
       const now = new Date();

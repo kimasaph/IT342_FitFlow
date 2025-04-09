@@ -307,7 +307,7 @@ import {
                   </Badge>
                 </IconButton>
   
-                <IconButton onClick={() => navigate("/sidebar-settings")}>
+                <IconButton onClick={() => navigate("/settings")}>
                   <SettingsIcon sx={{ color: "white" }} />
                 </IconButton>
   

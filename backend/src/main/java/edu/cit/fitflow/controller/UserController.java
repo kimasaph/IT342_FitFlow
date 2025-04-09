@@ -26,7 +26,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
@@ -112,7 +112,7 @@ public class UserController {
     }
 
     //Create of CRUD
-    @PostMapping("/signupuser")
+    @PostMapping("/signup")
       public ResponseEntity<?> postStudentRecord(@RequestBody UserEntity user) {
           try {
               logger.info("Received registration request for email: {}", user.getEmail());
@@ -275,7 +275,7 @@ public class UserController {
         }
     }
 
-      @PostMapping("/forgot1")
+      @PostMapping("/forgot-password")
       public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> request) {
           try {
               String email = request.get("email");
@@ -302,7 +302,7 @@ public class UserController {
           }
       }
 
-      @PostMapping("/forgot2")
+      @PostMapping("/reset-password")
       public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
           try {
               String email = request.get("email");
