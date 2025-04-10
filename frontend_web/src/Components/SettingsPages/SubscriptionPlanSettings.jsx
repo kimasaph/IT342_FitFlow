@@ -141,7 +141,7 @@ const SubscriptionPlanSettings = () => {
               <button 
                 className={getButtonClass(plan.color, hoveredPlan === plan.name)}
               >
-                <div classname= "font-bold">
+                <div className= "font-bold text-[13px]">
                 Choose {plan.name}
                 </div>
               </button>

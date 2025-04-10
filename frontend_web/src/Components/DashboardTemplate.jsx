@@ -127,7 +127,7 @@ import {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 2,
+              gap: 0,
               borderBottom: "1px solid rgba(203, 213, 225, 1)",
               pb: 3,
             }}
