@@ -1,5 +1,5 @@
 {
-  "name": "fitflow",
+  "name": "frontend_web",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,15 +9,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mui/icons-material": "^6.4.8",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@headlessui/react": "^2.2.1",
+    "@mui/icons-material": "^7.0.0",
+    "@mui/material": "^7.0.0",
+    "axios": "^1.8.4",
+    "lucide-react": "^0.484.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^5.5.0"
+    "react-router-dom": "^7.4.1"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
     "vite": "^6.2.3"
   }
 }
