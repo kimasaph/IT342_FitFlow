@@ -1,5 +1,6 @@
 package edu.cit.fitflow.service;
 
+import edu.cit.fitflow.entity.Role;
 import edu.cit.fitflow.entity.UserEntity;
 import edu.cit.fitflow.repository.UserRepository;
 
@@ -38,9 +39,12 @@ public class UserService {
 	}
 
   //Read of CRUD
-	public List<UserEntity> getAllUsers(){
-		return urepo.findAll();
-	}
+  public List<UserEntity> getAllUsers() {
+    logger.info("Fetching all users with role USER");
+    return urepo.findAll().stream()
+        .filter(user -> user.getRole() == Role.USER)
+        .toList();
+  }
 
   //Create of User
 	public UserEntity createUser(UserEntity user) {
@@ -85,5 +89,28 @@ public class UserService {
       msg = "User not found";
     }
     return msg;
+  }
+
+  public List<UserEntity> getAllTrainers() {
+    logger.info("Fetching all trainers");
+    return urepo.findAll().stream()
+        .filter(user -> user.getRole() == Role.TRAINER)
+        .toList();
+  }
+
+  public UserEntity createTrainer(UserEntity trainer) {
+    logger.info("Creating trainer with email: {}", trainer.getEmail());
+    trainer.setRole(Role.TRAINER);
+    return urepo.save(trainer);
+  }
+
+  public UserEntity updateTrainer(int trainerId, UserEntity updatedTrainerDetails) {
+    logger.info("Updating trainer with ID: {}", trainerId);
+    return updateUser(trainerId, updatedTrainerDetails); // Reuse existing update logic
+  }
+
+  public String deleteTrainer(int trainerId) {
+    logger.info("Deleting trainer with ID: {}", trainerId);
+    return deleteUser(trainerId); // Reuse existing delete logic
   }
 }

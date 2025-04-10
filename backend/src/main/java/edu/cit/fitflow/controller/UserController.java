@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import edu.cit.fitflow.config.FileStorageConfig;
@@ -49,6 +51,8 @@ public class UserController {
 
   @Autowired
   private FileStorageConfig fileStorageConfig;
+
+  private Object userService;
 
   @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
@@ -362,5 +366,107 @@ public class UserController {
               return ResponseEntity.badRequest()
                   .body(Map.of("error", "Password reset failed: " + e.getMessage()));
           }
-      }
+        }
+
+    @GetMapping("/all-trainers")
+    public ResponseEntity<?> getAllTrainers() {
+        try {
+            logger.info("Fetching all trainers");
+            List<UserEntity> trainers = userv.getAllUsers().stream()
+                .filter(user -> user.getRole() == Role.TRAINER)
+                .toList();
+            return ResponseEntity.ok(trainers);
+        } catch (Exception e) {
+            logger.error("Error fetching trainers: ", e);
+            return ResponseEntity.status(500).body(Map.of("error", "Failed to fetch trainers"));
+        }
+    }
+
+    @PostMapping("/create-trainer")
+    public ResponseEntity<?> createTrainer(@RequestBody UserEntity trainer) {
+        try {
+            logger.info("Creating new trainer with email: {}", trainer.getEmail());
+            trainer.setRole(Role.TRAINER);
+            UserEntity savedTrainer = userv.createUser(trainer);
+            savedTrainer.setPassword(null); // Do not return the password
+            return ResponseEntity.ok(savedTrainer);
+        } catch (Exception e) {
+            logger.error("Error creating trainer: ", e);
+            return ResponseEntity.badRequest().body(Map.of("error", "Failed to create trainer"));
+        }
+    }
+
+    @PutMapping("/update-trainer/{trainerId}")
+    public ResponseEntity<?> updateTrainer(@PathVariable int trainerId, @RequestBody UserEntity updatedTrainerDetails) {
+        try {
+            logger.info("Updating trainer with ID: {}", trainerId);
+            UserEntity updatedTrainer = userv.updateUser(trainerId, updatedTrainerDetails);
+            return ResponseEntity.ok(updatedTrainer);
+        } catch (Exception e) {
+            logger.error("Error updating trainer: ", e);
+            return ResponseEntity.status(500).body(Map.of("error", "Failed to update trainer"));
+        }
+    }
+
+    @DeleteMapping("/delete-trainer/{trainerId}")
+    public ResponseEntity<?> deleteTrainer(@PathVariable int trainerId) {
+        try {
+            logger.info("Deleting trainer with ID: {}", trainerId);
+            String message = userv.deleteUser(trainerId);
+            return ResponseEntity.ok(Map.of("message", message));
+        } catch (Exception e) {
+            logger.error("Error deleting trainer: ", e);
+            return ResponseEntity.status(500).body(Map.of("error", "Failed to delete trainer"));
+        }
+    }
+
+    @GetMapping("/all-users")
+    public ResponseEntity<?> getAllUsers() {
+        try {
+            logger.info("Fetching all users with role USER");
+            List<UserEntity> users = userv.getAllUsers();
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            logger.error("Error fetching users: ", e);
+            return ResponseEntity.status(500).body(Map.of("error", "Failed to fetch users"));
+        }
+    }
+
+    @PostMapping("/create-user")
+    public ResponseEntity<?> createUser(@RequestBody UserEntity user) {
+        try {
+            logger.info("Creating new user with email: {}", user.getEmail());
+            user.setRole(Role.USER); // Default role for users
+            UserEntity savedUser = userv.createUser(user);
+            savedUser.setPassword(null); // Do not return the password
+            return ResponseEntity.ok(savedUser);
+        } catch (Exception e) {
+            logger.error("Error creating user: ", e);
+            return ResponseEntity.badRequest().body(Map.of("error", "Failed to create user"));
+        }
+    }
+
+    @PutMapping("/update-user/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable int userId, @RequestBody UserEntity updatedUserDetails) {
+        try {
+            logger.info("Updating user with ID: {}", userId);
+            UserEntity updatedUser = userv.updateUser(userId, updatedUserDetails);
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            logger.error("Error updating user: ", e);
+            return ResponseEntity.status(500).body(Map.of("error", "Failed to update user"));
+        }
+    }
+
+    @DeleteMapping("/delete-user/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable int userId) {
+        try {
+            logger.info("Deleting user with ID: {}", userId);
+            String message = userv.deleteUser(userId);
+            return ResponseEntity.ok(Map.of("message", message));
+        } catch (Exception e) {
+            logger.error("Error deleting user: ", e);
+            return ResponseEntity.status(500).body(Map.of("error", "Failed to delete user"));
+        }
+    }
 }

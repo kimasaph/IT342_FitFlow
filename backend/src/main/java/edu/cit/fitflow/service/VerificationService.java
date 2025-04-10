@@ -73,29 +73,23 @@ public class VerificationService {
     public boolean verifyCode(String email, String code) {
         logger.info("Verifying code for email: {}", email);
         Optional<VerificationCodeEntity> verificationCode = codeRepository.findByEmailAndCode(email, code);
-        
+    
         if (verificationCode.isPresent()) {
             VerificationCodeEntity savedCode = verificationCode.get();
-            
-            // Ensure role is checked if needed
-            UserEntity user = userRepository.findByEmail(email);
-            if (user != null && user.getRole() == Role.TRAINER) {
-                logger.info("Trainer role verified for email: {}", email);
-            }
-            
+    
             // Check if code has expired
             if (LocalDateTime.now().isAfter(savedCode.getExpiryDate())) {
                 logger.info("Code expired for email: {}", email);
                 codeRepository.delete(savedCode);
                 return false;
             }
-            
+    
             // Code is valid, delete it after use
             logger.info("Code verified successfully for email: {}", email);
             codeRepository.delete(savedCode);
             return true;
         }
-
+    
         logger.info("Invalid code provided for email: {}", email);
         return false;
     }

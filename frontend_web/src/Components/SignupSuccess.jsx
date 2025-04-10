@@ -12,6 +12,14 @@ const SignupSuccessPage = () => {
     if (!localStorage.getItem('isAuthenticated')) {
       localStorage.setItem('isAuthenticated', 'true');
     }
+    // Ensure token and user data are stored
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!token || !user) {
+      alert('Authentication data is missing. Please log in again.');
+      navigate('/dashboard');
+      return;
+    }
     navigate('/signup-setup');
   };
 
@@ -75,12 +83,15 @@ const SignupSuccessPage = () => {
           </p>
 
           <div className="space-y-4">
-            <Link
-              to="/dashboard"
+            <button
+              onClick={() => {
+                console.log('Navigating to dashboard');
+                navigate('/dashboard');
+              }}
               className="block w-full py-3 px-4 rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-800 transition duration-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Go to Dashboard
-            </Link>
+            </button>
 
             <button
               onClick={handleProfileSetup}

@@ -31,13 +31,7 @@ public class SecurityConfig {
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @Autowired
-    private JwtUtil jwtUtil;
     
     // Instead of autowiring these, we'll look them up from the application context
     // during the filterChain method execution

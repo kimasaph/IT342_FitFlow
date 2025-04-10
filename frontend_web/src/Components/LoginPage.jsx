@@ -81,59 +81,44 @@ useEffect(() => {
     e.preventDefault();
     setIsLoading(true);
     setErrorMessages([]);
-
+  
     try {
-      const response = await fetch('http://localhost:8080/api/user/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8080/api/user/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
-        credentials: 'include',
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
         }),
       });
-
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
-        // Check if the error is related to admin credentials
-        if (data.error === 'Invalid credentials for admin') {
-          throw new Error('Admin login failed. Please check the credentials.');
-        }
-        throw new Error(data.error || 'Login failed');
+        throw new Error(data.error || "Login failed");
       }
-
-      // Success case
-      if (data.token && data.user) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        localStorage.setItem('isAuthenticated', 'true');
-        
-        if (onLoginSuccess) {
-          onLoginSuccess(); 
-        }
-
-        const storedToken = localStorage.getItem('token');
-        console.log('Stored token:', storedToken);
-        
-        // Redirect based on user role
-        const userRole = data.user.role;
-        if (userRole === 'admin') {
-          navigate('/admin-dashboard');
-        } else if (userRole === 'trainer') {
-          navigate('/trainer-dashboard');
-        } else {
-          navigate('/dashboard');
-        }
+  
+      // Store user data and token
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      console.log("User role:", data.user.role); // Debugging log
+      localStorage.setItem("isAuthenticated", "true");
+  
+      // Redirect based on role
+      const userRole = data.user.role;
+      if (userRole === "ADMIN") {
+        navigate("/admin-dashboard");
+      } else if (userRole === "TRAINER") {
+        navigate("/dashboard");
       } else {
-        throw new Error('Invalid response format from server');
+        navigate("/dashboard");
       }
     } catch (error) {
-      console.error('Login error:', error);
-      setErrorMessages([error.message || 'Invalid email or password']);
+      setErrorMessages([error.message || "An unexpected error occurred"]);
+    } finally {
       setIsLoading(false);
     }
   };
