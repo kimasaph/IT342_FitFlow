@@ -1,27 +1,79 @@
 import React, { useState, useEffect } from "react";
 import Footer from "../Footer";
+import { Toaster, toast } from "react-hot-toast";
 
 const GoalPreferencesSettings = () => {
   const [goal, setGoal] = useState("");
   const [isModified, setIsModified] = useState(false);
+  const [initialGoal, setInitialGoal] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Load goal on mount
   useEffect(() => {
-    // Assume user info is stored in localStorage after login
     const userData = JSON.parse(localStorage.getItem("user"));
-  
-    if (userData && userData.bodyGoal) {
-      setGoal(userData.bodyGoal); // prefill based on saved goal
-    }
-  }, []);  
 
-  const handleSubmit = (e) => {
+    if (userData && userData.bodyGoal) {
+      setGoal(userData.bodyGoal);
+      setInitialGoal(userData.bodyGoal);
+    }
+  }, []);
+
+  // Track if user changed the goal
+  useEffect(() => {
+    setIsModified(goal !== initialGoal);
+  }, [goal, initialGoal]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ goal });
-    // Handle saving goal
+    setIsLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const storedUser = localStorage.getItem("user");
+
+      if (!token || !storedUser) {
+        throw new Error("No user or token found");
+      }
+
+      const userData = JSON.parse(storedUser);
+
+      // Update request payload
+      const updatedData = {
+        ...userData,
+        bodyGoal: goal,
+      };
+
+      const res = await fetch(`http://localhost:8080/api/auth/update-profile?userId=${userData.userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(errText || "Failed to update goal.");
+      }
+
+      const updatedUser = await res.json();
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setInitialGoal(updatedUser.bodyGoal);
+      setIsModified(false);
+      toast.success("Fitness goal updated!");
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "Update failed.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      <Toaster position="top-right" toastOptions={{ style: { background: "#ffffff", color: "#333333" } }} />
+
       <div className="p-8 w-full max-w-[680px] mx-auto flex-grow">
         <h1 className="text-xl font-bold mb-6 mt-4">Goal Preferences</h1>
 
@@ -50,14 +102,14 @@ const GoalPreferencesSettings = () => {
           <div className="pt-2 text-right">
             <button
               type="submit"
-              disabled={!isModified}
+              disabled={!isModified || isLoading}
               className={`transition px-16 py-3 rounded-xl text-sm font-semibold ${
-                isModified
+                isModified && !isLoading
                   ? "bg-[#3797EF] text-white hover:bg-[#318ce7] cursor-pointer"
                   : "bg-[#3797EF]/30 text-white cursor-not-allowed"
               }`}
             >
-              Submit
+              {isLoading ? "Saving..." : "Submit"}
             </button>
           </div>
         </form>

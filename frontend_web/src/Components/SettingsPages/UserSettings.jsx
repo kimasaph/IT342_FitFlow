@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { User, Camera, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Footer from "../Footer";
+import { Toaster, toast } from "react-hot-toast";
 
 const UserSettings = ({ onLogout }) => {
   const navigate = useNavigate();
@@ -120,10 +122,13 @@ const UserSettings = ({ onLogout }) => {
       setFormData(finalUserData);
       setIsChanged(false);
       setEditingField(null);
+      toast.success('Profile updated successfully!');
 
     } catch (error) {
       console.error('Profile update error:', error);
-      setError(error.message || 'An unexpected error occurred');
+      const errorMessage = error.message || 'An unexpected error occurred';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -201,13 +206,14 @@ const UserSettings = ({ onLogout }) => {
         };
         localStorage.setItem('user', JSON.stringify(updatedUser));
 
-        setShowImageModal(false);
-        setError('');
-        setIsChanged(false);
+        toast.success('Profile picture updated!');
+        setShowImageModal(false);  // <-- This closes the modal after successful upload
 
       } catch (error) {
         console.error('Complete error details:', error);
-        setError(error.message);
+        const errorMessage = error.message || 'Failed to upload profile picture';
+        setError(errorMessage);
+        toast.error(errorMessage);
       } finally {
         setIsLoading(false);
       }
@@ -478,6 +484,17 @@ const UserSettings = ({ onLogout }) => {
       {/* Image Upload Modal */}
       {showImageModal && <ImageUploadModal />}
       {showEnlargedImage && <EnlargedImageModal />}
+
+            <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: "#D4EDDA",
+            color: "#155724",
+          },
+        }}
+      />
+      <Footer />
     </div>
   );
 };
