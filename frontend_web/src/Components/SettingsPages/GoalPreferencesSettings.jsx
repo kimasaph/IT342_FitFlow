@@ -1,26 +1,79 @@
 import React, { useState, useEffect } from "react";
 import Footer from "../Footer";
+import { Toaster, toast } from "react-hot-toast";
 
 const GoalPreferencesSettings = () => {
   const [goal, setGoal] = useState("");
   const [isModified, setIsModified] = useState(false);
+  const [initialGoal, setInitialGoal] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Load goal on mount
   useEffect(() => {
-    if (goal) {
-      setIsModified(true);
-    } else {
-      setIsModified(false);
-    }
-  }, [goal]);
+    const userData = JSON.parse(localStorage.getItem("user"));
 
-  const handleSubmit = (e) => {
+    if (userData && userData.bodyGoal) {
+      setGoal(userData.bodyGoal);
+      setInitialGoal(userData.bodyGoal);
+    }
+  }, []);
+
+  // Track if user changed the goal
+  useEffect(() => {
+    setIsModified(goal !== initialGoal);
+  }, [goal, initialGoal]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ goal });
-    // Handle saving goal
+    setIsLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const storedUser = localStorage.getItem("user");
+
+      if (!token || !storedUser) {
+        throw new Error("No user or token found");
+      }
+
+      const userData = JSON.parse(storedUser);
+
+      // Update request payload
+      const updatedData = {
+        ...userData,
+        bodyGoal: goal,
+      };
+
+      const res = await fetch(`http://localhost:8080/api/auth/update-profile?userId=${userData.userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(errText || "Failed to update goal.");
+      }
+
+      const updatedUser = await res.json();
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setInitialGoal(updatedUser.bodyGoal);
+      setIsModified(false);
+      toast.success("Fitness goal updated!");
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "Update failed.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      <Toaster position="top-right" toastOptions={{ style: { background: "#ffffff", color: "#333333" } }} />
+
       <div className="p-8 w-full max-w-[680px] mx-auto flex-grow">
         <h1 className="text-xl font-bold mb-6 mt-4">Goal Preferences</h1>
 
@@ -33,9 +86,12 @@ const GoalPreferencesSettings = () => {
               className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none bg-white"
             >
               <option value="">Select goal</option>
-              <option value="bulking">Bulking</option>
-              <option value="cutting">Cutting</option>
-              <option value="maintenance">Maintenance</option>
+              <option value="lose-weight">Lose Weight</option>
+              <option value="build-muscle">Build Muscle</option>
+              <option value="maintain-weight">Maintain Weight</option>
+              <option value="increase-endurance">Increase Endurance</option>
+              <option value="improve-flexibility">Improve Flexibility</option>
+              <option value="overall-fitness">Overall Fitness</option>
             </select>
           </div>
 
@@ -46,14 +102,14 @@ const GoalPreferencesSettings = () => {
           <div className="pt-2 text-right">
             <button
               type="submit"
-              disabled={!isModified}
+              disabled={!isModified || isLoading}
               className={`transition px-16 py-3 rounded-xl text-sm font-semibold ${
-                isModified
+                isModified && !isLoading
                   ? "bg-[#3797EF] text-white hover:bg-[#318ce7] cursor-pointer"
                   : "bg-[#3797EF]/30 text-white cursor-not-allowed"
               }`}
             >
-              Submit
+              {isLoading ? "Saving..." : "Submit"}
             </button>
           </div>
         </form>

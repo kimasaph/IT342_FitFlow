@@ -69,6 +69,10 @@ const SidebarSettings = () => {
   };
 
   useEffect(() => {
+    document.title = "Settings | FitFlow";
+  }, []);
+
+  useEffect(() => {
     const currentPath = window.location.pathname;
     setMenuItemsState((prevItems) =>
       prevItems.map((item) => ({
@@ -482,7 +486,7 @@ const SidebarSettings = () => {
           <ContactsSettings />
         ) : (
           <div className="p-6">
-            <h1 className="text-2xl font-semibold">Select a setting from the sidebar</h1>
+            <h1 className="text-2xl font-semibold"></h1>
           </div>
         )}
       </div>
