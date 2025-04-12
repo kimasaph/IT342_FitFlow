@@ -19,7 +19,7 @@ import StrengthTraining from "./Components/StrengthTraining.jsx";
 import Cardio from "./Components/Cardio.jsx";
 import FlexiYoga from "./Components/FlexiYoga.jsx";
 import SettingsRoutes from "./SettingsRoutes.jsx";
-import DietPlan from "./Components/DietPlanPage.jsx";
+import DietPlan from "./Components/DietPlanPage/DietPlanPage.jsx";
 import axios from 'axios';
 
 const setupAxiosInterceptors = () => {

@@ -17,7 +17,8 @@ const UserSettings = ({ onLogout }) => {
     email: '',
     age: '',
     gender: '',
-    allowWorkoutSuggestions: false
+    allowWorkoutSuggestions: false,
+    phoneNumber: ''
   });
 
   const [formData, setFormData] = useState({ ...userData });
@@ -86,7 +87,7 @@ const UserSettings = ({ onLogout }) => {
         profilePicture: formData.profilePicture
       };
       
-      const response = await fetch(`http://localhost:8080/api/user/update-profile?userId=${userData.userId}`, {
+      const response = await fetch(`http://localhost:8080/api/auth/update-profile?userId=${userData.userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -150,7 +151,7 @@ const UserSettings = ({ onLogout }) => {
 
         setIsLoading(true);
 
-        const response = await fetch('http://localhost:8080/api/user/upload-profile-picture', {
+        const response = await fetch('http://localhost:8080/api/auth/upload-profile-picture', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -303,73 +304,57 @@ const UserSettings = ({ onLogout }) => {
     </div>
   );
 
-  const renderField = (label, fieldName, type = 'text', options = null) => {
-    const isEditing = editingField === fieldName;
+
+  const renderField = (label, fieldName, type = 'text', options = null, alwaysEditable = false) => {
+    const isEditing = alwaysEditable || editingField === fieldName;
     const value = formData[fieldName];
-    
+  
     return (
       <div className="mb-6">
-        <h3 className="text-lg font-bold mb-2">{label}</h3>
-        
+        <label className="block text-[15px] font-bold mb-2">{label}</label>
+  
         {isEditing ? (
           type === 'select' ? (
-            <div className="relative w-full">
-              <select
-                name={fieldName}
-                value={value || ''}
-                onChange={handleInputChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-              >
-                {options.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              <div className="absolute top-0 right-0 p-3">
-                <button 
-                  type="button" 
-                  className="text-gray-500"
-                  onClick={() => toggleEditField(null)}
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
+            <select
+              name={fieldName}
+              value={value || ''}
+              onChange={handleInputChange}
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            >
+              {options.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           ) : (
-            <div className="relative w-full">
-              <input
-                type={type}
-                name={fieldName}
-                value={value || ''}
-                onChange={handleInputChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-              />
-              <div className="absolute top-0 right-0 p-3">
-                <button 
-                  type="button" 
-                  className="text-gray-500"
-                  onClick={() => toggleEditField(null)}
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
+            <input
+              type={type}
+              name={fieldName}
+              value={value || ''}
+              placeholder={`Enter ${label.toLowerCase()}`}
+              onChange={handleInputChange}
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400 text-black"
+            />
           )
         ) : (
-          <div 
-            className="p-3 border border-gray-200 rounded-lg bg-gray-50 text-black flex justify-between items-center cursor-pointer"
+          <div
+            className="px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-sm text-black flex justify-between items-center cursor-pointer"
             onClick={() => toggleEditField(fieldName)}
           >
             <span>{renderFieldValue(fieldName, value)}</span>
-            <button type="button" className="text-blue-500">
-              Edit
-            </button>
+            {!alwaysEditable && (
+              <button type="button" className="text-blue-500 text-sm font-medium">
+                Edit
+              </button>
+            )}
           </div>
         )}
       </div>
     );
   };
+  
+  
 
   const renderFieldValue = (fieldName, value) => {
     if (fieldName === 'gender') {
@@ -384,6 +369,7 @@ const UserSettings = ({ onLogout }) => {
     
     return value || 'Not specified';
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -434,6 +420,7 @@ const UserSettings = ({ onLogout }) => {
           <form onSubmit={handleSubmit} className="space-y-7">
             {renderField('First Name', 'firstName')}
             {renderField('Last Name', 'lastName')}
+            {renderField('Username', 'username',)}
             {renderField('Age', 'age', 'number')}
             {renderField('Gender', 'gender', 'select', [
               { value: '', label: 'Select gender' },
@@ -442,6 +429,8 @@ const UserSettings = ({ onLogout }) => {
               { value: 'non-binary', label: 'Non-binary' },
               { value: 'prefer-not-to-say', label: 'Prefer not to say' }
             ])}
+            {renderField('Phone Number', 'phoneNumber')}
+
             
             {/* Toggle for workout suggestions */}
             <div className="mb-6">

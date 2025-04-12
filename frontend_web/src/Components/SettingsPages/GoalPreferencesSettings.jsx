@@ -6,12 +6,13 @@ const GoalPreferencesSettings = () => {
   const [isModified, setIsModified] = useState(false);
 
   useEffect(() => {
-    if (goal) {
-      setIsModified(true);
-    } else {
-      setIsModified(false);
+    // Assume user info is stored in localStorage after login
+    const userData = JSON.parse(localStorage.getItem("user"));
+  
+    if (userData && userData.bodyGoal) {
+      setGoal(userData.bodyGoal); // prefill based on saved goal
     }
-  }, [goal]);
+  }, []);  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,9 +34,12 @@ const GoalPreferencesSettings = () => {
               className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none bg-white"
             >
               <option value="">Select goal</option>
-              <option value="bulking">Bulking</option>
-              <option value="cutting">Cutting</option>
-              <option value="maintenance">Maintenance</option>
+              <option value="lose-weight">Lose Weight</option>
+              <option value="build-muscle">Build Muscle</option>
+              <option value="maintain-weight">Maintain Weight</option>
+              <option value="increase-endurance">Increase Endurance</option>
+              <option value="improve-flexibility">Improve Flexibility</option>
+              <option value="overall-fitness">Overall Fitness</option>
             </select>
           </div>
 
