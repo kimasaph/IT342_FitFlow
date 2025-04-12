@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface MealRepository extends JpaRepository<MealEntity, Integer> {
-    List<MealEntity> findByDietPlanId(Integer dietPlanId);
+    List<MealEntity> findByUserId(Integer userId);
 }

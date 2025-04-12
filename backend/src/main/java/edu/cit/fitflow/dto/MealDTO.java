@@ -3,6 +3,7 @@ package edu.cit.fitflow.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -18,4 +19,7 @@ public class MealDTO {
     private String notes;
     private String image;
     private String ingredients;
+    private Integer userId;
+    private Date createdAt;
+    private Date updatedAt;
 }

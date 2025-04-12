@@ -5,6 +5,8 @@ import edu.cit.fitflow.entity.DietPlanEntity;
 import edu.cit.fitflow.entity.MealEntity;
 import edu.cit.fitflow.repository.DietPlanRepository;
 import edu.cit.fitflow.repository.MealRepository;
+import edu.cit.fitflow.repository.UserRepository;
+import edu.cit.fitflow.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,7 +20,7 @@ public class MealService {
     private MealRepository mealRepository;
     
     @Autowired
-    private DietPlanRepository dietPlanRepository;
+    private UserRepository userRepository;
     
     public List<MealDTO> getAllMeals() {
         List<MealEntity> meals = mealRepository.findAll();
@@ -34,18 +36,18 @@ public class MealService {
         return convertToDTO(meal);
     }
     
-    // Get meals by diet plan ID
-    public List<MealDTO> getMealsByDietPlanId(Integer dietPlanId) {
-        List<MealEntity> meals = mealRepository.findByDietPlanId(dietPlanId);
+    // Get meals by user ID
+    public List<MealDTO> getMealsByUserId(Integer userId) {
+        List<MealEntity> meals = mealRepository.findByUserId(userId);
         return meals.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
     
     // Create a new meal
-    public MealDTO createMeal(Integer dietPlanId, MealDTO mealDTO) {
-        DietPlanEntity dietPlan = dietPlanRepository.findById(dietPlanId)
-                .orElseThrow(() -> new EntityNotFoundException("Diet plan not found with id: " + dietPlanId));
+    public MealDTO createMeal(MealDTO mealDTO) {
+        UserEntity user = userRepository.findById(mealDTO.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + mealDTO.getUserId()));
         
         MealEntity meal = new MealEntity();
         meal.setName(mealDTO.getName());
@@ -57,7 +59,7 @@ public class MealService {
         meal.setNotes(mealDTO.getNotes());
         meal.setImage(mealDTO.getImage());
         meal.setIngredients(mealDTO.getIngredients());
-        meal.setDietPlan(dietPlan);
+        meal.setUser(user);
         
         MealEntity savedMeal = mealRepository.save(meal);
         return convertToDTO(savedMeal);
@@ -100,6 +102,9 @@ public class MealService {
         dto.setNotes(meal.getNotes());
         dto.setImage(meal.getImage());
         dto.setIngredients(meal.getIngredients());
+        dto.setUserId(meal.getUser().getId());
+        dto.setCreatedAt(meal.getCreatedAt());
+        dto.setUpdatedAt(meal.getUpdatedAt());
         return dto;
     }
 }

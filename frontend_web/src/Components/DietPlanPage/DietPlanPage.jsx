@@ -167,12 +167,7 @@ const AddMealButton = ({ onAddMeal, dietPlanId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Check if we have a diet plan ID
-    if (!dietPlanId) {
-      alert("No active diet plan found. Please create a diet plan first.");
-      setIsModalOpen(false);
-      return;
-    }
+    const userId = localStorage.getItem('userId') || 1;
     
     // Format the meal data to match the expected format
     const newMeal = {
@@ -183,7 +178,8 @@ const AddMealButton = ({ onAddMeal, dietPlanId }) => {
       carbs: Number(mealData.carbs),
       fats: Number(mealData.fats),
       notes: mealData.description,
-      ingredients: mealData.ingredients
+      ingredients: mealData.ingredients,
+      userId: userId
     };
     
     try {

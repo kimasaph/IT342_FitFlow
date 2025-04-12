@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.Date;
 
 @Entity
 @Table(name = "meals")
@@ -41,6 +42,21 @@ public class MealEntity {
     private String ingredients;
     
     @ManyToOne
-    @JoinColumn(name = "diet_plan_id", nullable = false)
-    private DietPlanEntity dietPlan;
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+    
+    private Date createdAt;
+    
+    private Date updatedAt;
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+        updatedAt = new Date();
+    }
+    
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
 }

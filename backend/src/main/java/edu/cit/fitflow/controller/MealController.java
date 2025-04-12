@@ -29,17 +29,17 @@ public class MealController {
         return new ResponseEntity<>(meal, HttpStatus.OK);
     }
     
-    // Get meals by diet plan ID
-    @GetMapping("/diet-plan/{dietPlanId}")
-    public ResponseEntity<List<MealDTO>> getMealsByDietPlanId(@PathVariable Integer dietPlanId) {
-        List<MealDTO> meals = mealService.getMealsByDietPlanId(dietPlanId);
+    // Get meals by user ID
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<MealDTO>> getMealsByUserId(@PathVariable Integer userId) {
+        List<MealDTO> meals = mealService.getMealsByUserId(userId);
         return new ResponseEntity<>(meals, HttpStatus.OK);
     }
     
     // Create a new meal
-    @PostMapping("/diet-plan/{dietPlanId}")
-    public ResponseEntity<MealDTO> createMeal(@PathVariable Integer dietPlanId, @RequestBody MealDTO mealDTO) {
-        MealDTO createdMeal = mealService.createMeal(dietPlanId, mealDTO);
+    @PostMapping
+    public ResponseEntity<MealDTO> createMeal(@RequestBody MealDTO mealDTO) {
+        MealDTO createdMeal = mealService.createMeal(mealDTO);
         return new ResponseEntity<>(createdMeal, HttpStatus.CREATED);
     }
     

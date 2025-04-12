@@ -78,7 +78,6 @@ public class DietPlanService {
                 meal.setNotes(mealDTO.getNotes());
                 meal.setImage(mealDTO.getImage());
                 meal.setIngredients(mealDTO.getIngredients());
-                meal.setDietPlan(savedDietPlan);
                 mealRepository.save(meal);
             }
         }
