@@ -52,8 +52,9 @@ import {
     const navigate = useNavigate(); // Initialize useNavigate
 
     const handleLogout = () => {
-      // Clear any stored authentication tokens
-      localStorage.removeItem("token"); // Adjust based on your token storage method
+      // Clear any stored authentication tokens and role
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
       sessionStorage.removeItem("token");
     
       // Redirect to login page

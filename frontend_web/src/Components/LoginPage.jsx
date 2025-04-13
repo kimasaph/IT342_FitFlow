@@ -69,6 +69,13 @@ useEffect(() => {
   }
 }, [navigate, onLoginSuccess]);
 
+useEffect(() => {
+  // Clear any stored authentication tokens and role on page load
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  localStorage.removeItem("isAuthenticated");
+}, []);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -108,8 +115,9 @@ useEffect(() => {
 
       // Success case
       if (data.token && data.user) {
-        localStorage.setItem('token', data.token);
+        localStorage.setItem('token', data.token); // Store token
         localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('role', data.user.role); // Store the role
         localStorage.setItem('isAuthenticated', 'true');
         
         if (onLoginSuccess) {

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "r
 import Dashboard from "./Components/Dashboard";
 import LoginPage from "./Components/LoginPage";
 import SignupPage from "./Components/SignupPage";
-import SignupSuccessPage from "./components/SignupSuccess";
+import SignupSuccessPage from "./Components/SignupSuccess";
 import ForgotPassPage1 from "./Components/ForgotPassPage1.jsx";
 import ForgotPassPage2 from "./Components/ForgotPassPage2.jsx";
 import SignupVerifyPage from "./Components/SignupVerifyPage.jsx";
@@ -30,8 +30,7 @@ const setupAxiosInterceptors = () => {
   const token = localStorage.getItem('token');
   
   if (token) {
-    // Set default headers for all requests
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Pass token
   }
   
   // Add response interceptor to handle auth errors
@@ -40,9 +39,10 @@ const setupAxiosInterceptors = () => {
     error => {
       if (error.response && error.response.status === 401) {
         // If unauthorized, clear localStorage and redirect to login
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        localStorage.removeItem("user");
+        localStorage.removeItem("isAuthenticated");
         window.location.href = '/login';
       }
       return Promise.reject(error);
