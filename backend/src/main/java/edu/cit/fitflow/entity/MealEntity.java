@@ -45,6 +45,10 @@ public class MealEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
     
+    @ManyToOne
+    @JoinColumn(name = "diet_plan_id")
+    private DietPlanEntity dietPlan;
+    
     private Date createdAt;
     
     private Date updatedAt;

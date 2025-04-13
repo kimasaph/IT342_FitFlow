@@ -32,6 +32,7 @@ import edu.cit.fitflow.entity.UserEntity;
 import edu.cit.fitflow.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import edu.cit.fitflow.entity.Role;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -112,6 +113,7 @@ public class UserController {
         userMap.put("created_at", user.getCreated_at() != null ? user.getCreated_at() : new Date());
         userMap.put("phoneNumber", user.getPhoneNumber() != null ? user.getPhoneNumber() : "");
 
+
         // Add the full URL for the profile picture
         String profilePicturePath = user.getProfilePicturePath();
         if (profilePicturePath != null && !profilePicturePath.isEmpty()) {
@@ -142,52 +144,52 @@ public class UserController {
 
     //Create of CRUD
     @PostMapping("/signup")
-      public ResponseEntity<?> postStudentRecord(@RequestBody UserEntity user) {
-          try {
-              logger.info("Received registration request for email: {}", user.getEmail());
-              
-              // Validate required fields
-              if (user.getEmail() == null || user.getEmail().isEmpty()) {
-                  return ResponseEntity.badRequest().body("Email is required");
-              }
-              if (user.getPassword() == null || user.getPassword().isEmpty()) {
-                  return ResponseEntity.badRequest().body("Password is required");
-              }
-              if (user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty()) {
-                  return ResponseEntity.badRequest().body("Phone number is required");
-              }
-              
-              // Encrypt the password before saving
-              String encryptedPassword = passwordEncoder.encode(user.getPassword());
-              user.setPassword(encryptedPassword);
-              
-              // Set username and created_at
-              user.setUsername(user.getEmail());
-              user.setCreated_at(new Date());
+    public ResponseEntity<?> postStudentRecord(@RequestBody UserEntity user) {
+        try {
+            logger.info("Received registration request for email: {}", user.getEmail());
+            
+            // Validate required fields
+            if (user.getEmail() == null || user.getEmail().isEmpty()) {
+                return ResponseEntity.badRequest().body("Email is required");
+            }
+            if (user.getPassword() == null || user.getPassword().isEmpty()) {
+                return ResponseEntity.badRequest().body("Password is required");
+            }
+            if (user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty()) {
+                return ResponseEntity.badRequest().body("Phone number is required");
+            }
+            
+            // Encrypt the password before saving
+            String encryptedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encryptedPassword);
+            
+            // Set username and created_at
+            user.setUsername(user.getEmail());
+            user.setCreated_at(new Date());
 
-              // Initialize profile fields with default values
-              user.setFirstName(user.getFirstName() != null ? user.getFirstName() : "");
-              user.setLastName(user.getLastName() != null ? user.getLastName() : "");
-              user.setGender(user.getGender() != null ? user.getGender() : "");
-              user.setHeight(user.getHeight() != null ? user.getHeight() : 0.0f);
-              user.setWeight(user.getWeight() != null ? user.getWeight() : 0.0f);
-              user.setAge(user.getAge() != null ? user.getAge() : 0);
-              user.setBodyGoal(user.getBodyGoal() != null ? user.getBodyGoal() : "");
-              user.setUsername(user.getUsername() != null ? user.getUsername() : user.getEmail());
-              
-              UserEntity savedUser = userv.createUser(user);
-              
-              // Don't send the encrypted password back in the response
-              savedUser.setPassword(null);
-              
-              return ResponseEntity.ok(savedUser);
-              
-          } catch (Exception e) {
-              logger.error("Error creating user: ", e);
-              return ResponseEntity.badRequest()
-                  .body("Error creating user: " + e.getMessage());
-          }
-      }
+            // Initialize profile fields with default values
+            user.setFirstName(user.getFirstName() != null ? user.getFirstName() : "");
+            user.setLastName(user.getLastName() != null ? user.getLastName() : "");
+            user.setGender(user.getGender() != null ? user.getGender() : "");
+            user.setHeight(user.getHeight() != null ? user.getHeight() : 0.0f);
+            user.setWeight(user.getWeight() != null ? user.getWeight() : 0.0f);
+            user.setAge(user.getAge() != null ? user.getAge() : 0); // Default age value
+            user.setBodyGoal(user.getBodyGoal() != null ? user.getBodyGoal() : "");
+            user.setUsername(user.getUsername() != null ? user.getUsername() : user.getEmail());
+            
+            UserEntity savedUser = userv.createUser(user);
+            
+            // Don't send the encrypted password back in the response
+            savedUser.setPassword(null);
+            
+            return ResponseEntity.ok(savedUser);
+            
+        } catch (Exception e) {
+            logger.error("Error creating user: ", e);
+            return ResponseEntity.badRequest()
+                .body("Error creating user: " + e.getMessage());
+        }
+    }
 
       //Update of User
       @PutMapping("/update-profile")

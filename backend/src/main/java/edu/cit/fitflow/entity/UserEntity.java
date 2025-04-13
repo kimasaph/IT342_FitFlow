@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
+import edu.cit.fitflow.entity.Role;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -47,7 +48,7 @@ public class UserEntity {
     private Float weight;
 
     @Column(nullable = false)
-    private Integer age;
+    private Integer age = 0; // Default value set to 0
 
     @Column(nullable = false)
     private String bodyGoal;
