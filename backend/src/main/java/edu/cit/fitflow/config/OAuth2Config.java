@@ -130,6 +130,8 @@ public class OAuth2Config {
                     user.setWeight(0.0F);  // Default weight value
                     user.setBodyGoal("");  // Default body goal value
                     
+                    user.setRole(Role.MEMBER); // Assign default role for OAuth2 users
+                    
                     userService.createUser(user);
                 }
 
@@ -205,6 +207,8 @@ public class OAuth2Config {
                     user.setHeight(0.0F);
                     user.setWeight(0.0F);
                     user.setBodyGoal("");
+                    
+                    user.setRole(Role.MEMBER); // Assign default role for OAuth2 users
                     
                     userService.createUser(user);
                     logger.info("Created new user for OAuth2 login: " + email);

@@ -43,6 +43,9 @@ public class UserService {
 		if (user.getAge() == null) {
 			user.setAge(0); // Default age value
 		}
+		if (user.getRole() == null) {
+			user.setRole(Role.MEMBER); // Default role if not provided
+		}
 		return urepo.save(user);
 	}
 

@@ -112,6 +112,7 @@ public class UserController {
         userMap.put("bodyGoal", user.getBodyGoal() != null ? user.getBodyGoal() : "");
         userMap.put("created_at", user.getCreated_at() != null ? user.getCreated_at() : new Date());
         userMap.put("phoneNumber", user.getPhoneNumber() != null ? user.getPhoneNumber() : "");
+        userMap.put("role", user.getRole() != null ? user.getRole().name() : ""); // Include role in response
 
 
         // Add the full URL for the profile picture
@@ -176,6 +177,9 @@ public class UserController {
             user.setAge(user.getAge() != null ? user.getAge() : 0); // Default age value
             user.setBodyGoal(user.getBodyGoal() != null ? user.getBodyGoal() : "");
             user.setUsername(user.getUsername() != null ? user.getUsername() : user.getEmail());
+            if (user.getRole() == null) {
+                user.setRole(Role.MEMBER); // Default role if not provided
+            }
             
             UserEntity savedUser = userv.createUser(user);
             

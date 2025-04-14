@@ -117,6 +117,9 @@ const UserSettings = ({ onLogout }) => {
         profilePicture: formData.profilePicture
       };
 
+      // Store updated token and role in localStorage
+      localStorage.setItem('token', updatedUser.token);
+      localStorage.setItem('role', updatedUser.role);
       localStorage.setItem('user', JSON.stringify(finalUserData));
       setUserData(finalUserData);
       setFormData(finalUserData);

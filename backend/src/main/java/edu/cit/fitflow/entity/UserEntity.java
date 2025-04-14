@@ -56,5 +56,9 @@ public class UserEntity {
     @Column(name = "profile_picture_path")
     private String profilePicturePath;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role; // Add role field
+
     private Date created_at;
 }

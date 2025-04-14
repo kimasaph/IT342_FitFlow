@@ -29,38 +29,29 @@ const SignupVerifyPage = () => {
     setErrorMessages([]);
 
     try {
-      console.log('Sending verification code:', verificationCode, 'for email:', email);
-      
-      // Updated endpoint to match your backend API
       const response = await fetch('http://localhost:8080/api/verification/verify-code', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
         },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: email,
-          code: verificationCode  // Changed to match backend parameter name
-        })
+        body: JSON.stringify({ email, code: verificationCode }),
       });
-      
-      console.log('Response status:', response.status);
-      
-      const data = await response.json();
-      console.log('Response data:', data);
-      
+
       if (!response.ok) {
-        throw new Error(data.message || 'Invalid verification code');
+        throw new Error('Invalid verification code');
       }
-      
-      // If verification successful, proceed to dashboard or welcome page
-      localStorage.removeItem('signupEmail'); // Clear the stored email
-      navigate('/signup-success');
-      
+
+      const data = await response.json();
+
+      // Store token and role in localStorage
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('role', data.role);
+      localStorage.setItem('isAuthenticated', 'true');
+
+      // Navigate to the dashboard
+      navigate('/dashboard');
     } catch (error) {
-      console.error('Verification error:', error);
-      setErrorMessages([`Error: ${error.message}`]);
+      setErrorMessages([error.message]);
     } finally {
       setIsLoading(false);
     }
