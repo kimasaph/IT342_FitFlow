@@ -87,12 +87,13 @@ public class UserController {
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("user", getUserResponseMap(user));
+            response.put("redirectUrl", user.getRole() == Role.ADMIN ? "/admin-dashboard" : "/dashboard");
 
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             logger.error("Login error: ", e);
-            return ResponseEntity.badRequest()
+            return ResponseEntity.status(500)
                 .body(Map.of("error", "Login failed: " + e.getMessage()));
         }
     }

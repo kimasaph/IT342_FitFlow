@@ -89,7 +89,16 @@ const App = () => {
 
           {/* Protected Routes */}
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route
+            path="/admin-dashboard"
+            element={
+              localStorage.getItem("role") === "ADMIN" ? (
+                <AdminDashboard />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
           <Route path="/trainer-dashboard" element={<TrainerDashboard />} />
           <Route path="/settings" element={<SidebarSettings />} />
           <Route path="/workout" element={<Workout />} />

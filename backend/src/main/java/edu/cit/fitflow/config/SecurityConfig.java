@@ -41,7 +41,9 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/public/**", "/oauth2/**").permitAll()
-                .anyRequest().permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN") // Restrict admin dashboard
+                .requestMatchers("/trainer/**").hasRole("TRAINER") // Restrict trainer endpoints
+                .anyRequest().permitAll() // Require authentication for all other endpoints
             )
             .oauth2Login(oauth2 -> oauth2
                 .userInfoEndpoint(userInfo -> userInfo
