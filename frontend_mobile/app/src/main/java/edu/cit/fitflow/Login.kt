@@ -5,21 +5,18 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class Login : AppCompatActivity() {
-    private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Initialize Firebase Auth and Firestore
-        auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
-
+        // Video Background
         val videoView = findViewById<VideoView>(R.id.vidGetStarted1)
         val uri = Uri.parse("android.resource://$packageName/${R.raw.get_started}")
         videoView.setVideoURI(uri)
@@ -29,28 +26,22 @@ class Login : AppCompatActivity() {
         videoView.setMediaController(mediaController)
 
         videoView.start()
-
         videoView.setOnCompletionListener {
-            videoView.start() // Restart video
+            videoView.start()
         }
 
-        // TextView for "Sign Up" - Navigate to Registration Form
-        val signUpText = findViewById<TextView>(R.id.txtSignUp1)
-        signUpText.setOnClickListener {
-            val intent = Intent(this, RegistrationForm::class.java)
-            startActivity(intent)
+        // Navigate to Registration
+        findViewById<TextView>(R.id.txtSignUp1).setOnClickListener {
+            startActivity(Intent(this, RegistrationForm::class.java))
         }
 
-        // TextView for "Forgot Password" - Navigate to Forgot Password
-        val forgotPasswordText = findViewById<TextView>(R.id.txtForgotPassword)
-        forgotPasswordText.setOnClickListener {
-            val intent = Intent(this, ForgotPassword1::class.java)
-            startActivity(intent)
+        // Navigate to Forgot Password
+        findViewById<TextView>(R.id.txtForgotPassword).setOnClickListener {
+            startActivity(Intent(this, ForgotPassword1::class.java))
         }
 
-        // Button for "Login" - Handle Login Logic
-        val loginButton = findViewById<Button>(R.id.btnLogin)
-        loginButton.setOnClickListener {
+        // Login Button
+        findViewById<Button>(R.id.btnLogin).setOnClickListener {
             val email = findViewById<EditText>(R.id.editTextTextEmailAddress2).text.toString().trim()
             val password = findViewById<EditText>(R.id.editTextTextPassword3).text.toString().trim()
 
@@ -59,43 +50,31 @@ class Login : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Sign in with Firebase Auth
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        // Login successful, show a success toast
-                        Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
+            // Retrofit Login Call
+            val loginRequest = LoginRequest(email, password)
 
-                        // Retrieve user data from Firestore
-                        val userId = auth.currentUser?.uid ?: return@addOnCompleteListener
-                        db.collection("users").document(userId)
-                            .get()
-                            .addOnSuccessListener { document ->
-                                if (document.exists()) {
-                                    val firstName = document.getString("firstName")
-                                    val lastName = document.getString("lastName")
-                                    val gender = document.getString("gender")
+            RetrofitClient.instance.loginUser(loginRequest).enqueue(object : Callback<UserResponse> {
+                override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val user = response.body()!!
+                        Toast.makeText(this@Login, "Login Successful!", Toast.LENGTH_SHORT).show()
 
-                                    // Pass user data to the dashboard
-                                    val intent = Intent(this, FitFlowDashboard::class.java).apply {
-                                        putExtra("FIRST_NAME", firstName)
-                                        putExtra("LAST_NAME", lastName)
-                                        putExtra("GENDER", gender)
-                                    }
-                                    startActivity(intent)
-                                    finish()
-                                } else {
-                                    Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                            .addOnFailureListener { e ->
-                                Toast.makeText(this, "Failed to retrieve user data: ${e.message}", Toast.LENGTH_SHORT).show()
-                            }
+                        val intent = Intent(this@Login, FitFlowDashboard::class.java).apply {
+                            putExtra("FIRST_NAME", user.firstName)
+                            putExtra("LAST_NAME", user.lastName)
+                            putExtra("GENDER", user.gender)
+                        }
+                        startActivity(intent)
+                        finish()
                     } else {
-                        // If sign-in fails, show a message
-                        Toast.makeText(this, "Authentication Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@Login, "Login Failed: Invalid credentials", Toast.LENGTH_SHORT).show()
                     }
                 }
+
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                    Toast.makeText(this@Login, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
 }

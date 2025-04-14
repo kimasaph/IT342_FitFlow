@@ -1,4 +1,5 @@
 package edu.cit.fitflow
 
-class SendCodeRequest {
-}
+data class SendCodeRequest(
+    val email: String
+)

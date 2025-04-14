@@ -1,4 +1,6 @@
 package edu.cit.fitflow
 
-class VerifyCodeRequest {
-}
+data class VerifyCodeRequest(
+    val email: String,
+    val code: String
+)

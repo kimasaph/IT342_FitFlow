@@ -1,4 +1,8 @@
 package edu.cit.fitflow
 
-class UserResponse {
-}
+data class UserResponse(
+    val firstName: String,
+    val lastName: String,
+    val email: String,
+    val gender: String,
+)

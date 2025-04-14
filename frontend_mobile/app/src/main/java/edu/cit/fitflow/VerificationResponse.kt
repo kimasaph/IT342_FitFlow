@@ -1,4 +1,6 @@
 package edu.cit.fitflow
 
-class VerificationResponse {
-}
+data class VerificationResponse(
+    val status: String,
+    val message: String
+)
