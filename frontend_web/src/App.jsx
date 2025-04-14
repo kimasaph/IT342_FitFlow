@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "r
 import axios from "axios";
 
 // Pages
-import Dashboard from "./Components/Dashboard";
+import Dashboard from "./components/Dashboard";
 import LoginPage from "./Components/LoginPage";
 import SignupPage from "./Components/SignupPage";
 import SignupSuccessPage from "./Components/SignupSuccess";
@@ -23,6 +23,8 @@ import Cardio from "./Components/Cardio";
 import FlexiYoga from "./Components/FlexiYoga";
 import DietPlan from "./Components/DietPlanPage/DietPlanPage";
 import SettingsRoutes from "./SettingsRoutes";
+import AdminDashboard from "./Components/Admin/AdminDashboard";
+import TrainerDashboard from "./Components/Trainer/TrainerDashboard";
 
 // Axios Interceptor Setup
 const setupAxiosInterceptors = () => {
@@ -87,6 +89,8 @@ const App = () => {
 
           {/* Protected Routes */}
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/trainer-dashboard" element={<TrainerDashboard />} />
           <Route path="/settings" element={<SidebarSettings />} />
           <Route path="/workout" element={<Workout />} />
           <Route path="/exercises" element={<Exercises />} />

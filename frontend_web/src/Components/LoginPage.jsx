@@ -127,7 +127,14 @@ useEffect(() => {
         const storedToken = localStorage.getItem('token');
         console.log('Stored token:', storedToken);
         
-        navigate('/dashboard');
+        // Navigate to the appropriate dashboard based on role
+        if (data.user.role === 'ADMIN') {
+          navigate('/admin-dashboard');
+        } else if (data.user.role === 'TRAINER') {
+          navigate('/trainer-dashboard');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
         throw new Error('Invalid response format from server');
       }
