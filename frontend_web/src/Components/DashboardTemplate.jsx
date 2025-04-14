@@ -127,7 +127,7 @@ import {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 2,
+              gap: 0,
               borderBottom: "1px solid rgba(203, 213, 225, 1)",
               pb: 3,
             }}
@@ -307,7 +307,7 @@ import {
                   </Badge>
                 </IconButton>
   
-                <IconButton onClick={() => navigate("/sidebar-settings")}>
+                <IconButton onClick={() => navigate("/settings")}>
                   <SettingsIcon sx={{ color: "white" }} />
                 </IconButton>
   

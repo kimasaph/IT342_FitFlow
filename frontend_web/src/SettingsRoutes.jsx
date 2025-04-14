@@ -25,7 +25,7 @@ import ContactsSettings from "./Components/SettingsPages/ContactsSettings.jsx";
 
 const settingsRoutes = [
   <Route key="user" path="/user-settings" element={<UserSettings />} />,
-  <Route key="sidebar" path="/sidebar-settings" element={<SidebarSettings />} />,
+  <Route key="sidebar" path="/settings" element={<SidebarSettings />} />,
   <Route key="notifications" path="/notifications-settings" element={<NotificationsSettings />} />,
   <Route key="privacy" path="/account-privacy-settings" element={<AccountPrivacySettings />} />,
   <Route key="subscription" path="/subscription-plan-settings" element={<SubscriptionPlanSettings />} />,

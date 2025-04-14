@@ -30,8 +30,8 @@ const LoginPage = ({ onLoginSuccess }) => {
   };
 
   useEffect(() => {
-    document.title = 'Login - FitFlow';
-  });
+    document.title = "Login | FitFlow";
+  }, []);
 
   // Add this function to handle OAuth2 redirect
 useEffect(() => {
@@ -83,7 +83,7 @@ useEffect(() => {
     setErrorMessages([]);
 
     try {
-      const response = await fetch('http://localhost:8080/api/user/login', {
+      const response = await fetch('http://localhost:8080/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -253,7 +253,7 @@ useEffect(() => {
                 </div>
 
                 <Link
-                  to="/forgot1"
+                  to="/forgot-password"
                   className="text-sm text-blue-600 hover:text-blue-500 transition duration-200 cursor-pointer"
                 >
                   Forgot Password?
