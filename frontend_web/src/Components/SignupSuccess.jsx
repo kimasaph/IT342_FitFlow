@@ -3,6 +3,7 @@ import { CheckCircle } from 'lucide-react';
 
 const SignupSuccessPage = () => {
   const navigate = useNavigate();
+  const role = localStorage.getItem('role'); // Retrieve role from localStorage
 
   const handleBack = () => {
     navigate(-1);
@@ -76,7 +77,7 @@ const SignupSuccessPage = () => {
 
           <div className="space-y-4">
             <Link
-              to="/dashboard"
+              to={role === 'Trainer' ? '/trainers-dashboard' : '/dashboard'}
               className="block w-full py-3 px-4 rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-800 transition duration-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Go to Dashboard

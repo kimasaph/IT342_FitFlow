@@ -119,6 +119,11 @@ useEffect(() => {
         localStorage.setItem('user', JSON.stringify(data.user));
         localStorage.setItem('role', data.user.role); // Store the role
         localStorage.setItem('isAuthenticated', 'true');
+
+        // Automatically store admin token if the role is ADMIN
+        if (data.user.role === 'ADMIN') {
+          localStorage.setItem('adminToken', data.token);
+        }
         
         if (onLoginSuccess) {
           onLoginSuccess();

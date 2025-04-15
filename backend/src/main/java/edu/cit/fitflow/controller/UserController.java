@@ -138,6 +138,7 @@ public class UserController {
 
         return Jwts.builder()
             .setSubject(Long.toString(user.getId()))
+            .claim("role", user.getRole().name())
             .setIssuedAt(new Date())
             .setExpiration(expiryDate)
             .signWith(SignatureAlgorithm.HS512, jwtSecret)

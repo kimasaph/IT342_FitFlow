@@ -88,4 +88,11 @@ public class UserService {
     }
     return msg;
   }
+
+  // Added a method to toggle the active status of a user
+  public UserEntity toggleUserActiveStatus(int userId) {
+    UserEntity user = urepo.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+    user.setActive(!user.isActive()); // Toggle the active status
+    return urepo.save(user);
+  }
 }

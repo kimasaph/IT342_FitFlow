@@ -60,5 +60,15 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Role role; // Add role field
 
+    @Column(nullable = false)
+    private boolean isActive = true; // Default value set to true
+
+    @Column(nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date created_at;
+
+    @PrePersist
+    protected void onCreate() {
+        this.created_at = new Date();
+    }
 }

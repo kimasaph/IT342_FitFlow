@@ -32,7 +32,7 @@ public class FitflowApplication {
                 admin.setEmail("admin@fitflow.com");
                 admin.setPassword(passwordEncoder.encode("admin123")); // Default password
                 admin.setFirstName("Admin");
-                admin.setLastName("User");
+                admin.setLastName("");
                 admin.setRole(Role.ADMIN);
                 admin.setUsername("admin");
                 admin.setPhoneNumber("0000000000");

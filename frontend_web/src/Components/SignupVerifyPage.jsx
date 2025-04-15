@@ -48,8 +48,8 @@ const SignupVerifyPage = () => {
       localStorage.setItem('role', data.role);
       localStorage.setItem('isAuthenticated', 'true');
 
-      // Navigate to the dashboard
-      navigate('/dashboard');
+      // Navigate to the signup success page
+      navigate('/signup-success');
     } catch (error) {
       setErrorMessages([error.message]);
     } finally {

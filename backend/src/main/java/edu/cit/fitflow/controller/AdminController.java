@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,12 @@ import java.util.stream.Collectors;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 @RestController
 @RequestMapping("/admin")
 @PreAuthorize("hasRole('ADMIN')") // Restrict access to ADMIN role
+@CrossOrigin(origins = "http://localhost:5173")
 public class AdminController {
 
     @Autowired
@@ -29,6 +32,9 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
     @GetMapping("/dashboard")
     public ResponseEntity<?> accessAdminDashboard(@RequestHeader("Authorization") String token) {
         try {
@@ -36,15 +42,21 @@ public class AdminController {
                 token = token.substring(7); // Remove "Bearer " prefix
                 Claims claims = jwtUtil.validateAndParseToken(token);
 
-                if (claims != null && "ADMIN".equals(claims.get("role"))) {
-                    return ResponseEntity.ok(Map.of("message", "Access granted to admin dashboard"));
+                if (claims != null && claims.get("role", String.class).equals("ADMIN")) {
+                    // Grant access by returning success response with user data
+                    return ResponseEntity.ok(Map.of(
+                        "message", "Access granted to admin dashboard",
+                        "role", claims.get("role", String.class),
+                        "userId", claims.getSubject(),
+                        "access", "granted"
+                    ));
                 }
             }
             return ResponseEntity.status(403).body(Map.of("error", "Access denied"));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "Failed to decode token: " + e.getMessage()));
         }
-    }
+}
 
     @GetMapping("/users-by-role")
     public ResponseEntity<?> getUsersByRole(@RequestParam("role") String role) {
@@ -77,12 +89,22 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<?> getAllUsers() {
+    public ResponseEntity<?> getAllUsers(@RequestHeader("Authorization") String token) {
         try {
-            List<UserEntity> users = userService.getAllUsers();
-            return ResponseEntity.ok(users);
+            if (token != null && token.startsWith("Bearer ")) {
+                token = token.substring(7); // Remove "Bearer " prefix
+                Claims claims = jwtUtil.validateAndParseToken(token);
+
+                if (claims != null && claims.get("role", String.class).equals("ADMIN")) {
+                    List<UserEntity> users = userService.getAllUsers().stream()
+                        .filter(user -> !user.getRole().name().equals("ADMIN")) // Exclude default admin account
+                        .collect(Collectors.toList());
+                    return ResponseEntity.ok(users);
+                }
+            }
+            return ResponseEntity.status(403).body(Map.of("error", "Access denied"));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of("error", "Failed to fetch users: " + e.getMessage()));
+            return ResponseEntity.status(500).body(Map.of("error", "Failed to decode token: " + e.getMessage()));
         }
     }
 }
