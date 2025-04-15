@@ -1,39 +1,40 @@
 package edu.cit.fitflow.controller;
 
-import edu.cit.fitflow.config.FileStorageConfig;
-import edu.cit.fitflow.entity.UserEntity;
-import edu.cit.fitflow.service.UserService;
-import lombok.RequiredArgsConstructor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Date;
-
-
+import edu.cit.fitflow.config.FileStorageConfig;
+import edu.cit.fitflow.entity.UserEntity;
+import edu.cit.fitflow.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
@@ -95,6 +96,7 @@ public class UserController {
         }
     }
 
+    // Helper method to create a user response map
     private Map<String, Object> getUserResponseMap(UserEntity user) {
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("userId", user.getId());
@@ -102,10 +104,30 @@ public class UserController {
         userMap.put("username", user.getUsername());
         userMap.put("firstName", user.getFirstName() != null ? user.getFirstName() : "");
         userMap.put("lastName", user.getLastName() != null ? user.getLastName() : "");
-        
+        userMap.put("gender", user.getGender() != null ? user.getGender() : "");
+        userMap.put("weight", user.getWeight() != null ? user.getWeight() : 0.0f);
+        userMap.put("height", user.getHeight() != null ? user.getHeight() : 0.0f);
+        userMap.put("age", user.getAge() != null ? user.getAge() : 0);
+        userMap.put("bodyGoal", user.getBodyGoal() != null ? user.getBodyGoal() : "");
+        userMap.put("created_at", user.getCreated_at() != null ? user.getCreated_at() : new Date());
+        userMap.put("phoneNumber", user.getPhoneNumber() != null ? user.getPhoneNumber() : "");
+
+        // Add the full URL for the profile picture
+        String profilePicturePath = user.getProfilePicturePath();
+        if (profilePicturePath != null && !profilePicturePath.isEmpty()) {
+            // Ensure the path starts with a forward slash
+            if (!profilePicturePath.startsWith("/")) {
+                profilePicturePath = "/" + profilePicturePath;
+            }
+            userMap.put("profilePicture", "http://localhost:8080" + profilePicturePath);
+        } else {
+            userMap.put("profilePicture", ""); // or your default profile picture URL
+        }
+    
         return userMap;
     }
-
+    
+    // Generate JWT token
     private String generateToken(UserEntity user) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpiration);
@@ -119,7 +141,7 @@ public class UserController {
     }
 
     //Create of CRUD
-    @PostMapping("/signupuser")
+    @PostMapping("/signup")
       public ResponseEntity<?> postStudentRecord(@RequestBody UserEntity user) {
           try {
               logger.info("Received registration request for email: {}", user.getEmail());
@@ -151,6 +173,7 @@ public class UserController {
               user.setWeight(user.getWeight() != null ? user.getWeight() : 0.0f);
               user.setAge(user.getAge() != null ? user.getAge() : 0);
               user.setBodyGoal(user.getBodyGoal() != null ? user.getBodyGoal() : "");
+              user.setUsername(user.getUsername() != null ? user.getUsername() : user.getEmail());
               
               UserEntity savedUser = userv.createUser(user);
               
@@ -166,6 +189,7 @@ public class UserController {
           }
       }
 
+      //Update of User
       @PutMapping("/update-profile")
       public ResponseEntity<?> updateProfile(@RequestBody UserEntity updatedUserDetails, @RequestParam("userId") int userId) {
           try {
@@ -184,6 +208,9 @@ public class UserController {
               user.setHeight(updatedUserDetails.getHeight());
               user.setAge(updatedUserDetails.getAge());
               user.setBodyGoal(updatedUserDetails.getBodyGoal());
+              user.setGender(updatedUserDetails.getGender());
+              user.setPhoneNumber(updatedUserDetails.getPhoneNumber());
+              user.setUsername(updatedUserDetails.getUsername());
 
               // Save updated user
               UserEntity updatedUser = userv.createUser(user);
@@ -196,6 +223,7 @@ public class UserController {
           }
       }
 
+      //Setup of User
       @PostMapping("/signup-setup")
         public ResponseEntity<?> setupProfile(@RequestBody Map<String, String> profileData) {
         try {
@@ -282,7 +310,7 @@ public class UserController {
         }
     }
 
-      @PostMapping("/forgot1")
+      @PostMapping("/forgot-password")
       public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> request) {
           try {
               String email = request.get("email");
@@ -309,7 +337,7 @@ public class UserController {
           }
       }
 
-      @PostMapping("/forgot2")
+      @PostMapping("/reset-password")
       public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
           try {
               String email = request.get("email");
@@ -348,4 +376,57 @@ public class UserController {
                   .body(Map.of("error", "Password reset failed: " + e.getMessage()));
           }
       }
+
+      @PostMapping("/upload-profile-picture")
+        public ResponseEntity<?> uploadProfilePicture(
+        @RequestParam("file") MultipartFile file,
+        @RequestParam("userId") int userId) {
+        
+        try {
+            UserEntity user = userv.findById(userId);
+            if (user == null) {
+                return ResponseEntity.status(404).body(Map.of("error", "User not found"));
+            }
+
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Please select a file"));
+            }
+
+            String contentType = file.getContentType();
+            if (!fileStorageConfig.isValidFileType(contentType)) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Invalid file type"));
+            }
+
+            if (file.getSize() > fileStorageConfig.getMaxFileSize()) {
+                return ResponseEntity.badRequest().body(Map.of("error", "File size exceeds limit"));
+            }
+
+            String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
+            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String fileName = UUID.randomUUID().toString() + extension;
+                String publicUrl = "/uploads/" + fileName; // Remove the host and port
+                
+                String uploadDir = fileStorageConfig.getUploadDir();
+                Path uploadPath = Paths.get(uploadDir);
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+                
+                Path filePath = uploadPath.resolve(fileName);
+                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                
+                user.setProfilePicturePath(publicUrl);
+                userv.createUser(user);
+                
+                return ResponseEntity.ok(Map.of(
+                    "message", "Profile picture uploaded successfully",
+                    "profilePicturePath", publicUrl,
+                    "user", getUserResponseMap(user)
+                ));
+                
+            } catch (IOException e) {
+                return ResponseEntity.status(500)
+                    .body(Map.of("error", "Failed to upload profile picture: " + e.getMessage()));
+            }
+        }
 }

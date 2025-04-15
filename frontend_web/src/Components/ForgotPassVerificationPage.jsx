@@ -117,7 +117,7 @@ const ForgotPassVerificationPage = () => {
       }
       
       // If verification successful, redirect to password reset page
-      navigate('/forgot2', { state: { email, verified: true } });
+      navigate('/reset-password', { state: { email, verified: true } });
       
     } catch (error) {
       console.error('Verification error:', error);

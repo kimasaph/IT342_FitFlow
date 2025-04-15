@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         val btnGetStarted = findViewById<Button>(R.id.btnGetStarted)
         btnGetStarted.setOnClickListener{
-            val intent = Intent(this, Registration::class.java)
+            val intent = Intent(this, RegistrationForm::class.java)
             startActivity(intent)
         }
 

@@ -39,7 +39,7 @@ const SignupSetupPage = () => {
     try {
       const token = localStorage.getItem('token'); // Retrieve the token from localStorage
 
-      const response = await fetch('http://localhost:8080/api/user/signup-setup', {
+      const response = await fetch('http://localhost:8080/api/auth/signup-setup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "467981087973",
+    "project_id": "fitflow-42085",
+    "storage_bucket": "fitflow-42085.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467981087973:android:d6a8c03f74aeb92d4bd00c",
+        "android_client_info": {
+          "package_name": "edu.cit.fitflow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "467981087973-h5j06m17p8h3fp6clqdie6vanv5n515f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.cit.fitflow",
+            "certificate_hash": "afc5e07fbaa872e8fe047cdf938eeea3432587f5"
+          }
+        },
+        {
+          "client_id": "467981087973-0mdvieltlckqv1amh8k3tct7pbr86sv8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkAOUnNViGK0-Jo0VHhbC5CScdD6vgHkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "467981087973-0mdvieltlckqv1amh8k3tct7pbr86sv8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

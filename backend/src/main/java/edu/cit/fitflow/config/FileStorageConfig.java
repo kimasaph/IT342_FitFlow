@@ -23,28 +23,17 @@ public class FileStorageConfig {
     
     @Value("${file.allowed-types:image/jpeg,image/png,image/gif}")
     private String[] allowedTypes;
-    
-    @PostConstruct
-    public void init() {
-        try {
-            Path uploadPath = Paths.get(uploadDir);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Could not initialize upload directory!", e);
-        }
-    }
 
     @Bean
     public File createUploadDirectory() {
-        File uploadDir = new File("clarity_springboot/uploads");
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+            dir.mkdirs();
         }
-        return uploadDir;
+        System.out.println("Upload directory initialized at: " + dir.getAbsolutePath());
+        return dir;
     }
-
+    
     public String getUploadDir() {
       return uploadDir;
     }

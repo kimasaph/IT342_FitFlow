@@ -17,16 +17,57 @@ const LoginPage = ({ onLoginSuccess }) => {
   const handleGoogleLogin = () => {
     window.location.href = 'http://localhost:8080/oauth2/authorization/google'
   };
-  const handleGithubLogin = () => {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/github'
+  const handleGithubLogin = async () => {
+    try {
+        // Redirect to GitHub OAuth2 authorization endpoint
+        window.location.href = 'http://localhost:8080/oauth2/authorization/github';
+    } catch (error) {
+        console.error('GitHub login error:', error);
+    }
   };
   const handleFacebookLogin = () => {
     window.location.href = 'http://localhost:8080/oauth2/authorization/facebook'
   };
 
   useEffect(() => {
-    document.title = 'Login - FitFlow';
-  });
+    document.title = "Login | FitFlow";
+  }, []);
+
+  // Add this function to handle OAuth2 redirect
+useEffect(() => {
+  // Check if we have query parameters from OAuth2 redirect
+  const queryParams = new URLSearchParams(window.location.search);
+  const token = queryParams.get('token');
+  const userId = queryParams.get('userId');
+  const email = queryParams.get('email');
+  
+  if (token && userId) {
+    // We have OAuth2 login data
+    try {
+      // Store the token and user data
+      localStorage.setItem('token', token);
+      
+      // Create a basic user object from redirect params
+      const user = {
+        id: userId,
+        email: email
+      };
+      
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('isAuthenticated', 'true');
+      
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
+      
+      // Clear the URL parameters and navigate to dashboard
+      navigate('/dashboard', { replace: true });
+    } catch (error) {
+      console.error('Error handling OAuth redirect:', error);
+      setErrorMessages(['Failed to process login information']);
+    }
+  }
+}, [navigate, onLoginSuccess]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -42,22 +83,26 @@ const LoginPage = ({ onLoginSuccess }) => {
     setErrorMessages([]);
 
     try {
-      const response = await fetch('http://localhost:8080/api/user/login', {
+      const response = await fetch('http://localhost:8080/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json', // This is important to tell the server what content type we accept
+          'Accept': 'application/json',
         },
         credentials: 'include',
         body: JSON.stringify({
           email: formData.email,
-          password: formData.password
-        })
+          password: formData.password,
+        }),
       });
 
       const data = await response.json();
-  
+
       if (!response.ok) {
+        // Check if the error is related to admin credentials
+        if (data.error === 'Invalid credentials for admin') {
+          throw new Error('Admin login failed. Please check the credentials.');
+        }
         throw new Error(data.error || 'Login failed');
       }
 
@@ -208,7 +253,7 @@ const LoginPage = ({ onLoginSuccess }) => {
                 </div>
 
                 <Link
-                  to="/forgot1"
+                  to="/forgot-password"
                   className="text-sm text-blue-600 hover:text-blue-500 transition duration-200 cursor-pointer"
                 >
                   Forgot Password?

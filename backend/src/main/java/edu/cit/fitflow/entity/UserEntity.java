@@ -52,5 +52,8 @@ public class UserEntity {
     @Column(nullable = false)
     private String bodyGoal;
 
+    @Column(name = "profile_picture_path")
+    private String profilePicturePath;
+
     private Date created_at;
 }

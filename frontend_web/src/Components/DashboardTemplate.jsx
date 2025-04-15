@@ -51,6 +51,15 @@ import {
     ]); // Manage menuItems as state
     const navigate = useNavigate(); // Initialize useNavigate
 
+    const handleLogout = () => {
+      // Clear any stored authentication tokens
+      localStorage.removeItem("token"); // Adjust based on your token storage method
+      sessionStorage.removeItem("token");
+    
+      // Redirect to login page
+      navigate("/login");
+    };    
+
     const features = [
       "Workout Tracker",
       "Goals Tracker",
@@ -66,7 +75,7 @@ import {
       setMenuItemsState((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          selected: item.route === currentPath, // Automatically select the tab based on the route
+          selected: item.route === currentPath || (currentPath === "/exercises" && item.route === "/workout"), // Ensure "Workout" is selected on Exercises page
         }))
       );
     }, []); // Run only on component mount
@@ -118,7 +127,7 @@ import {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 2,
+              gap: 0,
               borderBottom: "1px solid rgba(203, 213, 225, 1)",
               pb: 3,
             }}
@@ -208,7 +217,7 @@ import {
               />
             </ListItem>
             <Divider sx={{ my: 1 }} />
-            <ListItem button onClick={() => {}} sx={{
+            <ListItem button onClick={handleLogout} sx={{
               borderRadius: 2,
               "&:hover": {
                 bgcolor: "#ffe3e0", // Updated hover background color
@@ -234,7 +243,6 @@ import {
           </List>
         </Drawer>
   
-        {/* Main content */}
         <Box sx={{ flexGrow: 1 }}>
           <AppBar
             position="static"
@@ -257,7 +265,7 @@ import {
                   Welcome Back!
                 </Typography>
               </Box>
-  
+
               <Box sx={{ flexGrow: 1, mx: 3 }}>
                 <Autocomplete
                   freeSolo
@@ -299,7 +307,7 @@ import {
                   </Badge>
                 </IconButton>
   
-                <IconButton>
+                <IconButton onClick={() => navigate("/settings")}>
                   <SettingsIcon sx={{ color: "white" }} />
                 </IconButton>
   
@@ -359,7 +367,7 @@ import {
                 
     
             {/* Main content area, also a template for all*/}
-          <Box sx={{ p: 3 }}>{children}</Box>
+          <Box>{children}</Box>
         </Box>
       </Box>
     );
