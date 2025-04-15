@@ -72,8 +72,10 @@ const GoalPreferencesSettings = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Toaster position="top-right" toastOptions={{ style: { background: "#ffffff", color: "#333333" } }} />
-
+      <Toaster
+              position="top-right"
+              toastOptions={{ style: { background: "#D4EDDA", color: "#155724" } }}
+            />
       <div className="p-8 w-full max-w-[680px] mx-auto flex-grow">
         <h1 className="text-xl font-bold mb-6 mt-4">Goal Preferences</h1>
 

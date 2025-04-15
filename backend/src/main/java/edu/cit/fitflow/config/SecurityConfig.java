@@ -34,9 +34,6 @@ public class SecurityConfig {
     @Autowired
     private JwtUtil jwtUtil;
     
-    // Instead of autowiring these, we'll look them up from the application context
-    // during the filterChain method execution
-    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, 
                                           OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService,
@@ -46,7 +43,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/public/**", "/oauth2/**").permitAll()
-                .anyRequest().permitAll()  // Change this to authenticated() in production
+                .anyRequest().permitAll()  // Change to authenticated() in production
             )
             .oauth2Login(oauth2 -> oauth2
                 .userInfoEndpoint(userInfo -> userInfo
