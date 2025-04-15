@@ -6,16 +6,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
 
+
 @Entity
-@Table(name = "meals")
+@Table(name = "user_meals")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MealEntity {
+public class UserMealEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
     
     @Column(nullable = false)
     private String name;
@@ -23,40 +28,18 @@ public class MealEntity {
     @Column(nullable = false)
     private String time;
     
-    @Column(nullable = false)
     private Integer calories;
-    
-    @Column(nullable = false)
     private Integer protein;
-    
-    @Column(nullable = false)
     private Integer carbs;
-    
-    @Column(nullable = false)
     private Integer fats;
     
+    @Column(columnDefinition = "TEXT")
     private String notes;
     
-    private String image;
-    
+    @Column(columnDefinition = "TEXT")
     private String ingredients;
     
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
-    
-    private Date createdAt;
-    
-    private Date updatedAt;
-    
-    @PrePersist
-    protected void onCreate() {
-        createdAt = new Date();
-        updatedAt = new Date();
-    }
-    
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = new Date();
-    }
+    private String image;
+
+    private Date created_at;
 }

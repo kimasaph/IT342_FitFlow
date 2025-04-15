@@ -20,6 +20,7 @@ import Cardio from "./Components/Cardio.jsx";
 import FlexiYoga from "./Components/FlexiYoga.jsx";
 import SettingsRoutes from "./SettingsRoutes.jsx";
 import DietPlan from "./Components/DietPlanPage/DietPlanPage.jsx";
+import Goal from "./Components/GoalsPage/GoalsPage.jsx"
 import axios from 'axios';
 
 const setupAxiosInterceptors = () => {
@@ -129,6 +130,9 @@ const App = () => {
 
           {/* Route for Diet Plan */}
           <Route path="/diet-plan" element={<DietPlan />} />
+
+          {/* Route for Goals */}
+          <Route path="/goals" element={<Goal />} />
 
           <Route path="/strength-training" element={<StrengthTraining />} />
 
