@@ -39,10 +39,9 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.198" />
+        app:layout_constraintVertical_bias="0.239" />
 
     <TextView
         android:id="@+id/textView5"
@@ -54,10 +53,11 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintVertical_bias="0.197" />
+
 
     <EditText
         android:id="@+id/editTextFirstName"
@@ -78,7 +78,7 @@
         app:layout_constraintHorizontal_bias="0.585"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.256" />
+        app:layout_constraintVertical_bias="0.314" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -89,7 +89,7 @@
         app:layout_constraintHorizontal_bias="0.312"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.036"
+        app:layout_constraintVertical_bias="0.087"
         app:srcCompat="@drawable/fitflowlogogrey" />
 
     <TextView
@@ -104,27 +104,23 @@
         app:layout_constraintHorizontal_bias="0.623"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.058" />
+        app:layout_constraintVertical_bias="0.113" />
 
-    <EditText
-        android:id="@+id/editTextBodyGoal"
+    <Spinner
+        android:id="@+id/spinnerBodyGoal"
         android:layout_width="300dp"
         android:layout_height="40dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/login_border_details"
-        android:drawableLeft="@drawable/ic_goal"
-        android:drawablePadding="8dp"
-        android:ems="10"
-        android:hint="Body Goal"
-        android:inputType="textEmailAddress"
         android:paddingLeft="15dp"
-        android:textColorHint="#FFFFFF"
-        android:textSize="14sp"
+        android:popupBackground="#FFFFFF"
+        android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/editTextAge"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/editTextAge"
         app:layout_constraintTop_toBottomOf="@+id/editTextAge"
-        app:layout_constraintVertical_bias="0.08" />
+        app:layout_constraintVertical_bias="0.028" />
 
     <EditText
         android:id="@+id/editTextAge"
@@ -141,10 +137,10 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/editTextHeight"
-        app:layout_constraintHorizontal_bias="0.866"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/editTextHeight"
         app:layout_constraintTop_toBottomOf="@+id/editTextHeight"
-        app:layout_constraintVertical_bias="0.044" />
+        app:layout_constraintVertical_bias="0.055" />
 
     <EditText
         android:id="@+id/editTextWeight"
@@ -155,7 +151,7 @@
         android:drawablePadding="8dp"
         android:ems="10"
         android:hint="Weight (kg)"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:paddingLeft="15dp"
         android:textColorHint="#FFFFFF"
         android:textSize="14sp"
@@ -178,7 +174,7 @@
         app:layout_constraintHorizontal_bias="0.322"
         app:layout_constraintStart_toEndOf="@+id/radioButton2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.803" />
+        app:layout_constraintVertical_bias="0.847" />
 
     <EditText
         android:id="@+id/editTextHeight"
@@ -189,7 +185,7 @@
         android:drawablePadding="8dp"
         android:ems="10"
         android:hint="Height (cm)"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:paddingLeft="15dp"
         android:textColorHint="#FFFFFF"
         android:textSize="14sp"
@@ -198,7 +194,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/editTextWeight"
         app:layout_constraintTop_toBottomOf="@+id/editTextWeight"
-        app:layout_constraintVertical_bias="0.054" />
+        app:layout_constraintVertical_bias="0.051" />
 
     <RadioButton
         android:id="@+id/radioButton2"
@@ -212,7 +208,7 @@
         app:layout_constraintHorizontal_bias="0.185"
         app:layout_constraintStart_toEndOf="@+id/radioButton"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.803" />
+        app:layout_constraintVertical_bias="0.847" />
 
     <EditText
         android:id="@+id/editTextLastName"
@@ -234,6 +230,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextFirstName"
         app:layout_constraintVertical_bias="0.027" />
 
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSignUp1"
         android:layout_width="300dp"
@@ -243,11 +240,10 @@
         android:textColor="#03A9F4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.935" />
-
+        app:layout_constraintVertical_bias="0.951" />
 
     <TextView
         android:id="@+id/textView7"
@@ -264,7 +260,7 @@
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.732" />
+        app:layout_constraintVertical_bias="0.785" />
 
     <RadioButton
         android:id="@+id/radioButton"
@@ -278,7 +274,7 @@
         app:layout_constraintHorizontal_bias="0.186"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.803" />
+        app:layout_constraintVertical_bias="0.847" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

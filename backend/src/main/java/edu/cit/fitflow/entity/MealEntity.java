@@ -40,7 +40,12 @@ public class MealEntity {
     private String image;
     
     private String ingredients;
-    
+
+    //Added by moreno, can be edited
+    @ManyToOne
+    @JoinColumn(name = "diet_plan_id")
+    private DietPlanEntity dietPlan;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;

@@ -2,4 +2,17 @@
     <string name="app_name">FitFlow</string>
     <string name="default_web_client_id">1:467981087973:android:d6a8c03f74aeb92d4bd00c</string>
 
+    <string name="facebook_app_id">675994558412530</string>
+
+
+    <string-array name="body_goal_options">
+        <item>Lose Weight</item>
+        <item>Build Muscle</item>
+        <item>Maintain Weight</item>
+        <item>Increase Endurance</item>
+        <item>Improve Flexibility</item>
+        <item>Overall Fitness</item>
+    </string-array>
+
+
 </resources>

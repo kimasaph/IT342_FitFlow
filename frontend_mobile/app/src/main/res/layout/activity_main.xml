@@ -11,7 +11,7 @@
     <VideoView
         android:id="@+id/vidGetStarted"
         android:layout_width="495dp"
-        android:layout_height="815dp"
+        android:layout_height="885dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

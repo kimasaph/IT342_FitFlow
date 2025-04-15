@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/workouts")
+@RequestMapping("api/workouts")
 public class WorkoutController {
-
+        
     @Autowired
     private WorkoutService workoutService;
 
