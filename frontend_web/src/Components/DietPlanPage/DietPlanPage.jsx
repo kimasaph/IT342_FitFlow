@@ -10,7 +10,7 @@ import WeeklyMealPlan from "./WeeklyMealPlan";
 const sampleMeals = [
   {
     time: "Breakfast",
-    name: "Oatmeal with fresh berries and almonds",
+    name: "Oatmeal with Fresh Berries and Almonds",
     calories: 587,
     protein: 12,
     carbs: 45,
@@ -20,7 +20,7 @@ const sampleMeals = [
   },
   {
     time: "2nd breakfast",
-    name: "Grilled toast with pickle and eggs",
+    name: "Grilled Crab with Cabbage and Tomatoes",
     calories: 587,
     protein: 40,
     carbs: 50,
@@ -30,7 +30,7 @@ const sampleMeals = [
   },
   {
     time: "Lunch",
-    name: "Cheeseburger with bacon and fried egg",
+    name: "Salmon with Lemon and Spinach",
     calories: 587,
     protein: 35,
     carbs: 40,
@@ -40,7 +40,7 @@ const sampleMeals = [
   },
   {
     time: "Dinner",
-    name: "Salmon and Brown Rice",
+    name: "Pasta with Tomatoes and Cheese",
     calories: 500,
     protein: 35,
     carbs: 40,
