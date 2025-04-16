@@ -22,6 +22,8 @@ import Cardio from "./Components/Cardio.jsx";
 import FlexiYoga from "./Components/FlexiYoga.jsx";
 import SettingsRoutes from "./SettingsRoutes.jsx";
 import DietPlan from "./Components/DietPlanPage/DietPlanPage.jsx";
+import AdminDashboard from "./Components/Admin/AdminDashboard.jsx";
+import TrainerDashboard from "./Components/Trainer/TrainerDashboard.jsx";
 import axios from 'axios';
 
 // Axios Interceptor Setup
