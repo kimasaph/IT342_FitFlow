@@ -29,8 +29,8 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    // Instead of autowiring these, we'll look them up from the application context
-    // during the filterChain method execution
+    @Autowired
+    private JwtUtil jwtUtil;
     
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, 

@@ -47,7 +47,7 @@ public class UserController {
   @Value("${jwt.secret}")
 	private String jwtSecret;
 
-	@Value("${jwt.expiration}")
+    @Value("${jwt.expiration}")
 	private Long jwtExpiration;
 
   @Autowired
@@ -269,6 +269,9 @@ public class UserController {
             if (profileData.containsKey("gender")) {
                 user.setGender(profileData.get("gender"));
             }
+            if (profileData.containsKey("phoneNumber")) {
+                user.setPhoneNumber(profileData.get("phoneNumber"));
+            }
             if (profileData.containsKey("weight")) {
                 user.setWeight(profileData.containsKey("weight") && profileData.get("weight") != null 
                     ? Float.parseFloat(profileData.get("weight")) 
@@ -302,6 +305,7 @@ public class UserController {
             response.put("username", updatedUser.getUsername());
             response.put("firstName", updatedUser.getFirstName());
             response.put("lastName", updatedUser.getLastName());
+            response.put("phoneNumber", updatedUser.getPhoneNumber());
             response.put("gender", updatedUser.getGender());
             response.put("weight", updatedUser.getWeight());
             response.put("height", updatedUser.getHeight());

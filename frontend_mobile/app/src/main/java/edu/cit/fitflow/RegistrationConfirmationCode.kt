@@ -3,46 +3,51 @@ package edu.cit.fitflow
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.MediaController
-import android.widget.Toast
-import android.widget.VideoView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthProvider
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegistrationConfirmationCode : AppCompatActivity() {
-    private lateinit var auth: FirebaseAuth
-    private lateinit var verificationId: String
+
+    private lateinit var userEmail: String
+    private lateinit var userPhone: String
+    private lateinit var userPassword: String
+    private lateinit var userFirstName: String
+    private lateinit var userLastName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration_confirmation_code)
 
-        auth = FirebaseAuth.getInstance()
-        verificationId = intent.getStringExtra("verificationId") ?: ""
+        // Retrieve all user info passed from RegistrationForm
+        userEmail = intent.getStringExtra("email") ?: ""
+        userPhone = intent.getStringExtra("phone") ?: ""
+        userPassword = intent.getStringExtra("password") ?: ""
+        userFirstName = intent.getStringExtra("firstName") ?: ""
+        userLastName = intent.getStringExtra("lastName") ?: ""
 
         val otpInput = findViewById<EditText>(R.id.editTextOtp4)
         val btnConfirm = findViewById<Button>(R.id.btnContinue)
-        val v1 = findViewById<ImageView>(R.id.imgLeft)
+        val backBtn = findViewById<ImageView>(R.id.imgLeft)
 
         btnConfirm.setOnClickListener {
-            val otpCode = otpInput.text.toString()
-            if (otpCode.isNotEmpty()) {
-                verifyCode(otpCode)
-            } else {
-                Toast.makeText(this, "Enter OTP", Toast.LENGTH_SHORT).show()
+            val code = otpInput.text.toString().trim()
+
+            if (code.isEmpty()) {
+                Toast.makeText(this, "Enter verification code", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            verifyCode(userEmail, code)
         }
 
-        v1.setOnClickListener {
-            val intent = Intent(this, Registration::class.java)
-            startActivity(intent)
+        backBtn.setOnClickListener {
+            startActivity(Intent(this, Registration::class.java))
         }
 
+        // Background video setup
         val videoView = findViewById<VideoView>(R.id.vidConfirmCode)
         val uri = Uri.parse("android.resource://$packageName/${R.raw.confirm_code}")
         videoView.setVideoURI(uri)
@@ -54,21 +59,30 @@ class RegistrationConfirmationCode : AppCompatActivity() {
         videoView.setOnCompletionListener { videoView.start() }
     }
 
-    private fun verifyCode(code: String) {
-        val credential = PhoneAuthProvider.getCredential(verificationId, code)
-        signInWithCredential(credential)
-    }
+    private fun verifyCode(email: String, code: String) {
+        val request = VerifyCodeRequest(email, code)
 
-    private fun signInWithCredential(credential: PhoneAuthCredential) {
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val intent = Intent(this, RegistrationForm::class.java)
+        RetrofitClient.instance.verifyCode(request).enqueue(object : Callback<VerificationResponse> {
+            override fun onResponse(call: Call<VerificationResponse>, response: Response<VerificationResponse>) {
+                if (response.isSuccessful && response.body()?.status == "success") {
+                    Toast.makeText(this@RegistrationConfirmationCode, "Email Verified!", Toast.LENGTH_SHORT).show()
+
+                    val intent = Intent(this@RegistrationConfirmationCode, RegistrationSuccess::class.java).apply {
+                        putExtra("email", userEmail)
+                        putExtra("phone", userPhone)
+                        putExtra("password", userPassword)
+
+                    }
                     startActivity(intent)
                     finish()
                 } else {
-                    Toast.makeText(this, "Invalid OTP", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegistrationConfirmationCode, "Invalid or expired code", Toast.LENGTH_SHORT).show()
                 }
             }
+
+            override fun onFailure(call: Call<VerificationResponse>, t: Throwable) {
+                Toast.makeText(this@RegistrationConfirmationCode, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="140dp"
         android:fontFamily="serif"
-        android:text="Enter OTP sent to "
+        android:text="Enter the 6-digit code sent to"
         android:textColor="#4EB2F6"
         android:textSize="20sp"
 

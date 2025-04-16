@@ -1,30 +1,28 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import axios from "axios";
 
 // Pages
 import Dashboard from "./components/Dashboard";
 import LoginPage from "./Components/LoginPage";
 import SignupPage from "./Components/SignupPage";
-import SignupSuccessPage from "./Components/SignupSuccess";
-import ForgotPassPage1 from "./Components/ForgotPassPage1";
-import ForgotPassPage2 from "./Components/ForgotPassPage2";
-import SignupVerifyPage from "./Components/SignupVerifyPage";
-import SignupSetupPage from "./Components/SignupSetupPage";
-import ForgotPassVerification from "./Components/ForgotPassVerificationPage";
-import ForgotPassSuccess from "./Components/ForgotPassSuccess";
-import SignupSetupSuccess from "./Components/SignupSetupSuccess";
-import Workout from "./Components/Workout";
-import OAuth2RedirectHandler from "./Components/OAuth2RedirectHandler";
-import SidebarSettings from "./Components/SidebarSettings";
-import Exercises from "./Components/Exercises";
-import StrengthTraining from "./Components/StrengthTraining";
-import Cardio from "./Components/Cardio";
-import FlexiYoga from "./Components/FlexiYoga";
-import DietPlan from "./Components/DietPlanPage/DietPlanPage";
-import SettingsRoutes from "./SettingsRoutes";
-import AdminDashboard from "./Components/Admin/AdminDashboard";
-import TrainerDashboard from "./Components/Trainer/TrainerDashboard";
+import SignupSuccessPage from "./components/SignupSuccess";
+import ForgotPassPage1 from "./Components/ForgotPassPage1.jsx";
+import ForgotPassPage2 from "./Components/ForgotPassPage2.jsx";
+import SignupVerifyPage from "./Components/SignupVerifyPage.jsx";
+import SignupSetupPage from "./Components/SignupSetupPage.jsx";
+import ForgotPassVerification from "./Components/ForgotPassVerificationPage.jsx";
+import ForgotPassSuccess from "./Components/ForgotPassSuccess.jsx";
+import SignupSetupSuccess from "./Components/SignupSetupSuccess.jsx";
+import Workout from "./Components/Workout.jsx";
+import OAuth2RedirectHandler from "./Components/OAuth2RedirectHandler.jsx";
+import SidebarSettings from "./Components/SidebarSettings.jsx";
+import Exercises from "./Components/Exercises.jsx";
+import StrengthTraining from "./Components/StrengthTraining.jsx";
+import Cardio from "./Components/Cardio.jsx";
+import FlexiYoga from "./Components/FlexiYoga.jsx";
+import SettingsRoutes from "./SettingsRoutes.jsx";
+import DietPlan from "./Components/DietPlanPage/DietPlanPage.jsx";
+import axios from 'axios';
 
 // Axios Interceptor Setup
 const setupAxiosInterceptors = () => {
