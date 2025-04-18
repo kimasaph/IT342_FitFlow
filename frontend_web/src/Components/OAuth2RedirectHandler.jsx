@@ -14,7 +14,7 @@ const OAuth2RedirectHandler = () => {
     
     if (token && userId) {
       // Store authentication data
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', token); // Store token
       
       let user = {
         id: userId,

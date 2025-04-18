@@ -63,8 +63,12 @@ const SidebarSettings = () => {
   const [selectedSetting, setSelectedSetting] = useState('');
 
   const handleLogout = () => {
+    // Clear any stored authentication tokens and role
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
     sessionStorage.removeItem("token");
+
+    // Redirect to login page
     navigate("/login");
   };
 

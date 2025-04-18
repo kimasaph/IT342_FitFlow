@@ -1,6 +1,8 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import Dashboard from "./Components/Dashboard";
+
+// Pages
+import Dashboard from "./components/Dashboard";
 import LoginPage from "./Components/LoginPage";
 import SignupPage from "./Components/SignupPage";
 import SignupSuccessPage from "./components/SignupSuccess";
@@ -20,31 +22,25 @@ import Cardio from "./Components/Cardio.jsx";
 import FlexiYoga from "./Components/FlexiYoga.jsx";
 import SettingsRoutes from "./SettingsRoutes.jsx";
 import DietPlan from "./Components/DietPlanPage/DietPlanPage.jsx";
-import Goal from "./Components/GoalsPage/GoalsPage.jsx"
+import AdminDashboard from "./Components/Admin/AdminDashboard.jsx";
+import TrainerDashboard from "./Components/Trainer/TrainerDashboard.jsx";
 import axios from 'axios';
 
+// Axios Interceptor Setup
 const setupAxiosInterceptors = () => {
-  // Store axios instance globally so other components can access it
   window.axios = axios;
-  
-  // Get token from localStorage
-  const token = localStorage.getItem('token');
-  
+  const token = localStorage.getItem("token");
+
   if (token) {
-    // Set default headers for all requests
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
-  
-  // Add response interceptor to handle auth errors
+
   axios.interceptors.response.use(
-    response => response,
-    error => {
+    (response) => response,
+    (error) => {
       if (error.response && error.response.status === 401) {
-        // If unauthorized, clear localStorage and redirect to login
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('isAuthenticated');
-        window.location.href = '/login';
+        localStorage.clear();
+        window.location.href = "/login";
       }
       return Promise.reject(error);
     }
@@ -53,16 +49,16 @@ const setupAxiosInterceptors = () => {
 
 setupAxiosInterceptors();
 
+// Not Found Page
 const NotFound = () => {
   const navigate = useNavigate();
-  
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="text-center">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
         <p className="text-gray-600 mb-4">Page not found</p>
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate("/")}
           className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
         >
           Go back home
@@ -72,80 +68,48 @@ const NotFound = () => {
   );
 };
 
-// Disable authentication for development
-const ProtectedRoute = ({ children }) => {
-  return children; // Allows direct access to /dashboard
-};
-
-const PublicRoute = ({ children }) => {
-  return children; // Allows direct access to /login
-};
-
+// App Component
 const App = () => {
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">
         <Routes>
-          {/* Public Route - Login Page */}
+          {/* Public Routes */}
           <Route path="/login" element={<LoginPage />} />
-
-          {/* Public Route - Signup Page */}
           <Route path="/signup" element={<SignupPage />} />
-
-          {/* Public Route - Signup Success Page */}
           <Route path="/signup-success" element={<SignupSuccessPage />} />
-
-          {/* Public Route - Signup Verification Page */}
           <Route path="/signup-verify" element={<SignupVerifyPage />} />
-
-          {/* Public Route - Signup Setup Page */}
           <Route path="/signup-setup" element={<SignupSetupPage />} />
-
-          {/* Public Route - Signup Setup Success Page */}
           <Route path="/signup-setup-success" element={<SignupSetupSuccess />} />
-
-          {/* Public Route - Forgot Password Page */}
           <Route path="/forgot-password" element={<ForgotPassPage1 />} />
-
-          {/* Public Route - Forgot Password Verification Page */}
           <Route path="/forgot-verify" element={<ForgotPassVerification />} />
-
-          {/* Public Route - Forgot Password Page 2 */}
           <Route path="/reset-password" element={<ForgotPassPage2 />} />
-
-          {/* Public Route - Forgot Password Success Page */}
           <Route path="/forgot-success" element={<ForgotPassSuccess />} />
-
-          {/* Protected Route - Dashboard (now accessible without authentication) */}
-          <Route path="/dashboard" element={<Dashboard />} />
-
-          {/* Protected Route - Sidebar Settings */}
-          <Route path="/settings" element={<SidebarSettings />} />
-
-          {/* Route for Workout */}
-          <Route path="/workout" element={<Workout />} />
-
-          {/* Route for Exercises */}
-          <Route path="/exercises" element={<Exercises />} />
-
-          {/* Route for Diet Plan */}
-          <Route path="/diet-plan" element={<DietPlan />} />
-
-          {/* Route for Goals */}
-          <Route path="/goals" element={<Goal />} />
-
-          <Route path="/strength-training" element={<StrengthTraining />} />
-
-          <Route path="/cardio" element={<Cardio />} />
-
-          <Route path="/flexi-yoga" element={<FlexiYoga />} />
-          
-          {SettingsRoutes}
-
-          {/* OAuth2 Redirect Handler */}
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
 
-          {/* Redirect root path to dashboard for quick testing */}
+          {/* Protected Routes */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/admin-dashboard"
+            element={
+              localStorage.getItem("role") === "ADMIN" ? (
+                <AdminDashboard />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+          <Route path="/trainer-dashboard" element={<TrainerDashboard />} />
+          <Route path="/settings" element={<SidebarSettings />} />
+          <Route path="/workout" element={<Workout />} />
+          <Route path="/exercises" element={<Exercises />} />
+          <Route path="/diet-plan" element={<DietPlan />} />
+          <Route path="/strength-training" element={<StrengthTraining />} />
+          <Route path="/cardio" element={<Cardio />} />
+          <Route path="/flexi-yoga" element={<FlexiYoga />} />
+          {SettingsRoutes}
+
+          {/* Redirects */}
           <Route path="/" element={<Navigate to="/login" replace />} />
 
           {/* 404 Not Found */}

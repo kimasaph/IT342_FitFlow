@@ -10,7 +10,8 @@ const SignupPage = ({ onSignupSuccess }) => {
     email: '',
     phoneNumber: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: 'MEMBER' // Default role
   });
 
   const [errorMessages, setErrorMessages] = useState([]);
@@ -99,6 +100,7 @@ const SignupPage = ({ onSignupSuccess }) => {
       email: formData.email,
       phoneNumber: formData.phoneNumber,
       password: formData.password,
+      role: formData.role, // Include role
       created_at: new Date()
     };
     
@@ -143,10 +145,11 @@ const SignupPage = ({ onSignupSuccess }) => {
       // Handle successful signup
       localStorage.setItem('isAuthenticated', 'true');
       if (data.token) {
-        localStorage.setItem('token', data.token);
+        localStorage.setItem('token', data.token); // Store token
       }
       if (data.user) {
         localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('role', data.user.role); // Store the role
       }
       
       // Store the email for the verification page
@@ -242,6 +245,46 @@ const SignupPage = ({ onSignupSuccess }) => {
               <p className="text-gray-600">Enter necessary details.</p>
             </div>
 
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+              <div className="flex items-center">
+                
+                <div className="relative w-full">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <img
+                      src="/src/assets/images/group.png"
+                      alt="Role"
+                      className="h-5 w-5 opacity-60"
+                    />
+                  </div>
+                  <select
+                    name="role"
+                    value={formData.role}
+                    onChange={handleInputChange}
+                    className={`${inputClasses} appearance-none pl-10`}
+                    required
+                  >
+                    <option value="MEMBER">Member</option>
+                    <option value="TRAINER">Trainer</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg
+                      className="h-4 w-4 text-gray-400"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br />
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -280,7 +323,6 @@ const SignupPage = ({ onSignupSuccess }) => {
                   required
                 />
               </div>
-
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <img
