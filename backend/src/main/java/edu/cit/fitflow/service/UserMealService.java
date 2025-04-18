@@ -37,6 +37,7 @@ public class UserMealService {
         meal.setProtein(dto.getProtein());
         meal.setCarbs(dto.getCarbs());
         meal.setFats(dto.getFats());
+        meal.setDescription(dto.getDescription());
         meal.setNotes(dto.getNotes());
         meal.setIngredients(dto.getIngredients());
         meal.setImage(dto.getImage());

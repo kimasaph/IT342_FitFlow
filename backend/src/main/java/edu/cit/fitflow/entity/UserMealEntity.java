@@ -32,6 +32,9 @@ public class UserMealEntity {
     private Integer protein;
     private Integer carbs;
     private Integer fats;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
     
     @Column(columnDefinition = "TEXT")
     private String notes;

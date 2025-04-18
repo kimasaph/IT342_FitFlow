@@ -117,7 +117,15 @@ const UserMadeMeals = ({ onSelectMeal, onAddMeal, onDeleteMeal, userMealsData = 
 
   const handleAddClick = (e, meal) => {
     e.stopPropagation(); // Prevent triggering meal selection
-    if (onAddMeal) onAddMeal(meal);
+    if (onAddMeal) {
+      onAddMeal(meal);
+      
+      // Optionally provide feedback in the UserMadeMeals component as well
+      setHoveredMealId(meal.id);
+      setTimeout(() => {
+        setHoveredMealId(null);
+      }, 2000);
+    }
   };
 
   const handleDeleteClick = (e, meal) => {

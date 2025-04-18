@@ -13,6 +13,7 @@ const AddMealButton = ({ onAddMeal }) => {
   const [mealData, setMealData] = useState({
     name: '',
     description: '',
+    notes: '',
     protein: '',
     fats: '',
     carbs: '',
@@ -118,7 +119,7 @@ const AddMealButton = ({ onAddMeal }) => {
                     mealData.time.toLowerCase().includes('dinner') ? 'pasta.png' : 'yogurt2.png';
       }
       
-      // Get selected tags
+      // Get selected tags - extract just the label strings
       const mealTags = selectedTags.map(index => tags[index].label);
       
       // Create meal object with image name only, not the file
@@ -126,14 +127,15 @@ const AddMealButton = ({ onAddMeal }) => {
         userId: userId,
         time: mealData.time,
         name: mealData.name,
-        calories: Number(mealData.calories),
-        protein: Number(mealData.protein),
-        carbs: Number(mealData.carbs),
-        fats: Number(mealData.fats),
-        notes: mealData.description,
+        calories: Number(mealData.calories || 0),
+        protein: Number(mealData.protein || 0),
+        carbs: Number(mealData.carbs || 0),
+        fats: Number(mealData.fats || 0),
+        description: mealData.description, // Ensure both fields are populated
+        notes: mealData.notes, // Add the notes field here
         ingredients: mealData.ingredients,
         image: imageName,
-        tags: mealTags
+        tags: mealTags // Already an array of strings - ["Vegan", "Healthy"] etc.
       };
       
       // Send JSON data to backend API
@@ -144,12 +146,24 @@ const AddMealButton = ({ onAddMeal }) => {
         }
       });
       
+      // Add a unique ID if one wasn't provided by the server
+      const responseData = response.data;
+      if (!responseData.id) {
+        responseData.id = Date.now().toString(); // Use timestamp as unique ID if none provided
+      }
+      
       toast.success('Meal added successfully!');
-      console.log('Meal added successfully:', response.data);
+      console.log('Meal added successfully:', responseData);
+      
+      // Make sure tags are in the right format for the meal cards
+      const finalMealData = {
+        ...responseData,
+        tags: mealTags // Ensure we use the string array format for consistency
+      };
       
       // Add the new meal to the local state if callback exists
-      if (onAddMeal && response.data) {
-        onAddMeal(response.data);
+      if (onAddMeal && finalMealData) {
+        onAddMeal(finalMealData);
       }
       
       // Close the modal and reset the form
@@ -157,6 +171,7 @@ const AddMealButton = ({ onAddMeal }) => {
       setMealData({
         name: '',
         description: '',
+        notes: '',
         protein: '',
         fats: '',
         carbs: '',
@@ -226,7 +241,7 @@ const AddMealButton = ({ onAddMeal }) => {
                     value={mealData.name}
                     onChange={handleInputChange}
                     placeholder="E.g., Avocado Toast"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-sm placeholder: opacity-70"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-xs placeholder: opacity-70"
                     required
                   />
                 </div>
@@ -309,13 +324,25 @@ const AddMealButton = ({ onAddMeal }) => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description/Notes</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                   <textarea
                     name="description"
                     value={mealData.description}
                     onChange={handleInputChange}
-                    placeholder="Add notes about preparation, taste, or any other details"
+                    placeholder="Add description about taste, origin, or other details"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 min-h-20 placeholder:text-xs placeholder: opacity-70"
+                  ></textarea>
+                </div>
+
+                {/* Notes Field */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                  <textarea
+                    name="notes"
+                    value={mealData.notes}
+                    onChange={handleInputChange}
+                    placeholder="Add notes about preparation, extra uses, etc."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 min-h-20 placeholder:text-xs placeholder:opacity-70"
                   ></textarea>
                 </div>
                 
