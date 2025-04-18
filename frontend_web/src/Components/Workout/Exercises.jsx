@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import DashboardTemplate from './DashboardTemplate';
+import DashboardTemplate from '/src/Components/DashboardTemplate';
 import { Box } from '@mui/material'; // Import MUI Box
 
 const Waiver = () => {
@@ -13,20 +13,29 @@ const Waiver = () => {
     };
 
     const queryParams = new URLSearchParams(location.search);
-    const workoutStyle = queryParams.get('workoutStyle');
+    const workoutStyle = decodeURIComponent(queryParams.get('workoutStyle')); // Decode URL-encoded value
+    const workoutID = queryParams.get('workoutID'); // Extract workoutID
+    const userID = queryParams.get('userID'); // Extract userID
 
     const handleProceed = () => {
         if (isChecked) {
             console.log('Workout Style:', workoutStyle); // Debugging log
-            if (workoutStyle === 'Strength Training') {
-                navigate('/strength-training');
-            } else if (workoutStyle === 'Cardio') {
-                navigate('/cardio');
-            } else if (workoutStyle === 'Flexibility/Yoga' || workoutStyle === 'Flexibility%2FYoga') {
-                // Added condition to handle URL-encoded value
-                navigate('/flexi-yoga');
-            } else {
-                navigate('/workout');
+            console.log('Workout ID:', workoutID); // Debugging log
+            console.log('User ID:', userID); // Debugging log
+
+            switch (workoutStyle) {
+                case 'Strength Training':
+                    navigate(`/strength-training?workoutID=${workoutID}&userID=${userID}`);
+                    break;
+                case 'Cardio':
+                    navigate(`/cardio?workoutID=${workoutID}&userID=${userID}`);
+                    break;
+                case 'Flexibility/Yoga':
+                    navigate(`/flexi-yoga?workoutID=${workoutID}&userID=${userID}`);
+                    break;
+                default:
+                    navigate(`/workout`);
+                    break;
             }
         }
     };

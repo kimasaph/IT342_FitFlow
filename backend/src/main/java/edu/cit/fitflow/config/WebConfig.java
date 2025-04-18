@@ -24,12 +24,11 @@ public class WebConfig implements WebMvcConfigurer {
     @SuppressWarnings("null")
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // Allow CORS for specific URL pattern (e.g., /api/course)
-        registry.addMapping("/api/**")  // Allow CORS on all API endpoints
-                .allowedOrigins("http://localhost:5173")  // Allow only from this origin
-                .allowedMethods("GET", "POST", "PUT", "DELETE")  // Allowed HTTP methods
-                .allowedHeaders("*")  // Allow all headers
-                .allowCredentials(true);  // Allow credentials (cookies, authorization headers)
+        registry.addMapping("/api/**")
+                .allowedOrigins("http://localhost:5173")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Ensure POST is allowed
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
     
     @PostConstruct

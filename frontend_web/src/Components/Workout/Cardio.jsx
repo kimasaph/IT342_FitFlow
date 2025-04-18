@@ -1,5 +1,5 @@
 import React from 'react';
-import DashboardTemplate from './DashboardTemplate';
+import DashboardTemplate from '/src/Components/DashboardSimple';
 
 const Cardio = () => {
     return (

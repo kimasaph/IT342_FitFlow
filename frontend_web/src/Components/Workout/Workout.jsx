@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Added import
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   Box,
   Typography,
@@ -9,8 +10,8 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import Dashboard from "./DashboardTemplate";
-import workoutbg from "../assets/videos/workout.mp4";
+import Dashboard from "/src/Components/DashboardTemplate";
+import workoutbg from "/src/assets/videos/workout.mp4";
 
 const Workout = () => {
   const [bodyType, setBodyType] = useState("");
@@ -19,23 +20,53 @@ const Workout = () => {
   const [workoutStyle, setWorkoutStyle] = useState("");
   const [healthConcerns, setHealthConcerns] = useState("");
 
-  const navigate = useNavigate(); // Added useNavigate hook
+  const navigate = useNavigate();
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!bodyType || !fitnessGoal || !fitnessLevel || !workoutStyle) {
-      alert("Please fill out all required fields before submitting.");
-      return;
+        alert("Please fill out all required fields before submitting.");
+        return;
     }
-    console.log({
-      bodyType,
-      fitnessGoal,
-      fitnessLevel,
-      workoutStyle,
-      healthConcerns,
-    });
 
-    // Ensure proper encoding of workoutStyle, including "Flexibility/Yoga"
-    navigate(`/exercises?workoutStyle=${encodeURIComponent(workoutStyle)}`);
+    const workoutDetails = {
+        bodyType,
+        fitnessGoal,
+        fitnessLevel,
+        workoutStyle,
+        healthConcerns: healthConcerns || null, // Send null if healthConcerns is empty
+        currentFitnessLevel: fitnessLevel, // Include currentFitnessLevel
+    };
+
+    console.log("Reconstructed POST payload:", JSON.stringify(workoutDetails, null, 2)); // Debugging log
+
+    try {
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
+            alert("User not found. Please log in again.");
+            return;
+        }
+
+        const userId = JSON.parse(storedUser).id || JSON.parse(storedUser).userId;
+        const response = await axios.post(`http://localhost:8080/api/workouts/${userId}`, workoutDetails, {
+            headers: {
+                "Content-Type": "application/json", // Ensure proper content type
+                "Authorization": `Bearer ${localStorage.getItem("token")}`, // Include token
+            },
+        });
+        console.log("Response from backend:", response.data); // Debugging log
+
+        const workout = response.data; // Directly access the workout object
+        if (!workout.workoutStyle) {
+            throw new Error("Missing workoutStyle in the response");
+        }
+
+        console.log("Workout saved:", workout);
+
+        navigate(`/exercises?workoutStyle=${encodeURIComponent(workout.workoutStyle)}&workoutID=${workout.id}&userID=${userId}`);
+    } catch (error) {
+        console.error("Error saving workout details:", error.response?.data || error.message);
+        alert("Failed to save workout details. Please try again.");
+    }
   };
 
   const clearSelection = (setter) => {
@@ -50,12 +81,12 @@ const Workout = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          p: 15, // Reduced padding
+          p: 15,
           bgcolor: "#ffffff",
           borderRadius: "0 100px 100px 0",
           boxShadow: "0px 20px 20px rgba(0,0,0,0.1)",
-          maxWidth: 650, // Reduced width
-          height: 781, // Reduced height
+          maxWidth: 650,
+          height: 781,
           mx: "auto",
           position: "relative",
           zIndex: 1,
@@ -64,8 +95,8 @@ const Workout = () => {
         }}
       >
         <Typography
-          variant="h3" // Adjusted size
-          fontWeight="600" // Adjusted weight
+          variant="h3"
+          fontWeight="600"
           color="#12417f"
           sx={{ mb: 3, fontFamily: "'Outfit', sans-serif" }}
         >
@@ -75,8 +106,8 @@ const Workout = () => {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr", // 2 columns
-            gap: 2, // Spacing between items
+            gridTemplateColumns: "1fr 1fr",
+            gap: 2,
             width: "100%",
           }}
         >
@@ -237,7 +268,7 @@ const Workout = () => {
             fontWeight: "600",
             mt: 3,
           }}
-          onClick={handleNext} // Updated to use handleNext
+          onClick={handleNext}
         >
           Submit
         </Button>
@@ -251,7 +282,7 @@ const Workout = () => {
           top: 135,
           right: 0,
           width: "55%",
-          height: "780px", 
+          height: "780px",
           objectFit: "cover",
           zIndex: 0,
         }}

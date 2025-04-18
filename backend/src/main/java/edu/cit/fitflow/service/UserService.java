@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -32,6 +33,11 @@ public class UserService {
 	public UserEntity findById(int userId) {
 		return urepo.findById(userId).get();
 	}
+
+  // Added method to fetch user by userId
+  public Optional<UserEntity> getUserById(Long userId) {
+    return urepo.findById(userId);
+  }
 
   //Read of CRUD
 	public List<UserEntity> getAllUsers(){
