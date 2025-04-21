@@ -1,17 +1,33 @@
 import React from "react"
+import DashboardSimple from "/src/Components/DashboardSimple"
 
 // Self-contained Flexibility/Yoga Workout page with no external dependencies
 function FlexibilityYogaWorkout() {
-  // State management using React hooks
-  const [currentPose, setCurrentPose] = React.useState(0)
-  const [poseTime, setPoseTime] = React.useState(0)
-  const [isActive, setIsActive] = React.useState(false)
-  const [difficulty, setDifficulty] = React.useState("beginner")
-  const [showDifficultyMenu, setShowDifficultyMenu] = React.useState(false)
-  const [completedPoses, setCompletedPoses] = React.useState([])
-  const [activeTab, setActiveTab] = React.useState("instructions")
-  const [workoutComplete, setWorkoutComplete] = React.useState(false)
-  const [breathCount, setBreathCount] = React.useState(0)
+  // Get userID from localStorage or fallback
+  const userID = localStorage.getItem("userID") || "defaultUser"
+
+  // Helper to get initial state from localStorage
+  const getInitialStats = () => {
+    try {
+      const savedStats = localStorage.getItem(`flexiYogaStats_${userID}`)
+      if (savedStats) {
+        return JSON.parse(savedStats)
+      }
+    } catch {}
+    return {}
+  }
+  const initialStats = getInitialStats()
+
+  // State management using React hooks, initialized from localStorage if available
+  const [currentPose, setCurrentPose] = React.useState(initialStats.currentPose || 0)
+  const [poseTime, setPoseTime] = React.useState(initialStats.poseTime || 0)
+  const [isActive, setIsActive] = React.useState(initialStats.isActive || false)
+  const [difficulty, setDifficulty] = React.useState(initialStats.difficulty || "beginner")
+  const [showDifficultyMenu, setShowDifficultyMenu] = React.useState(initialStats.showDifficultyMenu || false)
+  const [completedPoses, setCompletedPoses] = React.useState(initialStats.completedPoses || [])
+  const [activeTab, setActiveTab] = React.useState(initialStats.activeTab || "instructions")
+  const [workoutComplete, setWorkoutComplete] = React.useState(initialStats.workoutComplete || false)
+  const [breathCount, setBreathCount] = React.useState(initialStats.breathCount || 0)
 
   // Yoga/Flexibility poses data
   const poses = {
@@ -152,6 +168,37 @@ function FlexibilityYogaWorkout() {
   // Get current poses based on difficulty level
   const currentPoses = poses[difficulty]
 
+  // Save data to localStorage whenever relevant stats change
+  React.useEffect(() => {
+    try {
+      const statsToSave = {
+        currentPose,
+        poseTime,
+        isActive,
+        difficulty,
+        showDifficultyMenu,
+        completedPoses,
+        activeTab,
+        workoutComplete,
+        breathCount,
+      }
+      localStorage.setItem(`flexiYogaStats_${userID}`, JSON.stringify(statsToSave))
+    } catch (error) {
+      console.error("Error saving yoga workout data:", error)
+    }
+  }, [
+    currentPose,
+    poseTime,
+    isActive,
+    difficulty,
+    showDifficultyMenu,
+    completedPoses,
+    activeTab,
+    workoutComplete,
+    breathCount,
+    userID,
+  ])
+
   // Timer functionality
   React.useEffect(() => {
     let interval = null
@@ -161,7 +208,7 @@ function FlexibilityYogaWorkout() {
         setPoseTime((prevTime) => prevTime + 1)
 
         // Increment breath count every 5 seconds
-        if (poseTime % 5 === 0) {
+        if ((poseTime + 1) % 5 === 0) {
           setBreathCount((prev) => prev + 1)
         }
       }, 1000)
@@ -174,7 +221,7 @@ function FlexibilityYogaWorkout() {
     }
 
     return () => clearInterval(interval)
-  }, [isActive, poseTime, currentPose, difficulty])
+  }, [isActive, poseTime, currentPose, difficulty, currentPoses])
 
   // Format time to mm:ss
   const formatTime = (seconds) => {
@@ -226,7 +273,6 @@ function FlexibilityYogaWorkout() {
     setCurrentPose(0)
     setPoseTime(0)
     setIsActive(false)
-    setCompletedPoses([])
     setWorkoutComplete(false)
     setBreathCount(0)
   }
@@ -409,6 +455,7 @@ function FlexibilityYogaWorkout() {
   )
 
   return (
+    <DashboardSimple>
     <div
       style={{
         minHeight: "100vh",
@@ -1050,6 +1097,7 @@ function FlexibilityYogaWorkout() {
         </div>
       </div>
     </div>
+    </DashboardSimple>
   )
 }
 

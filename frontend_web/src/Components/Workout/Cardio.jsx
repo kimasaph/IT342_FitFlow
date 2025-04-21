@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import DashboardSimple from "/src/Components/DashboardSimple"
 // Self-contained Cardio Workout page with no external dependencies
 function CardioWorkout() {
@@ -133,24 +133,64 @@ function CardioWorkout() {
     },
   ]
 
-  // State management using React hooks
-  const [isActive, setIsActive] = useState(false)
-  const [time, setTime] = useState(0)
-  const [intensity, setIntensity] = useState("low")
-  const [currentExercise, setCurrentExercise] = useState(0)
-  const [caloriesBurned, setCaloriesBurned] = useState(0)
-  const [workoutComplete, setWorkoutComplete] = useState(false)
-  const [heartRate, setHeartRate] = useState(75)
-  const [activeTab, setActiveTab] = useState("instructions")
-  const [showSelectContent, setShowSelectContent] = useState(false)
-  const [exerciseCountdown, setExerciseCountdown] = useState(0)
-  const [completedExercises, setCompletedExercises] = useState([])
-  const [totalWorkouts, setTotalWorkouts] = useState(0)
-  const [totalCaloriesBurned, setTotalCaloriesBurned] = useState(0)
-  const [totalTime, setTotalTime] = useState(0)
+  // Replace this with your actual user ID logic
+  const userID = localStorage.getItem("userID") || "defaultUser";
+
+  // Helper to get initial state from localStorage
+  const getInitialStats = () => {
+    try {
+      const savedStats = localStorage.getItem(`cardioWorkoutStats_${userID}`)
+      if (savedStats) {
+        return JSON.parse(savedStats)
+      }
+    } catch {}
+    return {}
+  }
+  const initialStats = getInitialStats()
+
+  // State management using React hooks, initialized from localStorage if available
+  const [isActive, setIsActive] = useState(initialStats.isActive || false)
+  const [time, setTime] = useState(initialStats.time || 0)
+  const [intensity, setIntensity] = useState(initialStats.intensity || "low")
+  const [currentExercise, setCurrentExercise] = useState(initialStats.currentExercise || 0)
+  const [caloriesBurned, setCaloriesBurned] = useState(initialStats.caloriesBurned || 0)
+  const [workoutComplete, setWorkoutComplete] = useState(initialStats.workoutComplete || false)
+  const [heartRate, setHeartRate] = useState(initialStats.heartRate || 75)
+  const [activeTab, setActiveTab] = useState(initialStats.activeTab || "instructions")
+  const [showSelectContent, setShowSelectContent] = useState(initialStats.showSelectContent || false)
+  const [exerciseCountdown, setExerciseCountdown] = useState(initialStats.exerciseCountdown || 0)
+  const [completedExercises, setCompletedExercises] = useState(initialStats.completedExercises || [])
+  const [totalWorkouts, setTotalWorkouts] = useState(initialStats.totalWorkouts || 0)
+  const [totalCaloriesBurned, setTotalCaloriesBurned] = useState(initialStats.totalCaloriesBurned || 0)
+  const [totalTime, setTotalTime] = useState(initialStats.totalTime || 0)
 
   // Filter exercises based on the selected intensity
   const filteredExercises = exercises.filter((exercise) => exercise.intensity === intensity)
+
+  // Refs for interval and latest state
+  const intervalRef = useRef(null)
+  const currentExerciseRef = useRef(currentExercise)
+  const intensityRef = useRef(intensity)
+  const filteredExercisesRef = useRef(filteredExercises)
+  const workoutCompleteRef = useRef(workoutComplete)
+  const completedExercisesRef = useRef(completedExercises) // add this ref
+
+  // Keep refs up to date
+  useEffect(() => {
+    currentExerciseRef.current = currentExercise
+  }, [currentExercise])
+  useEffect(() => {
+    intensityRef.current = intensity
+  }, [intensity])
+  useEffect(() => {
+    filteredExercisesRef.current = filteredExercises
+  }, [filteredExercises])
+  useEffect(() => {
+    workoutCompleteRef.current = workoutComplete
+  }, [workoutComplete])
+  useEffect(() => {
+    completedExercisesRef.current = completedExercises
+  }, [completedExercises]) // keep ref up to date
 
   // Handle exercise completion
   const completeExercise = () => {
@@ -172,26 +212,6 @@ function CardioWorkout() {
     }
   }
 
-  // Load saved data from localStorage on initial render
-  useEffect(() => {
-    try {
-      const savedStats = localStorage.getItem("cardioWorkoutStats")
-      if (savedStats) {
-        const stats = JSON.parse(savedStats)
-        setCaloriesBurned(stats.caloriesBurned || 0)
-        setHeartRate(stats.heartRate || 75)
-        setIntensity(stats.intensity || "low")
-        setCurrentExercise(stats.currentExercise || 0)
-        setCompletedExercises(stats.completedExercises || [])
-        setTotalWorkouts(stats.totalWorkouts || 0)
-        setTotalCaloriesBurned(stats.totalCaloriesBurned || 0)
-        setTotalTime(stats.totalTime || 0)
-      }
-    } catch (error) {
-      console.error("Error loading saved workout data:", error)
-    }
-  }, [])
-
   // Save data to localStorage whenever relevant stats change
   useEffect(() => {
     try {
@@ -204,8 +224,12 @@ function CardioWorkout() {
         totalWorkouts,
         totalCaloriesBurned,
         totalTime,
+        isActive,
+        showSelectContent,
+        activeTab,
+        exerciseCountdown,
       }
-      localStorage.setItem("cardioWorkoutStats", JSON.stringify(statsToSave))
+      localStorage.setItem(`cardioWorkoutStats_${userID}`, JSON.stringify(statsToSave))
     } catch (error) {
       console.error("Error saving workout data:", error)
     }
@@ -218,14 +242,12 @@ function CardioWorkout() {
     totalWorkouts,
     totalCaloriesBurned,
     totalTime,
+    isActive,
+    showSelectContent,
+    activeTab,
+    exerciseCountdown,
+    userID,
   ])
-
-  // Set initial exercise countdown when component mounts or exercise changes
-  useEffect(() => {
-    if (filteredExercises[currentExercise]) {
-      setExerciseCountdown(filteredExercises[currentExercise].duration)
-    }
-  }, [currentExercise, filteredExercises])
 
   // Initialize countdown on first load
   useEffect(() => {
@@ -234,46 +256,84 @@ function CardioWorkout() {
     }
   }, [])
 
-  // Timer functionality
+  // Timer functionality (fixed)
   useEffect(() => {
-    let interval = null;
-
     if (isActive && !workoutComplete) {
-      interval = setInterval(() => {
+      // Clear any existing interval first
+      if (intervalRef.current) clearInterval(intervalRef.current)
+
+      // Set up a new interval
+      intervalRef.current = setInterval(() => {
+        // Update exercise countdown
         setExerciseCountdown((prevTime) => {
           if (prevTime <= 1) {
-            completeExercise(); // Complete the current exercise when the timer reaches 0
-            return 0;
+            // Exercise is complete
+            const exercisesArr = filteredExercisesRef.current
+            const idx = currentExerciseRef.current
+
+            // Use ref for completedExercises to avoid stale closure
+            const currentExerciseId = exercisesArr[idx].id
+            if (!completedExercisesRef.current.includes(currentExerciseId)) {
+              setCompletedExercises((prev) => [...prev, currentExerciseId])
+            }
+
+            // Move to next exercise or complete workout
+            if (idx < exercisesArr.length - 1) {
+              setCurrentExercise(idx + 1)
+              return exercisesArr[idx + 1].duration // Return the duration of the next exercise
+            } else {
+              // Workout complete
+              setWorkoutComplete(true)
+              setIsActive(false)
+              setTotalWorkouts((prev) => prev + 1)
+              clearInterval(intervalRef.current)
+              return 0
+            }
           }
-          return prevTime - 1; // Decrease the countdown by 1 second
-        });
+          return prevTime - 1
+        })
 
         // Update total workout time
-        setTime((prevTime) => prevTime + 1);
-        setTotalTime((prevTime) => prevTime + 1);
+        setTime((prevTime) => prevTime + 1)
+        setTotalTime((prevTime) => prevTime + 1)
 
         // Update calories burned based on current exercise and intensity
-        if (currentExercise < filteredExercises.length) {
-          const exercise = filteredExercises[currentExercise];
-          const caloriesPerSecond = exercise.caloriesPerMinute[intensity] / 60;
-          setCaloriesBurned((prev) => Math.round((prev + caloriesPerSecond) * 10) / 10);
-          setTotalCaloriesBurned((prev) => Math.round((prev + caloriesPerSecond) * 10) / 10);
+        const idx = currentExerciseRef.current
+        const exercisesArr = filteredExercisesRef.current
+        const intensityVal = intensityRef.current
+        if (idx < exercisesArr.length) {
+          const exercise = exercisesArr[idx]
+          const caloriesPerSecond = exercise.caloriesPerMinute[intensityVal] / 60
+          setCaloriesBurned((prev) => Math.round((prev + caloriesPerSecond) * 10) / 10)
+          setTotalCaloriesBurned((prev) => Math.round((prev + caloriesPerSecond) * 10) / 10)
         }
 
         // Simulate heart rate changes
         setHeartRate((prev) => {
-          const intensityFactor = intensity === "low" ? 1 : intensity === "medium" ? 1.5 : 2;
-          const randomChange = Math.random() * 3 - 1; // Random value between -1 and 2
-          const newRate = prev + randomChange * intensityFactor;
-          return Math.min(Math.max(Math.round(newRate), 70), 180); // Keep between 70-180
-        });
-      }, 1000); // Run the interval every second
+          const intensityVal = intensityRef.current
+          const intensityFactor = intensityVal === "low" ? 1 : intensityVal === "medium" ? 1.5 : 2
+          const randomChange = Math.random() * 3 - 1
+          const newRate = prev + randomChange * intensityFactor
+          return Math.min(Math.max(Math.round(newRate), 70), 180)
+        })
+      }, 1000)
+    } else {
+      // Clear interval when not active
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
     }
 
+    // Cleanup function
     return () => {
-      if (interval) clearInterval(interval); // Clear the interval when the component unmounts or dependencies change
-    };
-  }, [isActive, currentExercise, intensity, filteredExercises, workoutComplete]);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    }
+  // Add filteredExercises to dependencies
+  }, [isActive, workoutComplete, filteredExercises])
 
   // Format time to mm:ss
   const formatTime = (seconds) => {
@@ -476,667 +536,647 @@ function CardioWorkout() {
 
   return (
     <DashboardSimple>
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(to bottom, #f8fafc, #f1f5f9)",
-        padding: "1rem",
-        fontFamily: "system-ui, -apple-system, sans-serif",
-      }}
-    >
-      <div style={{ maxWidth: "1024px", margin: "0 auto" }}>
-        <header style={{ marginBottom: "2rem", textAlign: "center" }}>
-          <h1 style={{ fontSize: "1.875rem", fontWeight: "bold", marginBottom: "0.5rem" }}>Cardio Workout</h1>
-          <p style={{ color: "#64748b" }}>Boost your heart rate and burn calories with this effective cardio routine</p>
-        </header>
+      <div
+        style={{
+          minHeight: "100vh",
+          background: "linear-gradient(to bottom, #f8fafc, #f1f5f9)",
+          padding: "1rem",
+          fontFamily: "system-ui, -apple-system, sans-serif",
+        }}
+      >
+        <div style={{ maxWidth: "1024px", margin: "0 auto" }}>
+          <header style={{ marginBottom: "2rem", textAlign: "center" }}>
+            <h1 style={{ fontSize: "1.875rem", fontWeight: "bold", marginBottom: "0.5rem" }}>Cardio Workout</h1>
+            <p style={{ color: "#64748b" }}>
+              Boost your heart rate and burn calories with this effective cardio routine
+            </p>
+          </header>
 
-        {/* Stats Summary */}
-        <div
-          style={{
-            border: "1px solid #e2e8f0",
-            borderRadius: "0.5rem",
-            overflow: "hidden",
-            background: "white",
-            padding: "1rem",
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "1rem",
-            marginBottom: "1.5rem",
-          }}
-        >
-          <div style={{ textAlign: "center", padding: "0.5rem" }}>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.5rem", color: "#ef4444" }}>
-              <FlameIcon />
-            </div>
-            <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{totalCaloriesBurned.toFixed(1)}</div>
-            <div style={{ fontSize: "0.875rem", color: "#64748b" }}>Total Calories Burned</div>
-          </div>
-
-          <div style={{ textAlign: "center", padding: "0.5rem" }}>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.5rem", color: "#3b82f6" }}>
-              <ClockIcon />
-            </div>
-            <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{formatTotalTime(totalTime)}</div>
-            <div style={{ fontSize: "0.875rem", color: "#64748b" }}>Total Workout Time</div>
-          </div>
-
-          <div style={{ textAlign: "center", padding: "0.5rem" }}>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.5rem", color: "#10b981" }}>
-              <TrophyIcon />
-            </div>
-            <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{totalWorkouts}</div>
-            <div style={{ fontSize: "0.875rem", color: "#64748b" }}>Completed Workouts</div>
-          </div>
-        </div>
-
-        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1.5rem" }}>
-          {/* Left Column - Timer and Controls */}
+          {/* Stats Summary */}
           <div
             style={{
+              border: "1px solid #e2e8f0",
+              borderRadius: "0.5rem",
+              overflow: "hidden",
+              background: "white",
+              padding: "1rem",
               display: "grid",
-              gridTemplateColumns: "1fr 2fr",
-              gap: "1.5rem",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: "1rem",
+              marginBottom: "1.5rem",
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-              {/* Timer Card */}
-              <div
-                style={{
-                  border: "1px solid #e2e8f0",
-                  borderRadius: "0.5rem",
-                  overflow: "hidden",
-                  background: "white",
-                }}
-              >
-                <div style={{ padding: "1rem", borderBottom: "1px solid #f1f5f9" }}>
-                  <h2 style={{ fontSize: "1.25rem", fontWeight: "bold", display: "flex", alignItems: "center" }}>
-                    <span style={{ marginRight: "0.5rem" }}>
-                      <ClockIcon />
-                    </span>
-                    Workout Timer
-                  </h2>
-                </div>
-                <div style={{ padding: "1.5rem", textAlign: "center" }}>
-                  <div style={{ fontSize: "3rem", fontWeight: "bold", marginBottom: "1.5rem" }}>
-                    {formatTime(exerciseCountdown)}
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem" }}>
-                    <button
-                      onClick={() => setIsActive(!isActive)}
-                      disabled={workoutComplete}
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: "0.375rem",
-                        padding: "0.5rem",
-                        border: isActive ? "1px solid #e2e8f0" : "none",
-                        background: isActive ? "transparent" : "#2563eb",
-                        color: isActive ? "inherit" : "white",
-                        cursor: workoutComplete ? "not-allowed" : "pointer",
-                        opacity: workoutComplete ? 0.5 : 1,
-                      }}
-                    >
-                      {isActive ? <PauseIcon /> : <PlayIcon />}
-                    </button>
-                    <button
-                      onClick={resetWorkout}
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: "0.375rem",
-                        padding: "0.5rem",
-                        border: "1px solid #e2e8f0",
-                        background: "transparent",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <ResetIcon />
-                    </button>
-                  </div>
-                </div>
+            <div style={{ textAlign: "center", padding: "0.5rem" }}>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.5rem", color: "#ef4444" }}>
+                <FlameIcon />
               </div>
-
-              {/* Intensity Level Card */}
-              <div
-                style={{
-                  border: "1px solid #e2e8f0",
-                  borderRadius: "0.5rem",
-                  overflow: "hidden",
-                  background: "white",
-                  transition: "all 0.3s ease", // Smooth transition for height changes
-                  ...(showSelectContent && { height: "auto", paddingBottom: "8rem" }), // Expand card when dropdown is open
-                }}
-              >
-                <div style={{ padding: "1rem", borderBottom: "1px solid #f1f5f9" }}>
-                  <h2 style={{ fontSize: "1.25rem", fontWeight: "bold" }}>Intensity Level</h2>
-                  <p style={{ fontSize: "0.875rem", color: "#64748b" }}>Adjust based on your fitness level</p>
-                </div>
-                <div style={{ padding: "1rem" }}>
-                  <div style={{ position: "relative" }}>
-                    <button
-                      onClick={() => setShowSelectContent(!showSelectContent)}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        width: "100%",
-                        padding: "0.5rem 1rem",
-                        border: "1px solid #e2e8f0",
-                        borderRadius: "0.375rem",
-                        background: "white",
-                        cursor: "pointer",
-                        transition: "all 0.3s ease",
-                        color: "#374151",
-                        fontWeight: "500",
-                        ...(showSelectContent && { borderBottomLeftRadius: "0", borderBottomRightRadius: "0" }),
-                      }}
-                    >
-                      <span style={{ textTransform: "capitalize" }}>
-                        {intensity === "low"
-                          ? "Low Intensity"
-                          : intensity === "medium"
-                            ? "Medium Intensity"
-                            : "High Intensity"}
-                      </span>
-                      <ChevronDownIcon />
-                    </button>
-
-                    {showSelectContent && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "100%",
-                          left: 0,
-                          minWidth: "100%",
-                          border: "1px solid #e2e8f0",
-                          borderRadius: "0 0 0.375rem 0.375rem",
-                          background: "white",
-                          marginTop: "0.25rem",
-                          zIndex: 10,
-                          boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-                          overflow: "hidden",
-                        }}
-                      >
-                        <div
-                          onClick={() => handleIntensityChange("low")}
-                          style={{
-                            padding: "0.5rem 1rem",
-                            cursor: "pointer",
-                            backgroundColor: intensity === "low" ? "#f8fafc" : "transparent",
-                          }}
-                        >
-                          Low Intensity
-                        </div>
-                        <div
-                          onClick={() => handleIntensityChange("medium")}
-                          style={{
-                            padding: "0.5rem 1rem",
-                            cursor: "pointer",
-                            backgroundColor: intensity === "medium" ? "#f8fafc" : "transparent",
-                          }}
-                        >
-                          Medium Intensity
-                        </div>
-                        <div
-                          onClick={() => handleIntensityChange("high")}
-                          style={{
-                            padding: "0.5rem 1rem",
-                            cursor: "pointer",
-                            backgroundColor: intensity === "high" ? "#f8fafc" : "transparent",
-                          }}
-                        >
-                          High Intensity
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Workout Stats Card */}
-              <div
-                style={{
-                  border: "1px solid #e2e8f0",
-                  borderRadius: "0.5rem",
-                  overflow: "hidden",
-                  background: "white",
-                }}
-              >
-                <div style={{ padding: "1rem", borderBottom: "1px solid #f1f5f9" }}>
-                  <h2 style={{ fontSize: "1.25rem", fontWeight: "bold", display: "flex", alignItems: "center" }}>
-                    <span style={{ marginRight: "0.5rem", color: "#ef4444" }}>
-                      <FlameIcon />
-                    </span>
-                    Workout Stats
-                  </h2>
-                </div>
-                <div style={{ padding: "1rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
-                  <div>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        fontSize: "0.875rem",
-                        marginBottom: "0.25rem",
-                      }}
-                    >
-                      <span>Calories Burned</span>
-                      <span style={{ fontWeight: "500" }}>{caloriesBurned.toFixed(1)} kcal</span>
-                    </div>
-                    <div
-                      style={{ height: "0.5rem", background: "#e2e8f0", borderRadius: "9999px", overflow: "hidden" }}
-                    >
-                      <div
-                        style={{
-                          height: "100%",
-                          width: `${Math.min(caloriesBurned / 2, 100)}%`,
-                          background: "#2563eb",
-                          borderRadius: "9999px",
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        fontSize: "0.875rem",
-                        marginBottom: "0.25rem",
-                      }}
-                    >
-                      <span style={{ display: "flex", alignItems: "center" }}>
-                        <span style={{ marginRight: "0.25rem", color: "#ef4444" }}>
-                          <HeartIcon />
-                        </span>
-                        Heart Rate
-                      </span>
-                      <span style={{ fontWeight: "500" }}>{heartRate} BPM</span>
-                    </div>
-                    <div
-                      style={{ height: "0.5rem", background: "#e2e8f0", borderRadius: "9999px", overflow: "hidden" }}
-                    >
-                      <div
-                        style={{
-                          height: "100%",
-                          width: `${(heartRate - 60) / 1.2}%`,
-                          background: "#2563eb",
-                          borderRadius: "9999px",
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        fontSize: "0.875rem",
-                        marginBottom: "0.25rem",
-                      }}
-                    >
-                      <span>Overall Progress</span>
-                      <span style={{ fontWeight: "500" }}>{Math.round(getOverallProgress())}%</span>
-                    </div>
-                    <div
-                      style={{ height: "0.5rem", background: "#e2e8f0", borderRadius: "9999px", overflow: "hidden" }}
-                    >
-                      <div
-                        style={{
-                          height: "100%",
-                          width: `${getOverallProgress()}%`,
-                          background: "#2563eb",
-                          borderRadius: "9999px",
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{totalCaloriesBurned.toFixed(1)}</div>
+              <div style={{ fontSize: "0.875rem", color: "#64748b" }}>Total Calories Burned</div>
             </div>
 
-            {/* Right Column - Exercises */}
+            <div style={{ textAlign: "center", padding: "0.5rem" }}>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.5rem", color: "#3b82f6" }}>
+                <ClockIcon />
+              </div>
+              <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{formatTotalTime(totalTime)}</div>
+              <div style={{ fontSize: "0.875rem", color: "#64748b" }}>Total Workout Time</div>
+            </div>
+
+            <div style={{ textAlign: "center", padding: "0.5rem" }}>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.5rem", color: "#10b981" }}>
+                <TrophyIcon />
+              </div>
+              <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{totalWorkouts}</div>
+              <div style={{ fontSize: "0.875rem", color: "#64748b" }}>Completed Workouts</div>
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1.5rem" }}>
+            {/* Left Column - Timer and Controls */}
             <div
               style={{
-                border: "1px solid #e2e8f0",
-                borderRadius: "0.5rem",
-                overflow: "hidden",
-                background: "white",
-                height: "fit-content",
+                display: "grid",
+                gridTemplateColumns: "1fr 2fr",
+                gap: "1.5rem",
               }}
             >
-              <div style={{ padding: "1rem", borderBottom: "1px solid #f1f5f9" }}>
-                <h2 style={{ fontSize: "1.25rem", fontWeight: "bold" }}>Cardio Exercises</h2>
-                <p style={{ fontSize: "0.875rem", color: "#64748b" }}>
-                  Complete each exercise and click "Next" to continue
-                </p>
-              </div>
-              <div style={{ padding: "1rem" }}>
-                {workoutComplete ? (
-                  <div style={{ textAlign: "center", padding: "3rem 1rem" }}>
-                    <div style={{ color: "#22c55e", margin: "0 auto 1rem auto", width: "4rem", height: "4rem" }}>
-                      <CheckCircleIcon />
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                {/* Timer Card */}
+                <div
+                  style={{
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "0.5rem",
+                    overflow: "hidden",
+                    background: "white",
+                  }}
+                >
+                  <div style={{ padding: "1rem", borderBottom: "1px solid #f1f5f9" }}>
+                    <h2 style={{ fontSize: "1.25rem", fontWeight: "bold", display: "flex", alignItems: "center" }}>
+                      <span style={{ marginRight: "0.5rem" }}>
+                        <ClockIcon />
+                      </span>
+                      Workout Timer
+                    </h2>
+                  </div>
+                  <div style={{ padding: "1.5rem", textAlign: "center" }}>
+                    <div style={{ fontSize: "3rem", fontWeight: "bold", marginBottom: "1.5rem" }}>
+                      {formatTime(exerciseCountdown)}
                     </div>
-                    <h3 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
-                      Workout Complete!
-                    </h3>
-                    <p style={{ color: "#64748b", marginBottom: "1.5rem" }}>
-                      Great job! You've completed all {intensity} intensity exercises and burned approximately{" "}
-                      {caloriesBurned.toFixed(1)} calories.
-                    </p>
-                    <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+                    <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem" }}>
                       <button
-                        onClick={() => {
-                          setWorkoutComplete(false)
-                          setCurrentExercise(0)
-                          if (filteredExercises.length > 0) {
-                            setExerciseCountdown(filteredExercises[0].duration)
-                          }
-                        }}
+                        onClick={() => setIsActive(!isActive)}
+                        disabled={workoutComplete}
                         style={{
                           display: "inline-flex",
                           alignItems: "center",
                           justifyContent: "center",
                           borderRadius: "0.375rem",
-                          padding: "0.5rem 1rem",
-                          background: "#2563eb",
-                          color: "white",
-                          fontWeight: "500",
-                          cursor: "pointer",
-                          border: "none",
+                          padding: "0.5rem",
+                          border: isActive ? "1px solid #e2e8f0" : "none",
+                          background: isActive ? "transparent" : "#2563eb",
+                          color: isActive ? "inherit" : "white",
+                          cursor: workoutComplete ? "not-allowed" : "pointer",
+                          opacity: workoutComplete ? 0.5 : 1,
                         }}
                       >
-                        Start New Workout
+                        {isActive ? <PauseIcon /> : <PlayIcon />}
+                      </button>
+                      <button
+                        onClick={resetWorkout}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: "0.375rem",
+                          padding: "0.5rem",
+                          border: "1px solid #e2e8f0",
+                          background: "transparent",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <ResetIcon />
                       </button>
                     </div>
                   </div>
-                ) : (
-                  <div style={{ maxHeight: "400px", overflowY: "auto", paddingRight: "1rem" }}>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                      {filteredExercises.map((exercise, index) => {
-                        const isCompleted = completedExercises.includes(exercise.id)
+                </div>
 
-                        return (
+                {/* Intensity Level Card */}
+                <div
+                  style={{
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "0.5rem",
+                    overflow: "hidden",
+                    background: "white",
+                    transition: "all 0.3s ease", // Smooth transition for height changes
+                    ...(showSelectContent && { height: "auto", paddingBottom: "8rem" }), // Expand card when dropdown is open
+                  }}
+                >
+                  <div style={{ padding: "1rem", borderBottom: "1px solid #f1f5f9" }}>
+                    <h2 style={{ fontSize: "1.25rem", fontWeight: "bold" }}>Intensity Level</h2>
+                    <p style={{ fontSize: "0.875rem", color: "#64748b" }}>Adjust based on your fitness level</p>
+                  </div>
+                  <div style={{ padding: "1rem" }}>
+                    <div style={{ position: "relative" }}>
+                      <button
+                        onClick={() => setShowSelectContent(!showSelectContent)}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          width: "100%",
+                          padding: "0.5rem 1rem",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: "0.375rem",
+                          background: "white",
+                          cursor: "pointer",
+                          transition: "all 0.3s ease",
+                          color: "#374151",
+                          fontWeight: "500",
+                          ...(showSelectContent && { borderBottomLeftRadius: "0", borderBottomRightRadius: "0" }),
+                        }}
+                      >
+                        <span style={{ textTransform: "capitalize" }}>
+                          {intensity === "low"
+                            ? "Low Intensity"
+                            : intensity === "medium"
+                              ? "Medium Intensity"
+                              : "High Intensity"}
+                        </span>
+                        <ChevronDownIcon />
+                      </button>
+
+                      {showSelectContent && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "100%",
+                            left: 0,
+                            minWidth: "100%",
+                            border: "1px solid #e2e8f0",
+                            borderRadius: "0 0 0.375rem 0.375rem",
+                            background: "white",
+                            marginTop: "0.25rem",
+                            zIndex: 10,
+                            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                            overflow: "hidden",
+                          }}
+                        >
                           <div
-                            key={exercise.id}
+                            onClick={() => handleIntensityChange("low")}
                             style={{
-                              padding: "1rem",
-                              borderRadius: "0.5rem",
-                              border: "1px solid",
-                              borderColor: index === currentExercise ? "#2563eb" : isCompleted ? "#86efac" : "#e2e8f0",
-                              background:
-                                index === currentExercise ? "#eff6ff" : isCompleted ? "#f0fdf4" : "transparent",
+                              padding: "0.5rem 1rem",
+                              cursor: "pointer",
+                              backgroundColor: intensity === "low" ? "#f8fafc" : "transparent",
                             }}
                           >
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "flex-start",
-                                marginBottom: "0.5rem",
-                              }}
-                            >
-                              <div style={{ display: "flex", alignItems: "center" }}>
-                                <h3 style={{ fontWeight: "500", fontSize: "1.125rem" }}>{exercise.name}</h3>
-                                {isCompleted && (
-                                  <span style={{ marginLeft: "0.5rem", color: "#22c55e" }}>
-                                    <CheckCircleIcon />
-                                  </span>
-                                )}
-                              </div>
-                              <span
-                                style={{
-                                  display: "inline-block",
-                                  padding: "0.25rem 0.5rem",
-                                  borderRadius: "9999px",
-                                  fontSize: "0.75rem",
-                                  fontWeight: "500",
-                                  background: index === currentExercise ? "#2563eb" : "transparent",
-                                  color: index === currentExercise ? "white" : "inherit",
-                                  border: index === currentExercise ? "none" : "1px solid #e2e8f0",
-                                }}
-                              >
-                                {exercise.duration} sec
-                              </span>
-                            </div>
-                            <p style={{ color: "#64748b", fontSize: "0.875rem", marginBottom: "0.75rem" }}>
-                              {exercise.description}
-                            </p>
-
-                            {index === currentExercise && (
-                              <div style={{ marginTop: "1rem" }}>
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    fontSize: "0.875rem",
-                                    marginBottom: "0.25rem",
-                                  }}
-                                >
-                                  <span>Time remaining</span>
-                                  <span>{exerciseCountdown} sec</span>
-                                </div>
-                                <div
-                                  style={{
-                                    height: "0.5rem",
-                                    background: "#e2e8f0",
-                                    borderRadius: "9999px",
-                                    overflow: "hidden",
-                                    marginBottom: "0.75rem",
-                                  }}
-                                >
-                                  <div
-                                    style={{
-                                      height: "100%",
-                                      width: `${(exerciseCountdown / exercise.duration) * 100}%`,
-                                      background: "#2563eb",
-                                      borderRadius: "9999px",
-                                    }}
-                                  ></div>
-                                </div>
-                                <button
-                                  onClick={completeExercise}
-                                  style={{
-                                    width: "100%",
-                                    marginTop: "0.75rem",
-                                    padding: "0.5rem 1rem",
-                                    borderRadius: "0.375rem",
-                                    background: "#2563eb",
-                                    color: "white",
-                                    fontWeight: "500",
-                                    cursor: "pointer",
-                                    border: "none",
-                                  }}
-                                >
-                                  {index === filteredExercises.length - 1 ? "Complete Workout" : "Next Exercise"}
-                                </button>
-                              </div>
-                            )}
+                            Low Intensity
                           </div>
-                        )
-                      })}
+                          <div
+                            onClick={() => handleIntensityChange("medium")}
+                            style={{
+                              padding: "0.5rem 1rem",
+                              cursor: "pointer",
+                              backgroundColor: intensity === "medium" ? "#f8fafc" : "transparent",
+                            }}
+                          >
+                            Medium Intensity
+                          </div>
+                          <div
+                            onClick={() => handleIntensityChange("high")}
+                            style={{
+                              padding: "0.5rem 1rem",
+                              cursor: "pointer",
+                              backgroundColor: intensity === "high" ? "#f8fafc" : "transparent",
+                            }}
+                          >
+                            High Intensity
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                )}
+                </div>
+
+                {/* Workout Stats Card */}
+                <div
+                  style={{
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "0.5rem",
+                    overflow: "hidden",
+                    background: "white",
+                  }}
+                >
+                  <div style={{ padding: "1rem", borderBottom: "1px solid #f1f5f9" }}>
+                    <h2 style={{ fontSize: "1.25rem", fontWeight: "bold", display: "flex", alignItems: "center" }}>
+                      <span style={{ marginRight: "0.5rem", color: "#ef4444" }}>
+                        <FlameIcon />
+                      </span>
+                      Workout Stats
+                    </h2>
+                  </div>
+                  <div style={{ padding: "1rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                    <div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          fontSize: "0.875rem",
+                          marginBottom: "0.25rem",
+                        }}
+                      >
+                        <span>Calories Burned</span>
+                        <span style={{ fontWeight: "500" }}>{caloriesBurned.toFixed(1)} kcal</span>
+                      </div>
+                      <div
+                        style={{ height: "0.5rem", background: "#e2e8f0", borderRadius: "9999px", overflow: "hidden" }}
+                      >
+                        <div
+                          style={{
+                            height: "100%",
+                            width: `${Math.min(caloriesBurned / 2, 100)}%`,
+                            background: "#2563eb",
+                            borderRadius: "9999px",
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          fontSize: "0.875rem",
+                          marginBottom: "0.25rem",
+                        }}
+                      >
+                        <span style={{ display: "flex", alignItems: "center" }}>
+                          <span style={{ marginRight: "0.25rem", color: "#ef4444" }}>
+                            <HeartIcon />
+                          </span>
+                          Heart Rate
+                        </span>
+                        <span style={{ fontWeight: "500" }}>{heartRate} BPM</span>
+                      </div>
+                      <div
+                        style={{ height: "0.5rem", background: "#e2e8f0", borderRadius: "9999px", overflow: "hidden" }}
+                      >
+                        <div
+                          style={{
+                            height: "100%",
+                            width: `${(heartRate - 60) / 1.2}%`,
+                            background: "#2563eb",
+                            borderRadius: "9999px",
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          fontSize: "0.875rem",
+                          marginBottom: "0.25rem",
+                        }}
+                      >
+                        <span>Overall Progress</span>
+                        <span style={{ fontWeight: "500" }}>{Math.round(getOverallProgress())}%</span>
+                      </div>
+                      <div
+                        style={{ height: "0.5rem", background: "#e2e8f0", borderRadius: "9999px", overflow: "hidden" }}
+                      >
+                        <div
+                          style={{
+                            height: "100%",
+                            width: `${getOverallProgress()}%`,
+                            background: "#2563eb",
+                            borderRadius: "9999px",
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
+
+              {/* Right Column - Exercises */}
+              <div
+                style={{
+                  border: "1px solid #e2e8f0",
+                  borderRadius: "0.5rem",
+                  overflow: "hidden",
+                  background: "white",
+                  height: "fit-content",
+                }}
+              >
+                <div style={{ padding: "1rem", borderBottom: "1px solid #f1f5f9" }}>
+                  <h2 style={{ fontSize: "1.25rem", fontWeight: "bold" }}>Cardio Exercises</h2>
+                  <p style={{ fontSize: "0.875rem", color: "#64748b" }}>
+                    Complete each exercise and click "Next" to continue
+                  </p>
+                </div>
+                <div style={{ padding: "1rem" }}>
+                  {workoutComplete ? (
+                    <div style={{ textAlign: "center", padding: "3rem 1rem" }}>
+                      <div style={{ color: "#22c55e", margin: "0 auto 1rem auto", width: "4rem", height: "4rem" }}>
+                        <CheckCircleIcon />
+                      </div>
+                      <h3 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
+                        Workout Complete!
+                      </h3>
+                      <p style={{ color: "#64748b", marginBottom: "1.5rem" }}>
+                        Great job! You've completed all {intensity} intensity exercises and burned approximately{" "}
+                        {caloriesBurned.toFixed(1)} calories.
+                      </p>
+                      <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+                        <button
+                          onClick={() => {
+                            setWorkoutComplete(false)
+                            setCurrentExercise(0)
+                            if (filteredExercises.length > 0) {
+                              setExerciseCountdown(filteredExercises[0].duration)
+                            }
+                          }}
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "0.375rem",
+                            padding: "0.5rem 1rem",
+                            background: "#2563eb",
+                            color: "white",
+                            fontWeight: "500",
+                            cursor: "pointer",
+                            border: "none",
+                          }}
+                        >
+                          Start New Workout
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ maxHeight: "400px", overflowY: "auto", paddingRight: "1rem" }}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                        {filteredExercises.map((exercise, index) => {
+                          const isCompleted = completedExercises.includes(exercise.id)
+
+                          return (
+                            <div
+                              key={exercise.id}
+                              style={{
+                                padding: "1rem",
+                                borderRadius: "0.5rem",
+                                border: "1px solid",
+                                borderColor:
+                                  index === currentExercise ? "#2563eb" : isCompleted ? "#86efac" : "#e2e8f0",
+                                background:
+                                  index === currentExercise ? "#eff6ff" : isCompleted ? "#f0fdf4" : "transparent",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "flex-start",
+                                  marginBottom: "0.5rem",
+                                }}
+                              >
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                  <h3 style={{ fontWeight: "500", fontSize: "1.125rem" }}>{exercise.name}</h3>
+                                  {isCompleted && (
+                                    <span style={{ marginLeft: "0.5rem", color: "#22c55e" }}>
+                                      <CheckCircleIcon />
+                                    </span>
+                                  )}
+                                </div>
+                                <span
+                                  style={{
+                                    display: "inline-block",
+                                    padding: "0.25rem 0.5rem",
+                                    borderRadius: "9999px",
+                                    fontSize: "0.75rem",
+                                    fontWeight: "500",
+                                    background: index === currentExercise ? "#2563eb" : "transparent",
+                                    color: index === currentExercise ? "white" : "inherit",
+                                    border: index === currentExercise ? "none" : "1px solid #e2e8f0",
+                                  }}
+                                >
+                                  {exercise.duration} sec
+                                </span>
+                              </div>
+                              <p style={{ color: "#64748b", fontSize: "0.875rem", marginBottom: "0.75rem" }}>
+                                {exercise.description}
+                              </p>
+
+                              {index === currentExercise && (
+                                <div style={{ marginTop: "1rem" }}>
+                                  {/* Removed per-exercise time remaining and progress bar */}
+                                  <button
+                                    onClick={completeExercise}
+                                    style={{
+                                      width: "100%",
+                                      marginTop: "0.75rem",
+                                      padding: "0.5rem 1rem",
+                                      borderRadius: "0.375rem",
+                                      background: "#2563eb",
+                                      color: "white",
+                                      fontWeight: "500",
+                                      cursor: "pointer",
+                                      border: "none",
+                                    }}
+                                  >
+                                    {index === filteredExercises.length - 1 ? "Complete Workout" : "Next Exercise"}
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div
+                  style={{
+                    padding: "1rem",
+                    borderTop: "1px solid #f1f5f9",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div style={{ fontSize: "0.875rem", color: "#64748b" }}>
+                    {currentExercise + 1} of {filteredExercises.length} exercises
+                  </div>
+                  <button
+                    onClick={resetWorkout}
+                    style={{
+                      padding: "0.25rem 0.5rem",
+                      fontSize: "0.875rem",
+                      borderRadius: "0.375rem",
+                      border: "1px solid #e2e8f0",
+                      background: "transparent",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Reset Workout
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Information Tabs */}
+            <div style={{ marginTop: "1rem" }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "0.5rem",
+                  marginBottom: "0.5rem",
+                }}
+              >
+                <button
+                  onClick={() => setActiveTab("instructions")}
+                  style={{
+                    padding: "0.5rem",
+                    textAlign: "center",
+                    borderRadius: "0.375rem",
+                    background: activeTab === "instructions" ? "#2563eb" : "#f1f5f9",
+                    color: activeTab === "instructions" ? "white" : "inherit",
+                    cursor: "pointer",
+                    border: "none",
+                  }}
+                >
+                  Instructions
+                </button>
+                <button
+                  onClick={() => setActiveTab("tips")}
+                  style={{
+                    padding: "0.5rem",
+                    textAlign: "center",
+                    borderRadius: "0.375rem",
+                    background: activeTab === "tips" ? "#2563eb" : "#f1f5f9",
+                    color: activeTab === "tips" ? "white" : "inherit",
+                    cursor: "pointer",
+                    border: "none",
+                  }}
+                >
+                  Workout Tips
+                </button>
+                <button
+                  onClick={() => setActiveTab("benefits")}
+                  style={{
+                    padding: "0.5rem",
+                    textAlign: "center",
+                    borderRadius: "0.375rem",
+                    background: activeTab === "benefits" ? "#2563eb" : "#f1f5f9",
+                    color: activeTab === "benefits" ? "white" : "inherit",
+                    cursor: "pointer",
+                    border: "none",
+                  }}
+                >
+                  Benefits
+                </button>
+              </div>
+
               <div
                 style={{
                   padding: "1rem",
-                  borderTop: "1px solid #f1f5f9",
-                  display: "flex",
-                  justifyContent: "space-between",
+                  background: "white",
+                  borderRadius: "0.375rem",
+                  marginTop: "0.5rem",
+                  border: "1px solid #e2e8f0",
+                  display: activeTab === "instructions" ? "block" : "none",
                 }}
               >
-                <div style={{ fontSize: "0.875rem", color: "#64748b" }}>
-                  {currentExercise + 1} of {filteredExercises.length} exercises
-                </div>
-                <button
-                  onClick={resetWorkout}
+                <h3 style={{ fontWeight: "500", marginBottom: "0.5rem" }}>How to use this workout</h3>
+                <ol
                   style={{
-                    padding: "0.25rem 0.5rem",
+                    paddingLeft: "1.25rem",
+                    listStyleType: "decimal",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.5rem",
                     fontSize: "0.875rem",
-                    borderRadius: "0.375rem",
-                    border: "1px solid #e2e8f0",
-                    background: "transparent",
-                    cursor: "pointer",
                   }}
                 >
-                  Reset Workout
-                </button>
+                  <li>Select your desired intensity level before starting</li>
+                  <li>Press the play button to start the workout timer</li>
+                  <li>Complete each exercise for the specified duration</li>
+                  <li>Click "Next Exercise" to move to the next activity</li>
+                  <li>Try to complete the entire workout without long breaks</li>
+                  <li>Your progress and stats are automatically saved</li>
+                  <li>You can switch intensity levels without losing your overall progress</li>
+                </ol>
               </div>
-            </div>
-          </div>
 
-          {/* Information Tabs */}
-          <div style={{ marginTop: "1rem" }}>
-            <div
-              style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.5rem", marginBottom: "0.5rem" }}
-            >
-              <button
-                onClick={() => setActiveTab("instructions")}
+              <div
                 style={{
-                  padding: "0.5rem",
-                  textAlign: "center",
+                  padding: "1rem",
+                  background: "white",
                   borderRadius: "0.375rem",
-                  background: activeTab === "instructions" ? "#2563eb" : "#f1f5f9",
-                  color: activeTab === "instructions" ? "white" : "inherit",
-                  cursor: "pointer",
-                  border: "none",
+                  marginTop: "0.5rem",
+                  border: "1px solid #e2e8f0",
+                  display: activeTab === "tips" ? "block" : "none",
                 }}
               >
-                Instructions
-              </button>
-              <button
-                onClick={() => setActiveTab("tips")}
+                <h3 style={{ fontWeight: "500", marginBottom: "0.5rem" }}>Tips for an effective cardio session</h3>
+                <ul
+                  style={{
+                    paddingLeft: "1.25rem",
+                    listStyleType: "disc",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.5rem",
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  <li>Stay hydrated throughout your workout</li>
+                  <li>Focus on proper form rather than speed</li>
+                  <li>Breathe rhythmically and don't hold your breath</li>
+                  <li>If you need to rest, take short breaks rather than stopping completely</li>
+                  <li>Gradually increase intensity over time as your fitness improves</li>
+                  <li>Try to work out at least 3-4 times per week for best results</li>
+                  <li>Mix different intensity levels to challenge your body</li>
+                </ul>
+              </div>
+
+              <div
                 style={{
-                  padding: "0.5rem",
-                  textAlign: "center",
+                  padding: "1rem",
+                  background: "white",
                   borderRadius: "0.375rem",
-                  background: activeTab === "tips" ? "#2563eb" : "#f1f5f9",
-                  color: activeTab === "tips" ? "white" : "inherit",
-                  cursor: "pointer",
-                  border: "none",
+                  marginTop: "0.5rem",
+                  border: "1px solid #e2e8f0",
+                  display: activeTab === "benefits" ? "block" : "none",
                 }}
               >
-                Workout Tips
-              </button>
-              <button
-                onClick={() => setActiveTab("benefits")}
-                style={{
-                  padding: "0.5rem",
-                  textAlign: "center",
-                  borderRadius: "0.375rem",
-                  background: activeTab === "benefits" ? "#2563eb" : "#f1f5f9",
-                  color: activeTab === "benefits" ? "white" : "inherit",
-                  cursor: "pointer",
-                  border: "none",
-                }}
-              >
-                Benefits
-              </button>
-            </div>
-
-            <div
-              style={{
-                padding: "1rem",
-                background: "white",
-                borderRadius: "0.375rem",
-                marginTop: "0.5rem",
-                border: "1px solid #e2e8f0",
-                display: activeTab === "instructions" ? "block" : "none",
-              }}
-            >
-              <h3 style={{ fontWeight: "500", marginBottom: "0.5rem" }}>How to use this workout</h3>
-              <ol
-                style={{
-                  paddingLeft: "1.25rem",
-                  listStyleType: "decimal",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.5rem",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <li>Select your desired intensity level before starting</li>
-                <li>Press the play button to start the workout timer</li>
-                <li>Complete each exercise for the specified duration</li>
-                <li>Click "Next Exercise" to move to the next activity</li>
-                <li>Try to complete the entire workout without long breaks</li>
-                <li>Your progress and stats are automatically saved</li>
-                <li>You can switch intensity levels without losing your overall progress</li>
-              </ol>
-            </div>
-
-            <div
-              style={{
-                padding: "1rem",
-                background: "white",
-                borderRadius: "0.375rem",
-                marginTop: "0.5rem",
-                border: "1px solid #e2e8f0",
-                display: activeTab === "tips" ? "block" : "none",
-              }}
-            >
-              <h3 style={{ fontWeight: "500", marginBottom: "0.5rem" }}>Tips for an effective cardio session</h3>
-              <ul
-                style={{
-                  paddingLeft: "1.25rem",
-                  listStyleType: "disc",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.5rem",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <li>Stay hydrated throughout your workout</li>
-                <li>Focus on proper form rather than speed</li>
-                <li>Breathe rhythmically and don't hold your breath</li>
-                <li>If you need to rest, take short breaks rather than stopping completely</li>
-                <li>Gradually increase intensity over time as your fitness improves</li>
-                <li>Try to work out at least 3-4 times per week for best results</li>
-                <li>Mix different intensity levels to challenge your body</li>
-              </ul>
-            </div>
-
-            <div
-              style={{
-                padding: "1rem",
-                background: "white",
-                borderRadius: "0.375rem",
-                marginTop: "0.5rem",
-                border: "1px solid #e2e8f0",
-                display: activeTab === "benefits" ? "block" : "none",
-              }}
-            >
-              <h3 style={{ fontWeight: "500", marginBottom: "0.5rem" }}>Benefits of regular cardio exercise</h3>
-              <ul
-                style={{
-                  paddingLeft: "1.25rem",
-                  listStyleType: "disc",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.5rem",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <li>Improves heart health and cardiovascular endurance</li>
-                <li>Burns calories and helps with weight management</li>
-                <li>Reduces stress and improves mood</li>
-                <li>Increases energy levels and improves sleep quality</li>
-                <li>Strengthens immune system and overall health</li>
-                <li>Lowers blood pressure and improves cholesterol levels</li>
-                <li>Enhances cognitive function and brain health</li>
-                <li>Increases longevity and quality of life</li>
-              </ul>
+                <h3 style={{ fontWeight: "500", marginBottom: "0.5rem" }}>Benefits of regular cardio exercise</h3>
+                <ul
+                  style={{
+                    paddingLeft: "1.25rem",
+                    listStyleType: "disc",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.5rem",
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  <li>Improves heart health and cardiovascular endurance</li>
+                  <li>Burns calories and helps with weight management</li>
+                  <li>Reduces stress and improves mood</li>
+                  <li>Increases energy levels and improves sleep quality</li>
+                  <li>Strengthens immune system and overall health</li>
+                  <li>Lowers blood pressure and improves cholesterol levels</li>
+                  <li>Enhances cognitive function and brain health</li>
+                  <li>Increases longevity and quality of life</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </DashboardSimple>
   )
 }
