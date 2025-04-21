@@ -62,7 +62,7 @@ const Workout = () => {
 
         console.log("Workout saved:", workout);
 
-        navigate(`/exercises?workoutStyle=${encodeURIComponent(workout.workoutStyle)}&workoutID=${workout.id}&userID=${userId}`);
+        navigate(`/exercises?workoutStyle=${encodeURIComponent(workout.workoutStyle)}&workoutID=${workout.id}&userID=${userId}&suggestions=${encodeURIComponent(JSON.stringify(workout.suggestions || []))}`);
     } catch (error) {
         console.error("Error saving workout details:", error.response?.data || error.message);
         alert("Failed to save workout details. Please try again.");
