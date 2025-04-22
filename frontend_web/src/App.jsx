@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "r
 import { AuthProvider } from "./Contexts/AuthContext"; // Import AuthProvider
 
 // Pages
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./Components/Dashboard";
 import LoginPage from "./Components/LoginPage";
 import SignupPage from "./Components/SignupPage";
 import SignupSuccessPage from "./Components/SignupSuccess";
