@@ -103,26 +103,20 @@ const AddMealButton = ({ onAddMeal }) => {
     setError(null);
     
     try {
-      // Get token from localStorage
       const token = localStorage.getItem('token');
-      
       if (!token) {
         throw new Error('No authentication token found');
       }
       
-      // Determine image name to use
       let imageName = mealData.imageName;
       if (!imageName) {
-        // Use default image based on meal type if no image was selected
         imageName = mealData.time.toLowerCase().includes('breakfast') ? 'oatmeal.png' :
                     mealData.time.toLowerCase().includes('lunch') ? 'salmon2.png' :
                     mealData.time.toLowerCase().includes('dinner') ? 'pasta.png' : 'yogurt2.png';
       }
       
-      // Get selected tags - extract just the label strings
       const mealTags = selectedTags.map(index => tags[index].label);
       
-      // Create meal object with image name only, not the file
       const newMeal = {
         userId: userId,
         time: mealData.time,
@@ -131,14 +125,13 @@ const AddMealButton = ({ onAddMeal }) => {
         protein: Number(mealData.protein || 0),
         carbs: Number(mealData.carbs || 0),
         fats: Number(mealData.fats || 0),
-        description: mealData.description, // Ensure both fields are populated
-        notes: mealData.notes, // Add the notes field here
+        description: mealData.description,
+        notes: mealData.notes,
         ingredients: mealData.ingredients,
         image: imageName,
-        tags: mealTags // Already an array of strings - ["Vegan", "Healthy"] etc.
+        tags: mealTags
       };
       
-      // Send JSON data to backend API
       const response = await axios.post('http://localhost:8080/api/meals', newMeal, {
         headers: {
           'Content-Type': 'application/json',
@@ -146,27 +139,100 @@ const AddMealButton = ({ onAddMeal }) => {
         }
       });
       
-      // Add a unique ID if one wasn't provided by the server
       const responseData = response.data;
       if (!responseData.id) {
-        responseData.id = Date.now().toString(); // Use timestamp as unique ID if none provided
+        responseData.id = Date.now().toString();
       }
       
       toast.success('Meal added successfully!');
       console.log('Meal added successfully:', responseData);
       
-      // Make sure tags are in the right format for the meal cards
       const finalMealData = {
         ...responseData,
-        tags: mealTags // Ensure we use the string array format for consistency
+        tags: mealTags
       };
       
-      // Add the new meal to the local state if callback exists
       if (onAddMeal && finalMealData) {
         onAddMeal(finalMealData);
+  
+        // --- FETCH UPDATED ACHIEVEMENTS HERE ---
+        try {
+          const achievementsResponse = await axios.get(
+            `http://localhost:8080/api/achievements/my-progress?userId=${userId}`,
+            {
+              headers: { 'Authorization': `Bearer ${token}` }
+            }
+          );
+
+          if (achievementsResponse.data) {
+            console.log("Achievement data received:", achievementsResponse.data);
+            
+            // Check for meal master progress
+            if (achievementsResponse.data.progress && 
+              achievementsResponse.data.progress.meals_created_5) {
+            const mealCount = achievementsResponse.data.progress.meals_created_5;
+            
+            // Add a delay before showing the second toast
+            setTimeout(() => {
+              if (mealCount < 5) {
+                toast(`🍽️ Meal Progress: ${mealCount}/5 meals created!`, {
+                  style: {
+                    borderRadius: '10px',
+                    background: '#e6f4ea', // soft pastel green
+                    color: '#2f5135',       // calm dark green text
+                    boxShadow: '0 0 12px rgba(0, 128, 0, 0.1)',
+                    fontSize: '0.95rem',
+                    padding: '16px',
+                  },
+                  iconTheme: {
+                    primary: '#34D399', // nice emerald green
+                    secondary: '#e6f4ea',
+                  },
+                  duration: 4000,
+                  position: 'top-right'
+                });
+              } else if (mealCount === 5) {
+                toast.success('🏆 Meal Master Unlocked! 5/5 Meals Created!', {
+                  style: {
+                    borderRadius: '10px',
+                    background: 'linear-gradient(135deg, #ffe680, #ffb347)',
+                    color: '#222',
+                    fontWeight: '600',
+                    fontSize: '1rem', // smaller than before
+                    boxShadow: '0 0 15px rgba(255, 200, 0, 0.5)',
+                    textAlign: 'center',
+                    padding: '16px'
+                  },
+                  iconTheme: {
+                    primary: '#ffffff',
+                    secondary: '#FFD700',
+                  },
+                  duration: 5500,
+                  position: 'top-right'
+                });
+              }
+            }, 700);
+          }
+
+            // Format the data for our event
+            const achievementEventData = {
+              progress: achievementsResponse.data.progress || {},
+              unlocked: achievementsResponse.data.unlocked || []
+            };
+
+            // Dispatch the event with the properly formatted data
+            if (window.dispatchEvent) {
+              window.dispatchEvent(new CustomEvent('achievements-updated', {
+                detail: achievementEventData
+              }));
+            }
+          }
+        } catch (achievementErr) {
+          console.error('Error fetching updated achievements:', achievementErr);
+        }
+        // --- END OF ACHIEVEMENTS FETCH ---
       }
       
-      // Close the modal and reset the form
       setIsModalOpen(false);
       setMealData({
         name: '',
@@ -191,6 +257,7 @@ const AddMealButton = ({ onAddMeal }) => {
       setIsSubmitting(false);
     }
   };
+  
 
   return (
     <div className="relative">
