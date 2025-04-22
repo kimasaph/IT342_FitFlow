@@ -209,7 +209,7 @@ useEffect(() => {
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <img
-                    src="/src/assets/images/userIcon.png"
+                    src={userIcon}
                     alt="User"
                     className="h-4 w-4 opacity-60"
                   />
@@ -234,7 +234,7 @@ useEffect(() => {
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <img
-                    src="/src/assets/images/lockIcon2.png"
+                    src={lockIcon}
                     alt="Password"
                     className="h-4 w-4 opacity-60"
                   />
@@ -324,7 +324,7 @@ useEffect(() => {
                   className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 cursor-pointer"
                 >
                   <img
-                    src="/src/assets/images/facebookIcon2.png"
+                    src={facebookIcon}
                     alt="Facebook"
                     className="h-7 w-7"
                   />
@@ -334,7 +334,7 @@ useEffect(() => {
                     className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 cursor-pointer"
                   >
                     <img
-                      src="/src/assets/images/github.png"
+                      src={githubIcon}
                       alt="Github"
                       className="h-7 w-7"
                     />
@@ -344,7 +344,7 @@ useEffect(() => {
                 className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 cursor-pointer"
                 >
                   <img
-                    src="/src/assets/images/googleIcon2.png"
+                    src={googleIcon}
                     alt="Google"
                     className="h-7 w-7"
                   />
