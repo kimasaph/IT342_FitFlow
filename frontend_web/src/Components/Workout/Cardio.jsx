@@ -192,6 +192,11 @@ function CardioWorkout() {
     completedExercisesRef.current = completedExercises
   }, [completedExercises]) // keep ref up to date
 
+  // Save total completed Cardio workouts
+  const saveCardioTotalWorkouts = () => {
+    localStorage.setItem(`cardioTotalWorkouts_${userID}`, totalWorkouts + 1);
+  };
+
   // Handle exercise completion
   const completeExercise = () => {
     // Add current exercise to completed exercises if not already there
@@ -208,7 +213,11 @@ function CardioWorkout() {
       // Complete workout
       setWorkoutComplete(true)
       setIsActive(false)
-      setTotalWorkouts((prev) => prev + 1)
+      setTotalWorkouts((prev) => {
+        const newTotal = prev + 1;
+        localStorage.setItem(`cardioTotalWorkouts_${userID}`, newTotal);
+        return newTotal;
+      });
     }
   }
 

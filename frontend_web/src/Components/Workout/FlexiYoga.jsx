@@ -199,6 +199,12 @@ function FlexibilityYogaWorkout() {
     userID,
   ])
 
+  // Save total completed FlexiYoga workouts
+  const saveFlexiYogaTotalWorkouts = () => {
+    const prev = parseInt(localStorage.getItem(`flexiYogaTotalWorkouts_${userID}`) || "0", 10);
+    localStorage.setItem(`flexiYogaTotalWorkouts_${userID}`, prev + 1);
+  };
+
   // Timer functionality
   React.useEffect(() => {
     let interval = null
@@ -246,6 +252,8 @@ function FlexibilityYogaWorkout() {
     } else {
       setWorkoutComplete(true)
       setIsActive(false)
+      // Save total completed workouts for goals page
+      saveFlexiYogaTotalWorkouts();
     }
   }
 
