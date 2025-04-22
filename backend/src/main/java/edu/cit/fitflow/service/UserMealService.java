@@ -22,6 +22,9 @@ public class UserMealService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private AchievementService achievementService; // Add this
 
     public UserMealEntity addMeal(UserMealDTO dto) {
         logger.info("Adding meal for user ID: {}", dto.getUserId());
@@ -44,7 +47,34 @@ public class UserMealService {
         meal.setCreated_at(new Date()); // Set the creation date
         
         logger.info("Saving meal: {}", meal.getName());
-        return mealRepository.save(meal);
+        UserMealEntity savedMeal = mealRepository.save(meal);
+        
+        // Check for achievements after saving the meal
+        checkAndUpdateAchievements(user);
+        
+        return savedMeal;
+    }
+    
+    // Add this to UserMealService class
+private void checkAndUpdateAchievements(UserEntity user) {
+    // Check for first meal achievement
+    achievementService.checkAndUnlockAchievement(user, "meal_logged");
+    
+    // Check for Meal Master achievement (5 custom meals)
+    long mealCount = mealRepository.countByUser(user);
+    achievementService.updateAchievementProgress(user, "meals_created_5", (int) mealCount);
+}
+    
+    private void checkMealMasterAchievement(UserEntity user) {
+        // Get count of meals created by this user
+        long mealCount = mealRepository.countByUserId(user.getId());
+        
+        logger.info("User {} has created {} meals", user.getId(), mealCount);
+        
+        // Check if the user has created 5 or more meals (for Meal Master achievement)
+        if (mealCount >= 5) {
+            achievementService.unlockMealMasterAchievement(user);
+        }
     }
     
     public List<UserMealEntity> getMealsByUserId(Integer userId) {
