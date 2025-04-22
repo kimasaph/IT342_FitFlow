@@ -25,6 +25,7 @@ import SettingsRoutes from "./SettingsRoutes.jsx";
 import DietPlan from "./Components/DietPlanPage/DietPlanPage.jsx";
 import AdminDashboard from "./Components/Admin/AdminDashboard.jsx";
 import TrainerDashboard from "./Components/Trainer/TrainerDashboard.jsx";
+import GoalsPage from "./Components/GoalsPage/GoalsPage.jsx";
 import axios from 'axios';
 
 // Axios Interceptor Setup
@@ -109,6 +110,7 @@ const App = () => {
             <Route path="/strength-training" element={<StrengthTraining />} />
             <Route path="/cardio" element={<Cardio />} />
             <Route path="/flexi-yoga" element={<FlexiYoga />} />
+            <Route path="/goals" element={<GoalsPage />} />
             {SettingsRoutes}
 
             {/* Redirects */}
