@@ -39,6 +39,10 @@ public class UserService {
     return urepo.findById(userId);
   }
 
+  // public Optional<UserEntity> getUserById(Long userId) {
+  //   return urepo.findById(userId);
+  // }
+
   //Read of CRUD
 	public List<UserEntity> getAllUsers(){
 		return urepo.findAll();
