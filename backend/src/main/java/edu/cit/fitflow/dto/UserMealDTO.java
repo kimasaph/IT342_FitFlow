@@ -11,6 +11,7 @@ public class UserMealDTO {
     private Integer protein;
     private Integer carbs;
     private Integer fats;
+    private String description;
     private String notes;
     private String ingredients;
     private String image;
