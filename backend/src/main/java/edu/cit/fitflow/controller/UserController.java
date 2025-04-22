@@ -18,10 +18,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import edu.cit.fitflow.config.FileStorageConfig;
 import edu.cit.fitflow.entity.UserEntity;
 import edu.cit.fitflow.service.UserService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import edu.cit.fitflow.entity.Role;
@@ -441,4 +445,77 @@ public class UserController {
                     .body(Map.of("error", "Failed to upload profile picture: " + e.getMessage()));
             }
         }
+        //Tester for JWT token (can be deleted)
+        private boolean isValidToken(String token) {
+    try {
+        // Remove the "Bearer " part from the token string
+        String jwtToken = token.replace("Bearer ", "");
+
+        // Validate the token and parse it to extract information
+        Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwtToken);
+        return true;
+    } catch (Exception e) {
+        return false;  // Token is invalid or expired
+    }
+}
+
+private Long extractUserIdFromToken(String token) {
+    try {
+        // Remove the "Bearer " part from the token string
+        String jwtToken = token.replace("Bearer ", "");
+
+        // Parse the token and extract the user ID
+        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwtToken).getBody();
+        return Long.parseLong(claims.getSubject());  // Assuming userId is stored in the 'subject' of the token
+    } catch (Exception e) {
+        return null;  // Failed to extract userId from token
+    }
+}
+
+
+        //Mobile User Data Fetch Testing
+        @CrossOrigin(origins = "http://localhost:5173")
+@GetMapping("/profile/{userId}")
+public ResponseEntity<?> getUserProfile(@PathVariable("userId") int userId, @RequestHeader("Authorization") String token) {
+    try {
+        // Validate the JWT token first
+        if (!isValidToken(token)) {
+            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+        }
+
+        // Extract userId from token (in case it's needed for validation)
+        Long extractedUserId = extractUserIdFromToken(token);
+        if (extractedUserId == null || !extractedUserId.equals((long) userId)) {
+            return ResponseEntity.status(403).body(Map.of("error", "Forbidden"));
+        }
+
+        // Find user by ID
+        UserEntity user = userv.findById(userId);  // Finding user by ID from the database
+        if (user == null) {
+            return ResponseEntity.status(404)
+                    .body(Map.of("error", "User not found"));
+        }
+
+        // Prepare the response map with user data
+        Map<String, Object> response = new HashMap<>();
+        response.put("userId", user.getId());
+        response.put("email", user.getEmail());
+        response.put("firstName", user.getFirstName());
+        response.put("lastName", user.getLastName());
+        response.put("gender", user.getGender());
+        response.put("age", user.getAge());
+        response.put("height", user.getHeight());
+        response.put("weight", user.getWeight());
+        response.put("bodyGoal", user.getBodyGoal());
+        response.put("phoneNumber", user.getPhoneNumber());
+        response.put("profilePicturePath", user.getProfilePicturePath());
+
+        return ResponseEntity.ok(response);
+    } catch (Exception e) {
+        return ResponseEntity.status(500)
+                .body(Map.of("error", "Error retrieving user data: " + e.getMessage()));
+    }
+}
+
+
 }

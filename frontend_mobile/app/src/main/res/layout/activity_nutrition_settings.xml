@@ -7,15 +7,18 @@
     android:background="@color/white">
 
     <!-- Header -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:paddingStart="16dp"
         android:paddingTop="16dp"
         android:paddingEnd="16dp"
         android:paddingBottom="12dp"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp">
 
         <ImageView
             android:id="@+id/backtoSettings2"
@@ -40,7 +43,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/save_button"
+            android:id="@+id/profile_data_save_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"

@@ -8,11 +8,24 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="Background">#16A1FE</color>
-
+    <color name="darker_gray">#FF666666</color>
 <!--    &lt;!&ndash; Font Families &ndash;&gt;-->
 <!--    <color name="primary_blue">#42C0FB</color>-->
 <!--    <color name="light_gray">#EEEEEE</color>-->
 <!--    <color name="blacks">#000000</color>-->
+
+    <color name="colorPrimary">#10B981</color>
+    <color name="colorPrimaryDark">#059669</color>
+    <color name="colorAccent">#3B82F6</color>
+    <color name="gray">#757575</color>
+    <color name="light_gray">#E0E0E0</color>
+    <color name="background_gray">#F5F7FA</color>
+    <color name="tag_background">#F0F4F8</color>
+    <color name="orange">#FF6B35</color>
+
+    <color name="green">#1DB954</color>
+    <color name="green_dark">#18A349</color>
+
 
 
 

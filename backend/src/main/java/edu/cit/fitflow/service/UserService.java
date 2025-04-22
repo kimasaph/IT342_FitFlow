@@ -35,9 +35,13 @@ public class UserService {
 	}
 
   // Added method to fetch user by userId
-  public Optional<UserEntity> getUserById(Long userId) {
+  public Optional<UserEntity> getUserById(Integer userId) {
     return urepo.findById(userId);
   }
+
+  // public Optional<UserEntity> getUserById(Long userId) {
+  //   return urepo.findById(userId);
+  // }
 
   //Read of CRUD
 	public List<UserEntity> getAllUsers(){

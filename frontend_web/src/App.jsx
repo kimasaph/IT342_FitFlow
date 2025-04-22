@@ -103,6 +103,7 @@ const App = () => {
               }
             />
             <Route path="/trainer-dashboard" element={<TrainerDashboard />} />
+            <Route path="/goals" element={<GoalsPage />} />
             <Route path="/settings" element={<SidebarSettings />} />
             <Route path="/workout" element={<Workout />} />
             <Route path="/exercises" element={<Exercises />} />

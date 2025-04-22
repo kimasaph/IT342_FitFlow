@@ -43,7 +43,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/save_button"
+            android:id="@+id/profile_data_save_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"
@@ -102,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:text="Bridget" />
+                     />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Last Name -->
@@ -121,7 +121,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:text="Theriveequal" />
+                     />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Age -->
@@ -140,7 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:text="28" />
+                     />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Gender -->
@@ -179,7 +179,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone"
-                    android:text="(555) 123-4567" />
+                     />
             </com.google.android.material.textfield.TextInputLayout>
 
             <View
@@ -216,7 +216,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:text="165" />
+                     />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Weight -->
@@ -235,7 +235,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:text="58" />
+                     />
             </com.google.android.material.textfield.TextInputLayout>
 
             <View
@@ -273,7 +273,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:text="Lose Weight" />
+                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </ScrollView>

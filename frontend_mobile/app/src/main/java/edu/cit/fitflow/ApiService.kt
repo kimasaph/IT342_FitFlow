@@ -3,11 +3,16 @@ package edu.cit.fitflow
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 interface ApiService {
 
-    @POST("auth/signupuser")
+    @POST("auth/signup")
     fun registerUser(@Body user: User): Call<ResponseBody>
 
     @POST("auth/signup-setup")
@@ -30,6 +35,40 @@ interface ApiService {
 
     @POST("workouts")
     fun createWorkout(@Body workout: WorkoutRequest): Call<WorkoutRequest>
+
+    @GET("auth/profile/{userId}")
+    fun getUserProfile(@Path("userId") userId: Int, @Header("Authorization") token: String): Call<User>
+
+    @PUT("auth/update-profile/{userId}")
+    fun updateUserProfile(@Path("userId") userId: Int, @Body updatedUser: User, token: String): Call<ResponseBody>
+
+
+    //Meal Plan
+    @POST("meals")
+    fun createMeal(@Body newMeal: UserMealDTO): Call<ResponseBody>
+
+    // Get Meals by User ID
+    @GET("meals/user/{userId}")
+    fun getMealsByUserId(
+        @Path("userId") userId: Int,
+        @Header("Authorization") token: String
+    ): Call<List<UserMealEntity>>
+
+    @DELETE("meals/{mealId}")
+    fun deleteMeal(
+        @Path("mealId") mealId: Int,
+        @Header("Authorization") token: String
+    ): Call<ResponseBody>
+
+    @POST("workouts/{userId}")
+    fun createWorkout(
+        @Path("userId") userId: Int,
+        @Body workout: WorkoutRequest
+    ): Call<WorkoutRequest>
+
+
+
+
 
 
 
