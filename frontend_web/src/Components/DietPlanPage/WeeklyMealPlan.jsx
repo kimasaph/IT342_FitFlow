@@ -71,7 +71,7 @@ const ProgramCarousel = ({ options, selectedIndex, onSelect }) => {
   };
 
   return (
-    <div className="flex items-center gap-4 relative">
+    <div className="flex items-center gap-4 relative mt-[-15px]">
       <button
         onClick={handlePrev}
         className={`flex items-center justify-center w-8 h-8 rounded-full bg-white shadow flex-shrink-0 
