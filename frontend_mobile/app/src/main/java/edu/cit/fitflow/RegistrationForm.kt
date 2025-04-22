@@ -3,128 +3,123 @@ package edu.cit.fitflow
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.facebook.*
-import com.facebook.login.LoginManager
-import com.facebook.login.LoginResult
-import com.google.android.gms.auth.api.signin.*
-import com.google.android.gms.common.api.ApiException
-import org.json.JSONException
-import java.util.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegistrationForm : AppCompatActivity() {
-
-    private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var callbackManager: CallbackManager
-
-    private val GOOGLE_SIGN_IN_REQUEST = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration_form)
 
-        // 🔙 Back button
-        findViewById<ImageView>(R.id.imgLeft2).setOnClickListener {
+        // Back Button
+        val backButton = findViewById<ImageView>(R.id.imgLeft2)
+        backButton.setOnClickListener {
             startActivity(Intent(this, Registration::class.java))
         }
 
-        // 🔑 Navigate to Login
-        findViewById<TextView>(R.id.btnSignIn).setOnClickListener {
+        // Navigate to Login
+        val toLogin = findViewById<TextView>(R.id.btnSignIn)
+        toLogin.setOnClickListener {
             startActivity(Intent(this, Login::class.java))
         }
 
-        // 📹 Video Background
+        // Input Fields
+        val email = findViewById<EditText>(R.id.editTextFirstName)
+        val phone = findViewById<EditText>(R.id.editTextLastName)
+        val password = findViewById<EditText>(R.id.editTextPassword)
+        val confirmPassword = findViewById<EditText>(R.id.editTextConfirmPassword)
+
+        // Placeholder fields for first and last name if they will be used later
+        val firstName = EditText(this)
+        val lastName = EditText(this)
+
+        // Sign Up Button
+        val signUpButton = findViewById<Button>(R.id.btnSignUp1)
+        signUpButton.setOnClickListener {
+            val emailText = email.text.toString().trim()
+            val phoneText = phone.text.toString().trim()
+            val passText = password.text.toString().trim()
+            val confirmPassText = confirmPassword.text.toString().trim()
+
+            if (emailText.isEmpty() || phoneText.isEmpty() || passText.isEmpty() || confirmPassText.isEmpty()) {
+                Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (passText != confirmPassText) {
+                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val user = User(
+                userId = 0, //Change this if error
+                username = emailText,
+                email = emailText,
+                phoneNumber = phoneText,
+                password = passText,
+                firstName = "N/A",
+                lastName = "N/A",
+                gender = "Not Specified",
+                height = 0.0f,
+                weight = 0.0f,
+                age = 0,
+                bodyGoal = ""
+            )
+
+
+            RetrofitClient.instance.registerUser(user).enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response.isSuccessful) {
+                        // ✅ STEP 1: Send verification code
+                        RetrofitClient.instance.sendVerificationCode(SendCodeRequest(emailText))
+                            .enqueue(object : Callback<VerificationResponse> {
+                                override fun onResponse(call: Call<VerificationResponse>, response: Response<VerificationResponse>) {
+                                    if (response.isSuccessful && response.body()?.status == "success") {
+                                        Toast.makeText(this@RegistrationForm, "Verification code sent", Toast.LENGTH_SHORT).show()
+
+                                        // ✅ STEP 2: Move to confirmation screen
+                                        val intent = Intent(this@RegistrationForm, RegistrationConfirmationCode::class.java)
+                                        intent.putExtra("email", emailText)
+                                        startActivity(intent)
+                                        finish()
+                                    } else {
+                                        Toast.makeText(this@RegistrationForm, "Failed to send verification code", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<VerificationResponse>, t: Throwable) {
+                                    Toast.makeText(this@RegistrationForm, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                                }
+                            })
+
+                    } else {
+                        Toast.makeText(this@RegistrationForm, "Registration Failed: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(this@RegistrationForm, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
+        // Video Background
         val videoView = findViewById<VideoView>(R.id.vidRegistrationForm)
         val uri = Uri.parse("android.resource://$packageName/${R.raw.registration_form}")
         videoView.setVideoURI(uri)
+
+        val mediaController = MediaController(this)
+        mediaController.setAnchorView(videoView)
+        videoView.setMediaController(mediaController)
+
         videoView.start()
-        videoView.setOnCompletionListener { videoView.start() }
-
-        // 🌐 Google Sign-In setup
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        findViewById<Button>(R.id.btnGoogle).setOnClickListener {
-            val signInIntent = googleSignInClient.signInIntent
-            startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST)
+        videoView.setOnCompletionListener {
+            videoView.start()
         }
-
-        // 📘 Facebook Sign-In setup
-        callbackManager = CallbackManager.Factory.create()
-
-        findViewById<Button>(R.id.btnFacebook).setOnClickListener {
-            LoginManager.getInstance().logInWithReadPermissions(this, listOf("email", "public_profile"))
-            LoginManager.getInstance().registerCallback(callbackManager,
-                object : FacebookCallback<LoginResult> {
-                    override fun onSuccess(result: LoginResult) {
-                        handleFacebookAccessToken(result.accessToken)
-                    }
-
-                    override fun onCancel() {
-                        Toast.makeText(this@RegistrationForm, "Facebook sign in cancelled.", Toast.LENGTH_SHORT).show()
-                    }
-
-                    override fun onError(error: FacebookException) {
-                        Toast.makeText(this@RegistrationForm, "Facebook sign in failed: ${error.message}", Toast.LENGTH_SHORT).show()
-                    }
-                })
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        callbackManager.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == GOOGLE_SIGN_IN_REQUEST) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                val email = account?.email ?: ""
-                val name = account?.displayName ?: ""
-                val firstName = name.split(" ").firstOrNull() ?: ""
-                val lastName = name.split(" ").drop(1).joinToString(" ")
-                goToSuccessScreen(email, firstName, lastName)
-            } catch (e: ApiException) {
-                Toast.makeText(this, "Google sign in failed: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun handleFacebookAccessToken(token: AccessToken) {
-        val request = GraphRequest.newMeRequest(token) { json, _ ->
-            if (json != null) {
-                try {
-                    val email = json.optString("email", "")
-                    val name = json.optString("name", "")
-                    val firstName = name.split(" ").firstOrNull() ?: ""
-                    val lastName = name.split(" ").drop(1).joinToString(" ")
-                    goToSuccessScreen(email, firstName, lastName)
-                } catch (e: JSONException) {
-                    Toast.makeText(this, "Facebook data error: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                Toast.makeText(this, "Facebook data was null", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        val parameters = Bundle().apply {
-            putString("fields", "id,name,email")
-        }
-        request.parameters = parameters
-        request.executeAsync()
-    }
-
-
-    private fun goToSuccessScreen(email: String, firstName: String, lastName: String) {
-        val intent = Intent(this, RegistrationSuccess::class.java)
-        intent.putExtra("email", email)
-        intent.putExtra("firstName", firstName)
-        intent.putExtra("lastName", lastName)
-        startActivity(intent)
-        finish()
     }
 }

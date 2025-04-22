@@ -1,6 +1,7 @@
 package edu.cit.fitflow
 
 data class User(
+    val userId: Int,
     val username: String,
     val email: String,
     val phoneNumber: String,

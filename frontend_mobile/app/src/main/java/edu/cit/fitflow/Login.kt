@@ -3,9 +3,9 @@ package edu.cit.fitflow
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,7 +56,25 @@ class Login : AppCompatActivity() {
             RetrofitClient.instance.loginUser(loginRequest).enqueue(object : Callback<UserResponse> {
                 override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                     if (response.isSuccessful && response.body() != null) {
-                        val user = response.body()!!
+                        val responseBody = response.body()!!
+                        val user = responseBody.user
+                        val token = responseBody.token
+
+                        Log.d("Login", "Login successful for: ${user.email}")
+
+                        // Save userId and token in SharedPreferences
+                        val sharedPreferences = getSharedPreferences("prefs", MODE_PRIVATE)
+                        with(sharedPreferences.edit()) {
+                            putInt("userId", user.userId)
+                            putString("auth_token", "Bearer $token") // Stored with Bearer
+                            putString("firstName", user.firstName)
+                            putString("lastName", user.lastName)
+                            putString("email", user.email)
+                            apply()
+                        }
+
+                        Log.d("Login", "Saved User Data: ${user.firstName}, ${user.lastName}, ${user.email}")
+
                         Toast.makeText(this@Login, "Login Successful!", Toast.LENGTH_SHORT).show()
 
                         val intent = Intent(this@Login, FitFlowDashboard::class.java).apply {
@@ -68,11 +86,13 @@ class Login : AppCompatActivity() {
                         finish()
                     } else {
                         Toast.makeText(this@Login, "Login Failed: Invalid credentials", Toast.LENGTH_SHORT).show()
+                        Log.e("Login", "Unsuccessful login response: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                     Toast.makeText(this@Login, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    Log.e("Login", "Network failure: ${t.message}")
                 }
             })
         }

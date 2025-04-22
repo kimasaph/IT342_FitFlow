@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Drink"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <RadioGroup
+        android:id="@+id/drink_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp">
+
+        <RadioButton
+            android:id="@+id/water_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Water (0 calories)"
+            android:buttonTint="#3B82F6"
+            android:paddingVertical="8dp" />
+
+        <RadioButton
+            android:id="@+id/green_tea_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Green Tea (2 calories)"
+            android:buttonTint="#3B82F6"
+            android:paddingVertical="8dp" />
+
+        <RadioButton
+            android:id="@+id/black_coffee_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Black Coffee (5 calories)"
+            android:buttonTint="#3B82F6"
+            android:paddingVertical="8dp" />
+
+        <RadioButton
+            android:id="@+id/protein_shake_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Protein Shake (120 calories)"
+            android:buttonTint="#3B82F6"
+            android:paddingVertical="8dp" />
+
+        <RadioButton
+            android:id="@+id/fruit_smoothie_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fruit Smoothie (180 calories)"
+            android:buttonTint="#3B82F6"
+            android:paddingVertical="8dp" />
+
+        <RadioButton
+            android:id="@+id/sparkling_water_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sparkling Water (0 calories)"
+            android:buttonTint="#3B82F6"
+            android:paddingVertical="8dp" />
+
+        <RadioButton
+            android:id="@+id/herbal_tea_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Herbal Tea (0 calories)"
+            android:buttonTint="#3B82F6"
+            android:paddingVertical="8dp" />
+
+        <RadioButton
+            android:id="@+id/latte_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Latte (120 calories)"
+            android:buttonTint="#3B82F6"
+            android:paddingVertical="8dp" />
+    </RadioGroup>
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel_button"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            app:cornerRadius="8dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_drink_button"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Add Drink"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            app:cornerRadius="8dp"
+            app:backgroundTint="#3B82F6" />
+    </LinearLayout>
+</LinearLayout>

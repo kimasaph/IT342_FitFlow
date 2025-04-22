@@ -84,7 +84,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Kyle Ezekiel Moreno"
+
                     android:textColor="#000000"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -93,10 +93,11 @@
                     app:layout_constraintTop_toTopOf="@id/profile_image" />
 
                 <TextView
+                    android:id="@+id/user_email"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="akosikyle505@gmail.com"
+
                     android:textColor="#757575"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -150,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="8dp"
-                    android:text="Profile Data"
+                    android:text="Edit Profile"
                     android:textColor="#000000"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -664,27 +665,18 @@
                     app:tint="#333333" />
 
                 <TextView
+                    android:id="@+id/txtLogout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Privacy Center"
+                    android:text="Logout"
                     android:textColor="#000000"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/privacy_chevron"
                     app:layout_constraintStart_toEndOf="@id/privacy_icon"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/privacy_chevron"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_arrow_right"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="#CCCCCC" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
