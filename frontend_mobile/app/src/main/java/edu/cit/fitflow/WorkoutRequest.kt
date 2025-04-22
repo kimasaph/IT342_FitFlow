@@ -1,9 +1,11 @@
 package edu.cit.fitflow
 
-public final data class WorkoutRequest(
-    val userId: Long, // You need to pass the logged-in user's ID
+data class WorkoutRequest(
+    val userId: Int,
     val bodyType: String,
     val fitnessGoal: String,
-    val currentFitnessLevel: String,
-    val preferredWorkoutStyle: String
+    val fitnessLevel: String, // Not nullable
+    val workoutStyle: String, // Not nullable
+    val healthConcerns: String?, // Nullable
+    //val currentFitnessLevel: String // Not nullable
 )
