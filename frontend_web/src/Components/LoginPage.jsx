@@ -3,6 +3,15 @@ import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { EyeClosed, Eye } from 'lucide-react';
 
+import bodyBoostVideo from '../assets/videos/BodyBoostVideo.mp4';
+import whiteWordsLogo from '../assets/images/whiteWordsLogo.png';
+import logoFitFlow from '../assets/images/logoFitFlow.png';
+import userIcon from '../assets/images/userIcon.png';
+import lockIcon from '../assets/images/lockIcon2.png';
+import facebookIcon from '../assets/images/facebookIcon2.png';
+import githubIcon from '../assets/images/github.png';
+import googleIcon from '../assets/images/googleIcon2.png';
+
 const LoginPage = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -165,7 +174,7 @@ useEffect(() => {
               muted
               playsInline
             >
-              <source src="/src/assets/videos/BodyBoostVideo.mp4" type="video/mp4" />
+               <source src={bodyBoostVideo} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
 
@@ -174,7 +183,7 @@ useEffect(() => {
                     background: 'linear-gradient(rgba(36, 36, 37, 0.7), rgba(19, 22, 47, 0.9))'
                   }}>
               <img
-                src="/src/assets/images/whiteWordsLogo.png"
+                src={whiteWordsLogo}
                 alt="FitFlow"
                 className="w-2/3 max-w-md"
               />
@@ -186,7 +195,7 @@ useEffect(() => {
         <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-8">
           <div className="w-full max-w-md">
             <img
-              src="/src/assets/images/logoFitFlow.png"
+              src={logoFitFlow}
               alt="Logo"
               className="h-24 mx-auto mb-3"
             />
