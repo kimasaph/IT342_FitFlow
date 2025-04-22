@@ -2,6 +2,7 @@ package edu.cit.fitflow.service;
 
 import edu.cit.fitflow.entity.UserEntity;
 import edu.cit.fitflow.repository.UserRepository;
+import edu.cit.fitflow.entity.Role;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -32,13 +34,24 @@ public class UserService {
 		return urepo.findById(userId).get();
 	}
 
+  // Added method to fetch user by userId
+  public Optional<UserEntity> getUserById(Long userId) {
+    return urepo.findById(userId);
+  }
+
   //Read of CRUD
 	public List<UserEntity> getAllUsers(){
 		return urepo.findAll();
 	}
 
-  //Create of User
+  // Create a user with role validation
 	public UserEntity createUser(UserEntity user) {
+		if (user.getAge() == null) {
+			user.setAge(0); // Default age value
+		}
+		if (user.getRole() == null) {
+			user.setRole(Role.MEMBER); // Default role if not provided
+		}
 		return urepo.save(user);
 	}
 
@@ -80,5 +93,12 @@ public class UserService {
       msg = "User not found";
     }
     return msg;
+  }
+
+  // Added a method to toggle the active status of a user
+  public UserEntity toggleUserActiveStatus(int userId) {
+    UserEntity user = urepo.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+    user.setActive(!user.isActive()); // Toggle the active status
+    return urepo.save(user);
   }
 }

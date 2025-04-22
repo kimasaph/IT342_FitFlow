@@ -1,71 +1,41 @@
 package edu.cit.fitflow.entity;
 
 import jakarta.persistence.*;
-import edu.cit.fitflow.entity.UserEntity;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "workouts")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class WorkoutEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_workout_user"))
     private UserEntity user;
 
+    @Column(nullable = false)
     private String bodyType;
+
+    @Column(nullable = false)
     private String fitnessGoal;
+
+    @Column(nullable = false)
+    private String fitnessLevel;
+
+    @Column(nullable = false)
+    private String workoutStyle;
+
+    @Column(columnDefinition = "TEXT")
+    private String healthConcerns;
+
+    @Column(nullable = false)
     private String currentFitnessLevel;
-    private String preferredWorkoutStyle;
-
-    // Getters and setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
-    public String getBodyType() {
-        return bodyType;
-    }
-
-    public void setBodyType(String bodyType) {
-        this.bodyType = bodyType;
-    }
-
-    public String getFitnessGoal() {
-        return fitnessGoal;
-    }
-
-    public void setFitnessGoal(String fitnessGoal) {
-        this.fitnessGoal = fitnessGoal;
-    }
-
-    public String getCurrentFitnessLevel() {
-        return currentFitnessLevel;
-    }
-
-    public void setCurrentFitnessLevel(String currentFitnessLevel) {
-        this.currentFitnessLevel = currentFitnessLevel;
-    }
-
-    public String getPreferredWorkoutStyle() {
-        return preferredWorkoutStyle;
-    }
-
-    public void setPreferredWorkoutStyle(String preferredWorkoutStyle) {
-        this.preferredWorkoutStyle = preferredWorkoutStyle;
-    }
 }

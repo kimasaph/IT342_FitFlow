@@ -69,6 +69,13 @@ useEffect(() => {
   }
 }, [navigate, onLoginSuccess]);
 
+useEffect(() => {
+  // Clear any stored authentication tokens and role on page load
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  localStorage.removeItem("isAuthenticated");
+}, []);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -108,9 +115,15 @@ useEffect(() => {
 
       // Success case
       if (data.token && data.user) {
-        localStorage.setItem('token', data.token);
+        localStorage.setItem('token', data.token); // Store token
         localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('role', data.user.role); // Store the role
         localStorage.setItem('isAuthenticated', 'true');
+
+        // Automatically store admin token if the role is ADMIN
+        if (data.user.role === 'ADMIN') {
+          localStorage.setItem('adminToken', data.token);
+        }
         
         if (onLoginSuccess) {
           onLoginSuccess();
@@ -119,7 +132,14 @@ useEffect(() => {
         const storedToken = localStorage.getItem('token');
         console.log('Stored token:', storedToken);
         
-        navigate('/dashboard');
+        // Navigate to the appropriate dashboard based on role
+        if (data.user.role === 'ADMIN') {
+          navigate('/admin-dashboard');
+        } else if (data.user.role === 'TRAINER') {
+          navigate('/trainer-dashboard');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
         throw new Error('Invalid response format from server');
       }

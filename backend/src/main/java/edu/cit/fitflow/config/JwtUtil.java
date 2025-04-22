@@ -45,6 +45,7 @@ public class JwtUtil {
 
         return Jwts.builder()
             .setSubject(userId)
+            .claim("role", user.getRole().name()) // Include role in the token
             .setIssuedAt(now)
             .setExpiration(expiryDate)
             .signWith(key)

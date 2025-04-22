@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import edu.cit.fitflow.service.UserService; // Ensure this matches the actual package of UserService
 import edu.cit.fitflow.entity.UserEntity; // Ensure this matches the actual package of UserEntity
+import edu.cit.fitflow.entity.Role;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -129,6 +130,8 @@ public class OAuth2Config {
                     user.setWeight(0.0F);  // Default weight value
                     user.setBodyGoal("");  // Default body goal value
                     
+                    user.setRole(Role.MEMBER); // Assign default role for OAuth2 users
+                    
                     userService.createUser(user);
                 }
 
@@ -204,6 +207,8 @@ public class OAuth2Config {
                     user.setHeight(0.0F);
                     user.setWeight(0.0F);
                     user.setBodyGoal("");
+                    
+                    user.setRole(Role.MEMBER); // Assign default role for OAuth2 users
                     
                     userService.createUser(user);
                     logger.info("Created new user for OAuth2 login: " + email);

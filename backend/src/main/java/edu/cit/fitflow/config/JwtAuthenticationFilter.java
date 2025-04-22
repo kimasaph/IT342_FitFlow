@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import edu.cit.fitflow.service.UserService;
 import edu.cit.fitflow.entity.UserEntity;
 import java.util.Collections;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -40,15 +41,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 
                 if (claims != null) {
                     String userId = claims.getSubject();
+                    String role = claims.get("role", String.class); // Extract role from JWT claims
                     
                     UserEntity user = userService.findById(Integer.parseInt(userId));
                     
                     if (user != null) {
+                        // Set role in authentication
+                        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.toUpperCase());
                         UsernamePasswordAuthenticationToken authentication = 
-                            new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+                            new UsernamePasswordAuthenticationToken(user, null, Collections.singletonList(authority));
                         
                         SecurityContextHolder.getContext().setAuthentication(authentication);
-                        logger.debug("Authentication set for user ID: {}", userId);
+                        logger.debug("Authentication set for user ID: {} with role: {}", userId, role);
                     } else {
                         logger.warn("No user found for ID: {}", userId);
                     }
