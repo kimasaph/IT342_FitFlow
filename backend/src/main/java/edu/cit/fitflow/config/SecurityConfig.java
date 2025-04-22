@@ -43,7 +43,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/public/**", "/oauth2/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN") // Restrict admin dashboard
                 .requestMatchers("/trainer/**").hasRole("TRAINER") // Restrict trainer endpoints
-                .anyRequest().permitAll()
+                .requestMatchers("/api/workouts/**").permitAll() // Ensure this endpoint is accessible
+                .anyRequest().permitAll() // Require authentication for all other requests
             )
             .oauth2Login(oauth2 -> oauth2
                 .userInfoEndpoint(userInfo -> userInfo

@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { AuthProvider } from "./Contexts/AuthContext"; // Import AuthProvider
 
 // Pages
 import Dashboard from "./components/Dashboard";
@@ -13,13 +14,13 @@ import SignupSetupPage from "./Components/SignupSetupPage.jsx";
 import ForgotPassVerification from "./Components/ForgotPassVerificationPage.jsx";
 import ForgotPassSuccess from "./Components/ForgotPassSuccess.jsx";
 import SignupSetupSuccess from "./Components/SignupSetupSuccess.jsx";
-import Workout from "./Components/Workout.jsx";
+import Workout from "./Components/Workout/Workout.jsx";
 import OAuth2RedirectHandler from "./Components/OAuth2RedirectHandler.jsx";
 import SidebarSettings from "./Components/SidebarSettings.jsx";
-import Exercises from "./Components/Exercises.jsx";
-import StrengthTraining from "./Components/StrengthTraining.jsx";
-import Cardio from "./Components/Cardio.jsx";
-import FlexiYoga from "./Components/FlexiYoga.jsx";
+import Exercises from "./Components/Workout/Exercises.jsx";
+import StrengthTraining from "./Components/Workout/StrengthTraining.jsx";
+import Cardio from "./Components/Workout/Cardio.jsx";
+import FlexiYoga from "./Components/Workout/FlexiYoga.jsx";
 import SettingsRoutes from "./SettingsRoutes.jsx";
 import DietPlan from "./Components/DietPlanPage/DietPlanPage.jsx";
 import AdminDashboard from "./Components/Admin/AdminDashboard.jsx";
@@ -71,54 +72,55 @@ const NotFound = () => {
 // App Component
 const App = () => {
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-50">
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/signup-success" element={<SignupSuccessPage />} />
-          <Route path="/signup-verify" element={<SignupVerifyPage />} />
-          <Route path="/signup-setup" element={<SignupSetupPage />} />
-          <Route path="/signup-setup-success" element={<SignupSetupSuccess />} />
-          <Route path="/forgot-password" element={<ForgotPassPage1 />} />
-          <Route path="/forgot-verify" element={<ForgotPassVerification />} />
-          <Route path="/reset-password" element={<ForgotPassPage2 />} />
-          <Route path="/forgot-success" element={<ForgotPassSuccess />} />
-          <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+    <AuthProvider> {/* Wrap the application with AuthProvider */}
+      <Router>
+        <div className="min-h-screen bg-gray-50">
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/signup-success" element={<SignupSuccessPage />} />
+            <Route path="/signup-verify" element={<SignupVerifyPage />} />
+            <Route path="/signup-setup" element={<SignupSetupPage />} />
+            <Route path="/signup-setup-success" element={<SignupSetupSuccess />} />
+            <Route path="/forgot-password" element={<ForgotPassPage1 />} />
+            <Route path="/forgot-verify" element={<ForgotPassVerification />} />
+            <Route path="/reset-password" element={<ForgotPassPage2 />} />
+            <Route path="/forgot-success" element={<ForgotPassSuccess />} />
+            <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
 
-          {/* Protected Routes */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route
-            path="/admin-dashboard"
-            element={
-              localStorage.getItem("role") === "ADMIN" ? (
-                <AdminDashboard />
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            }
-          />
-          <Route path="/trainer-dashboard" element={<TrainerDashboard />} />
-          <Route path="/settings" element={<SidebarSettings />} />
-          <Route path="/workout" element={<Workout />} />
-          <Route path="/exercises" element={<Exercises />} />
-          <Route path="/diet-plan" element={<DietPlan />} />
-          <Route path="/strength-training" element={<StrengthTraining />} />
-          <Route path="/cardio" element={<Cardio />} />
-          <Route path="/flexi-yoga" element={<FlexiYoga />} />
-          {SettingsRoutes}
+            {/* Protected Routes */}
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route
+              path="/admin-dashboard"
+              element={
+                localStorage.getItem("role") === "ADMIN" ? (
+                  <AdminDashboard />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+            <Route path="/trainer-dashboard" element={<TrainerDashboard />} />
+            <Route path="/settings" element={<SidebarSettings />} />
+            <Route path="/workout" element={<Workout />} />
+            <Route path="/exercises" element={<Exercises />} />
+            <Route path="/diet-plan" element={<DietPlan />} />
+            <Route path="/strength-training" element={<StrengthTraining />} />
+            <Route path="/cardio" element={<Cardio />} />
+            <Route path="/flexi-yoga" element={<FlexiYoga />} />
+            {SettingsRoutes}
 
-          {/* Redirects */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+            {/* Redirects */}
+            <Route path="/" element={<Navigate to="/login" replace />} />
 
-          {/* 404 Not Found */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
-    </Router>
+            {/* 404 Not Found */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 };
 
 export default App;
-

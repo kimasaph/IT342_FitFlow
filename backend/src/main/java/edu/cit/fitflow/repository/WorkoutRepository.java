@@ -1,11 +1,9 @@
 package edu.cit.fitflow.repository;
 
-import edu.cit.fitflow.entity.UserEntity;
 import edu.cit.fitflow.entity.WorkoutEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
-@Repository
-public interface WorkoutRepository extends JpaRepository<WorkoutEntity, Long> {
-
+public interface WorkoutRepository extends JpaRepository<WorkoutEntity, Integer> {
+    List<WorkoutEntity> findByUserId(Integer userId);
 }

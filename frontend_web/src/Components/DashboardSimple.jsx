@@ -40,6 +40,7 @@ import {
     const handleLogout = () => {
       // Clear any stored authentication tokens
       localStorage.removeItem("token");
+      localStorage.removeItem("role");
       sessionStorage.removeItem("token");
     
       // Redirect to login page
