@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "r
 import { AuthProvider } from "./Contexts/AuthContext"; // Import AuthProvider
 
 // Pages
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./Components/Dashboard";
 import LoginPage from "./Components/LoginPage";
 import SignupPage from "./Components/SignupPage";
-import SignupSuccessPage from "./components/SignupSuccess";
+import SignupSuccessPage from "./Components/SignupSuccess";
 import ForgotPassPage1 from "./Components/ForgotPassPage1.jsx";
 import ForgotPassPage2 from "./Components/ForgotPassPage2.jsx";
 import SignupVerifyPage from "./Components/SignupVerifyPage.jsx";
