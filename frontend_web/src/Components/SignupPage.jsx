@@ -3,6 +3,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { EyeClosed, Eye } from 'lucide-react';
 
+import bodyBoostVideo from '../assets/videos/BodyBoostVideo.mp4';
+import whiteWordsLogo from '../assets/images/whiteWordsLogo.png';
+import logoFitFlow from '../assets/images/logoFitFlow.png';
+import userIcon from '../assets/images/userIcon.png';
+import phoneIcon from '../assets/images/phoneIcon.png';
+import lockIcon1 from '../assets/images/lockIcon1.png';
+import lockIcon2 from '../assets/images/lockIcon2.png';
+import facebookIcon from '../assets/images/facebookIcon2.png';
+import githubIcon from '../assets/images/github.png';
+import googleIcon from '../assets/images/googleIcon2.png';
+import groupIcon from '../assets/images/group.png';
+
 const SignupPage = ({ onSignupSuccess }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -201,7 +213,7 @@ const SignupPage = ({ onSignupSuccess }) => {
               muted
               playsInline
             >
-              <source src="/src/assets/videos/BodyBoostVideo.mp4" type="video/mp4" />
+              <source src={bodyBoostVideo} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
 
@@ -210,7 +222,7 @@ const SignupPage = ({ onSignupSuccess }) => {
                     background: 'linear-gradient(rgba(36, 36, 37, 0.7), rgba(19, 22, 47, 0.9))'
                   }}>
               <img
-                src="/src/assets/images/whiteWordsLogo.png"
+                src={whiteWordsLogo}
                 alt="FitFlow"
                 className="w-2/3 max-w-md"
               />
@@ -235,7 +247,7 @@ const SignupPage = ({ onSignupSuccess }) => {
 
             <div className="w-full max-w-md">
             <img
-              src="/src/assets/images/logoFitFlow.png"
+              src={logoFitFlow}
               alt="Logo"
               className="h-16 mx-auto mb-3"
             />
@@ -251,11 +263,11 @@ const SignupPage = ({ onSignupSuccess }) => {
                 
                 <div className="relative w-full">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <img
-                      src="/src/assets/images/group.png"
-                      alt="Role"
-                      className="h-5 w-5 opacity-60"
-                    />
+                  <img
+                    src={groupIcon}
+                    alt="Role"
+                    className="h-5 w-5 opacity-60"
+                  />
                   </div>
                   <select
                     name="role"
@@ -289,7 +301,7 @@ const SignupPage = ({ onSignupSuccess }) => {
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <img
-                    src="/src/assets/images/userIcon.png"
+                    src={userIcon}
                     alt="User"
                     className="h-4 w-4 opacity-60"
                   />
@@ -308,7 +320,7 @@ const SignupPage = ({ onSignupSuccess }) => {
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <img
-                    src="/src/assets/images/phoneIcon.png"
+                    src={phoneIcon}
                     alt="Phone"
                     className="h-5 w-5 opacity-60"
                   />
@@ -326,7 +338,7 @@ const SignupPage = ({ onSignupSuccess }) => {
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <img
-                    src="/src/assets/images/lockIcon1.png"
+                    src={lockIcon1}
                     alt="Password"
                     className="h-5 w-5 opacity-60"
                   />
@@ -348,7 +360,7 @@ const SignupPage = ({ onSignupSuccess }) => {
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <img
-                    src="/src/assets/images/lockIcon2.png"
+                    src={lockIcon2}
                     alt="Confirm Password"
                     className="h-5 w-5 opacity-60"
                   />
@@ -399,21 +411,21 @@ const SignupPage = ({ onSignupSuccess }) => {
               <div className="mt-6 grid grid-cols-3 gap-3">
                 <button className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50">
                   <img
-                    src="/src/assets/images/facebookIcon2.png"
+                    src={facebookIcon}
                     alt="Facebook"
                     className="h-7 w-7"
                   />
                 </button>
                 <button className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50">
                   <img
-                    src="/src/assets/images/github.png"
+                    src={githubIcon}
                     alt="Github"
                     className="h-7 w-7"
                   />
                 </button>
                 <button className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50">
                   <img
-                    src="/src/assets/images/googleIcon2.png"
+                    src={googleIcon}
                     alt="Google"
                     className="h-7 w-7"
                   />
