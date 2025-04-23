@@ -4,6 +4,18 @@ import React from "react";
 import { Trophy, Flame, Calendar } from "lucide-react";
 
 const StatsSummary = ({ achievements, streaks }) => {
+<<<<<<< HEAD
+=======
+  // Fetch total workouts for each style
+  const userID = localStorage.getItem("userID") || "guest";
+  const strengthTotal = parseInt(localStorage.getItem(`strengthTotalWorkouts_${userID}`) || "0", 10);
+  const cardioTotal = parseInt(localStorage.getItem(`cardioTotalWorkouts_${userID}`) || "0", 10);
+  const flexiYogaTotal = parseInt(localStorage.getItem(`flexiYogaTotalWorkouts_${userID}`) || "0", 10);
+
+  // Calculate total workouts across all styles
+  const totalWorkouts = strengthTotal + cardioTotal + flexiYogaTotal;
+
+>>>>>>> 0242c154e34abfadbb96fe8229cf924238b781d9
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
       <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl p-5 text-white shadow-md relative overflow-hidden group hover:shadow-lg hover:scale-105 transition-all cursor-pointer duration-300">
@@ -24,12 +36,26 @@ const StatsSummary = ({ achievements, streaks }) => {
         <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-white opacity-10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
         <h3 className="font-bold mb-1 text-lg flex items-center relative z-10">
           <Flame size={20} className="mr-2 group-hover:scale-125 transition-transform" />
+<<<<<<< HEAD
           Longest Streak
         </h3>
         <div className="text-3xl font-bold mb-1 group-hover:text-yellow-300 transition-colors">
           {Math.max(...streaks.map(s => s.best))} days
         </div>
         <p className="text-teal-100 text-sm">{streaks.find(s => s.best === Math.max(...streaks.map(s => s.best)))?.name}</p>
+=======
+          Current Streaks
+        </h3>
+        <div className="text-lg font-bold mb-1 group-hover:text-yellow-300 transition-colors">
+          Total Workouts: {totalWorkouts}
+        </div>
+        <div className="text-sm mt-1">
+          <span>Strength: {strengthTotal}</span> &nbsp;|&nbsp;
+          <span>Cardio: {cardioTotal}</span> &nbsp;|&nbsp;
+          <span>FlexiYoga: {flexiYogaTotal}</span>
+        </div>
+        <p className="text-teal-100 text-sm">Total Workouts per Style</p>
+>>>>>>> 0242c154e34abfadbb96fe8229cf924238b781d9
       </div>
       
       <div className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl p-5 text-white shadow-md relative overflow-hidden group hover:shadow-lg hover:scale-105 transition-all cursor-pointer duration-300">

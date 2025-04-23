@@ -450,7 +450,18 @@ export default function StrengthTraining() {
 
     setCurrentWorkout(null)
     setHasActiveWorkout(false)
+
+    // Save total completed workouts for goals page
+    saveStrengthTotalWorkouts();
   }
+
+  // Save total completed StrengthTraining workouts
+  const saveStrengthTotalWorkouts = () => {
+    const userKey = user?.id || "guest";
+    const completed = JSON.parse(localStorage.getItem(`${userKey}-workouts`)) || [];
+    const total = completed.filter(w => !w.isActive).length;
+    localStorage.setItem(`strengthTotalWorkouts_${userKey}`, total);
+  };
 
   // Add a new template
   const addTemplate = (template) => {

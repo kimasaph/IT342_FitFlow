@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "r
 import { AuthProvider } from "./Contexts/AuthContext"; // Import AuthProvider
 
 // Pages
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./Components/Dashboard";
 import LoginPage from "./Components/LoginPage";
 import SignupPage from "./Components/SignupPage";
-import SignupSuccessPage from "./components/SignupSuccess";
+import SignupSuccessPage from "./Components/SignupSuccess";
 import ForgotPassPage1 from "./Components/ForgotPassPage1.jsx";
 import ForgotPassPage2 from "./Components/ForgotPassPage2.jsx";
 import SignupVerifyPage from "./Components/SignupVerifyPage.jsx";
@@ -26,6 +26,7 @@ import DietPlan from "./Components/DietPlanPage/DietPlanPage.jsx";
 import AdminDashboard from "./Components/Admin/AdminDashboard.jsx";
 import TrainerDashboard from "./Components/Trainer/TrainerDashboard.jsx";
 import GoalsPage from "./Components/GoalsPage/GoalsPage.jsx";
+import Progress from "./Components/Progress/Progress.jsx";
 import axios from 'axios';
 
 // Axios Interceptor Setup
@@ -111,6 +112,8 @@ const App = () => {
             <Route path="/strength-training" element={<StrengthTraining />} />
             <Route path="/cardio" element={<Cardio />} />
             <Route path="/flexi-yoga" element={<FlexiYoga />} />
+            <Route path="/goals" element={<GoalsPage />} />
+            <Route path="/progress" element={<Progress />} />
             {SettingsRoutes}
 
             {/* Redirects */}
