@@ -5,6 +5,13 @@ import { Calendar } from "lucide-react";
 import { Trophy } from "lucide-react";
 
 const StreaksTab = ({ streaks, milestones }) => {
+  // Fetch total workouts for each style and sum for total
+  const userID = localStorage.getItem("userID") || "guest";
+  const strengthTotal = parseInt(localStorage.getItem(`strengthTotalWorkouts_${userID}`) || "0", 10);
+  const cardioTotal = parseInt(localStorage.getItem(`cardioTotalWorkouts_${userID}`) || "0", 10);
+  const flexiYogaTotal = parseInt(localStorage.getItem(`flexiYogaTotalWorkouts_${userID}`) || "0", 10);
+  const totalWorkouts = strengthTotal + cardioTotal + flexiYogaTotal;
+
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 shadow-lg text-white relative overflow-hidden">
@@ -15,7 +22,6 @@ const StreaksTab = ({ streaks, milestones }) => {
             {new Date().toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric'})}
           </div>
         </div>
-        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {streaks.map((streak, index) => (
             <div 
@@ -28,7 +34,10 @@ const StreaksTab = ({ streaks, milestones }) => {
               </div>
               <div className="flex items-end justify-between">
                 <div>
-                  <p className="text-3xl font-bold group-hover:text-yellow-300 transition-colors">{streak.current}</p>
+                  {/* Replace static value "4" with totalWorkouts for the "Workout" streak */}
+                  <p className="text-3xl font-bold group-hover:text-yellow-300 transition-colors">
+                    {streak.name.toLowerCase().includes("workout") ? totalWorkouts : streak.current}
+                  </p>
                   <p className="text-xs opacity-80">Current streak</p>
                 </div>
                 <div className="text-right">
