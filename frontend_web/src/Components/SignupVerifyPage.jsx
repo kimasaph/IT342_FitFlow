@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ShieldCheck } from 'lucide-react';
 
+import bodyBoostVideo from '../assets/videos/BodyBoostVideo.mp4';
+import whiteWordsLogo from '../assets/images/whiteWordsLogo.png';
+import logoFitFlow from '../assets/images/logoFitFlow.png';
+
 const SignupVerifyPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -104,7 +108,7 @@ const SignupVerifyPage = () => {
               muted
               playsInline
             >
-              <source src="/src/assets/videos/BodyBoostVideo.mp4" type="video/mp4" />
+              <source src={bodyBoostVideo} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
 
@@ -113,7 +117,7 @@ const SignupVerifyPage = () => {
                   background: 'linear-gradient(rgba(36, 36, 37, 0.7), rgba(19, 22, 47, 0.9))'
                 }}>
               <img
-                src="/src/assets/images/whiteWordsLogo.png"
+                src={whiteWordsLogo}
                 alt="FitFlow"
                 className="w-2/3 max-w-md"
               />
@@ -136,7 +140,7 @@ const SignupVerifyPage = () => {
             <span className="text-sm">Back</span>
           </button>
           <img
-            src="/src/assets/images/logoFitFlow.png"
+            src={logoFitFlow}
             alt="Logo"
             className="h-24 mx-auto mb-3"
           />
