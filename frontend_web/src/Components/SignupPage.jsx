@@ -15,6 +15,8 @@ import githubIcon from '../assets/images/github.png';
 import googleIcon from '../assets/images/googleIcon2.png';
 import groupIcon from '../assets/images/group.png';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const SignupPage = ({ onSignupSuccess }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -118,7 +120,7 @@ const SignupPage = ({ onSignupSuccess }) => {
     
     try {
       // Step 1: Create the user account
-      const response = await fetch('http://localhost:8080/api/auth/signup', {
+      const response = await fetch(`${API_URL}/api/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -168,7 +170,7 @@ const SignupPage = ({ onSignupSuccess }) => {
       localStorage.setItem('signupEmail', formData.email);
       
       // Step 2: Send verification email
-      const verificationResponse = await fetch('http://localhost:8080/api/verification/send-code', {
+      const verificationResponse = await fetch(`${API_URL}/api/verification/send-code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
