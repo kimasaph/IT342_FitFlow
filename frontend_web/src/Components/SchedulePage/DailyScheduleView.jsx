@@ -1,5 +1,5 @@
 // Daily Schedule View Component
-import { workoutTypes } from "../SchedulePage/ScheduleData";
+import { workoutTypes } from "./ScheduleData";
 import { CalendarIcon, Coffee, Dumbbell, Check } from "lucide-react";
 import React from "react";
 

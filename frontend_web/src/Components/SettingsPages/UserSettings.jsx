@@ -89,7 +89,7 @@ const UserSettings = ({ onLogout }) => {
         profilePicture: formData.profilePicture
       };
       
-      const response = await fetch(`http://localhost:8080/api/auth/update-profile?userId=${userData.userId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/update-profile?userId=${userData.userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -159,7 +159,7 @@ const UserSettings = ({ onLogout }) => {
 
         setIsLoading(true);
 
-        const response = await fetch('http://localhost:8080/api/auth/upload-profile-picture', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/upload-profile-picture`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -182,7 +182,7 @@ const UserSettings = ({ onLogout }) => {
         const data = await response.json();
         
         const cleanPath = data.profilePicturePath.replace(/\/+/g, '/');
-        const fullImagePath = `http://localhost:8080${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`;
+        const fullImagePath = `${import.meta.env.VITE_API_URL}${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`;
 
         // Verify the image is accessible
         const imageExists = await checkImageExists(fullImagePath);

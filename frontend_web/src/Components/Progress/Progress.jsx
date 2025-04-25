@@ -153,7 +153,7 @@ function FitFlowProgress() {
         }
         if (token && apiUserId && apiUserId !== "guest") {
           const response = await axios.get(
-            `http://localhost:8080/api/achievements/my-progress?userId=${apiUserId}`,
+            `${import.meta.env.VITE_API_URL}/api/achievements/my-progress?userId=${apiUserId}`,
             { headers: { 'Authorization': `Bearer ${token}` } }
           )
           if (response.data && response.data.progress) {

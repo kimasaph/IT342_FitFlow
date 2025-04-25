@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Check } from "lucide-react";
-import { workoutTypes } from "../SchedulePage/ScheduleData";
+import { workoutTypes } from "./ScheduleData";
 import { formatTime } from "../SchedulePage/eventUtils";
 
 const ScheduleItemDetails = ({ event, onClose, onToggleComplete, onDelete }) => {

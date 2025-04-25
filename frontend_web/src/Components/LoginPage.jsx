@@ -26,18 +26,18 @@ const LoginPage = ({ onLoginSuccess }) => {
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleGoogleLogin = () => {
-    window.location.href = `${API_URL}/oauth2/authorization/google`;
+    window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`;
   };
   const handleGithubLogin = async () => {
     try {
         // Redirect to GitHub OAuth2 authorization endpoint
-        window.location.href = `${API_URL}/oauth2/authorization/github`;
+        window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/github`;
       } catch (error) {
         console.error('GitHub login error:', error);
     }
   };
   const handleFacebookLogin = () => {
-    window.location.href = `${API_URL}/oauth2/authorization/facebook`;
+    window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/facebook`;
   };
 
   useEffect(() => {
@@ -91,7 +91,7 @@ const handleSubmit = async (e) => {
   setErrorMessages([]);
 
   try {
-    const response = await fetch(`${API_URL}/api/auth/login`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

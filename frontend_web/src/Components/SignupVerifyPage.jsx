@@ -33,7 +33,7 @@ const SignupVerifyPage = () => {
     setErrorMessages([]);
 
     try {
-      const response = await fetch('http://localhost:8080/api/verification/verify-code', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/verification/verify-code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ const SignupVerifyPage = () => {
       setIsLoading(true);
       
       // Updated endpoint to match your backend API
-      const response = await fetch('http://localhost:8080/api/verification/send-code', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/verification/send-code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

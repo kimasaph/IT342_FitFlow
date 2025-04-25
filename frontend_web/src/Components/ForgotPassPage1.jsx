@@ -33,7 +33,7 @@ const ForgotPassPage1 = () => {
 
     try {
       // Step 1: Check if the email exists in the database
-      const checkEmailResponse = await fetch('http://localhost:8080/api/auth/forgot-password', {
+      const checkEmailResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const ForgotPassPage1 = () => {
       }
       
       // Step 2: Send verification email (similar to SignupPage)
-      const verificationResponse = await fetch('http://localhost:8080/api/verification/send-code', {
+      const verificationResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/verification/send-code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
