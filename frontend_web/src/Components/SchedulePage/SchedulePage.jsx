@@ -20,7 +20,7 @@ import WeeklyProgress from "./WeeklyProgress";
 import UpcomingReminders from "./UpcomingReminders";
 
 // Import helper functions and data
-import { initialScheduleData, workoutTypes } from "./ScheduleData";
+import { initialScheduleData, workoutTypes } from "frontend_web/src/Components/SchedulePage/ScheduleData.js";
 import { eventStyleGetter } from "../SchedulePage/eventUtils";
 
 // Set up the localizer for the calendar
