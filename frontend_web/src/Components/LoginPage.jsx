@@ -12,6 +12,8 @@ import facebookIcon from '../assets/images/facebookIcon2.png';
 import githubIcon from '../assets/images/github.png';
 import googleIcon from '../assets/images/googleIcon2.png';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const LoginPage = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -24,18 +26,18 @@ const LoginPage = ({ onLoginSuccess }) => {
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/google'
+    window.location.href = '${API_URL}/oauth2/authorization/google'
   };
   const handleGithubLogin = async () => {
     try {
         // Redirect to GitHub OAuth2 authorization endpoint
-        window.location.href = 'http://localhost:8080/oauth2/authorization/github';
+        window.location.href = '${API_URL}/oauth2/authorization/github';
     } catch (error) {
         console.error('GitHub login error:', error);
     }
   };
   const handleFacebookLogin = () => {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/facebook'
+    window.location.href = '${API_URL}/oauth2/authorization/facebook'
   };
 
   useEffect(() => {
@@ -99,7 +101,7 @@ useEffect(() => {
     setErrorMessages([]);
 
     try {
-      const response = await fetch('http://localhost:8080/api/auth/login', {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
