@@ -1,3 +1,4 @@
+
 // Sample workout types with their colors
 export const workoutTypes = {
   strength: { color: "#8b5cf6", label: "Strength" },
@@ -152,5 +153,4 @@ const sampleMealSchedule = [
   }
 ];
 
-// Combined schedule data
 export const initialScheduleData = [...sampleWorkouts, ...sampleMealSchedule];

@@ -1,4 +1,4 @@
-import { workoutTypes } from "../SchedulePage/ScheduleData";
+import { workoutTypes } from "./ScheduleData";
 
 // Event styles for the calendar
 export const eventStyleGetter = (event) => {
