@@ -30,7 +30,7 @@ export default function AdminDashboard() {
     try {
       const token = localStorage.getItem("token"); // Retrieve token from localStorage
       const role = activeTab === "trainers" ? "TRAINER" : activeTab === "users" ? "MEMBER" : null;
-      const response = await axios.get(`http://localhost:8080/admin/users`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/users`, {
         headers: {
           Authorization: `Bearer ${token}`, // Add Authorization header
         },
@@ -60,7 +60,7 @@ export default function AdminDashboard() {
   const fetchUserStats = async () => {
     try {
       const token = localStorage.getItem("token"); // Retrieve token from localStorage
-      const response = await axios.get(`http://localhost:8080/admin/user-stats`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/user-stats`, {
         headers: {
           Authorization: `Bearer ${token}`, // Add Authorization header
         },

@@ -47,7 +47,7 @@ const Workout = () => {
         }
 
         const userId = JSON.parse(storedUser).id || JSON.parse(storedUser).userId;
-        const response = await axios.post(`http://localhost:8080/api/workouts/${userId}`, workoutDetails, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/workouts/${userId}`, workoutDetails, {
             headers: {
                 "Content-Type": "application/json", // Ensure proper content type
                 "Authorization": `Bearer ${localStorage.getItem("token")}`, // Include token

@@ -211,7 +211,7 @@ const GoalsPage = () => {
       }
       
       const response = await axios.get(
-        `http://localhost:8080/api/achievements/my-progress?userId=${userId}`,
+        `${import.meta.env.VITE_API_URL}/api/achievements/my-progress?userId=${userId}`,
         {
           headers: { 'Authorization': `Bearer ${token}` }
         }

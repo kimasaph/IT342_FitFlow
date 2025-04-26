@@ -1,6 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
 
+import bodyBoostVideo from '../assets/videos/BodyBoostVideo.mp4';
+import whiteWordsLogo from '../assets/images/whiteWordsLogo.png';
+
 const SignupSuccessPage = () => {
   const navigate = useNavigate();
   const role = localStorage.getItem('role'); // Retrieve role from localStorage
@@ -27,13 +30,13 @@ const SignupSuccessPage = () => {
           muted
           playsInline
         >
-          <source src="/src/assets/videos/BodyBoostVideo.mp4" type="video/mp4" />
+          <source src={bodyBoostVideo} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
 
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <img
-            src="/src/assets/images/whiteWordsLogo.png"
+            src={whiteWordsLogo}
             alt="FitFlow"
             className="w-2/3 max-w-md"
           />

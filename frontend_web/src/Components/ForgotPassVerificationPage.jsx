@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
+import bodyBoostVideo from '../assets/videos/BodyBoostVideo.mp4';
+import whiteWordsLogo from '../assets/images/whiteWordsLogo.png';
+import logoFitFlow from '../assets/images/logoFitFlow.png';
+
 const ForgotPassVerificationPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -99,7 +103,7 @@ const ForgotPassVerificationPage = () => {
     
     try {
       // Verify the code
-      const response = await fetch('http://localhost:8080/api/verification/verify-code', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/verification/verify-code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -133,7 +137,7 @@ const ForgotPassVerificationPage = () => {
     setIsLoading(true);
     
     try {
-      const response = await fetch('http://localhost:8080/api/verification/send-code', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/verification/send-code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -177,7 +181,7 @@ const ForgotPassVerificationPage = () => {
               muted
               playsInline
             >
-              <source src="/src/assets/videos/BodyBoostVideo.mp4" type="video/mp4" />
+              <source src={bodyBoostVideo} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
 
@@ -186,7 +190,7 @@ const ForgotPassVerificationPage = () => {
                   background: 'linear-gradient(rgba(36, 36, 37, 0.7), rgba(19, 22, 47, 0.9))'
                 }}>
               <img
-                src="/src/assets/images/whiteWordsLogo.png"
+                src={whiteWordsLogo}
                 alt="FitFlow"
                 className="w-2/3 max-w-md"
               />
@@ -210,7 +214,7 @@ const ForgotPassVerificationPage = () => {
 
           <div className="w-full max-w-md">
             <img
-              src="/src/assets/images/logoFitFlow.png"
+              src={logoFitFlow}
               alt="Logo"
               className="h-20 mx-auto mb-3"
             />

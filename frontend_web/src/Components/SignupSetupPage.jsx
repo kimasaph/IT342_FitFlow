@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Ruler, Calendar, Target, Mars, Venus, User, Anvil, VenusAndMars, Users} from 'lucide-react';
 
+import bodyBoostVideo from '../assets/videos/BodyBoostVideo.mp4';
+import whiteWordsLogo from '../assets/images/whiteWordsLogo.png';
+import logoFitFlow from '../assets/images/logoFitFlow.png';
+
 const SignupSetupPage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +43,7 @@ const SignupSetupPage = () => {
     try {
       const token = localStorage.getItem('token'); // Retrieve the token from localStorage
 
-      const response = await fetch('http://localhost:8080/api/auth/signup-setup', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signup-setup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +94,7 @@ const SignupSetupPage = () => {
               muted
               playsInline
             >
-              <source src="/src/assets/videos/BodyBoostVideo.mp4" type="video/mp4" />
+              <source src={bodyBoostVideo} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
 
@@ -99,7 +103,7 @@ const SignupSetupPage = () => {
                     background: 'linear-gradient(rgba(36, 36, 37, 0.7), rgba(19, 22, 47, 0.9))'
                   }}>
               <img
-                src="/src/assets/images/whiteWordsLogo.png"
+                src={whiteWordsLogo}
                 alt="FitFlow"
                 className="w-2/3 max-w-md"
               />
@@ -123,7 +127,7 @@ const SignupSetupPage = () => {
 </button>
 
             <img
-              src="/src/assets/images/logoFitFlow.png"
+              src={logoFitFlow}
               alt="Logo"
               className="h-24 mx-auto mb-2 mt-2"
             />
