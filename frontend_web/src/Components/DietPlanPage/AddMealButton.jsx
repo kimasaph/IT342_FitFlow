@@ -132,7 +132,7 @@ const AddMealButton = ({ onAddMeal }) => {
         tags: mealTags
       };
       
-      const response = await axios.post('http://localhost:8080/api/meals', newMeal, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/meals`, newMeal, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -158,7 +158,7 @@ const AddMealButton = ({ onAddMeal }) => {
         // --- FETCH UPDATED ACHIEVEMENTS HERE ---
         try {
           const achievementsResponse = await axios.get(
-            `http://localhost:8080/api/achievements/my-progress?userId=${userId}`,
+            `${import.meta.env.VITE_API_URL}/api/achievements/my-progress?userId=${userId}`,
             {
               headers: { 'Authorization': `Bearer ${token}` }
             }

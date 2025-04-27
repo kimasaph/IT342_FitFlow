@@ -32,7 +32,7 @@ import {
       { text: "Workout", icon: <FitnessCenterIcon />, route: "/workout" },
       { text: "Diet Plan", icon: <RestaurantIcon />, route: "/diet-plan" },
       { text: "Goals", icon: <FlagIcon />, route: "/goals" },
-      { text: "My Schedule", icon: <CalendarMonthIcon />, route: "/my-schedule" },
+      { text: "My Schedule", icon: <CalendarMonthIcon />, route: "/schedule" },
       { text: "Progress", icon: <BarChartIcon />, route: "/progress", hasArrow: true },
     ]);
     const navigate = useNavigate();

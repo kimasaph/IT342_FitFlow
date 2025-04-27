@@ -74,7 +74,7 @@ const BodyMetricsSettings = () => {
       };
 
       const response = await fetch(
-        `http://localhost:8080/api/auth/update-profile?userId=${userData.userId}`,
+        `${import.meta.env.VITE_API_URL}/api/auth/update-profile?userId=${userData.userId}`,
         {
           method: "PUT",
           headers: {

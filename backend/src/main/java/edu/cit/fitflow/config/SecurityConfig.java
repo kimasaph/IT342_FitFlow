@@ -1,6 +1,7 @@
 package edu.cit.fitflow.config;
 
 import java.util.Arrays;
+import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // Your frontend URL
+        configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
+        configuration.setAllowedOrigins(Arrays.asList(
+            "http://localhost:5173",
+            "https://fitflow0.netlify.app"
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
         configuration.setExposedHeaders(Arrays.asList("Authorization"));

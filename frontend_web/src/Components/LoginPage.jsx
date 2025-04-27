@@ -3,6 +3,17 @@ import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { EyeClosed, Eye } from 'lucide-react';
 
+import bodyBoostVideo from '../assets/videos/BodyBoostVideo.mp4';
+import whiteWordsLogo from '../assets/images/whiteWordsLogo.png';
+import logoFitFlow from '../assets/images/logoFitFlow.png';
+import userIcon from '../assets/images/userIcon.png';
+import lockIcon from '../assets/images/lockIcon2.png';
+import facebookIcon from '../assets/images/facebookIcon2.png';
+import githubIcon from '../assets/images/github.png';
+import googleIcon from '../assets/images/googleIcon2.png';
+
+const API_URL = import.meta.env.VITE_API_URL;
+
 const LoginPage = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -15,52 +26,41 @@ const LoginPage = ({ onLoginSuccess }) => {
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/google'
+    window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`;
   };
   const handleGithubLogin = async () => {
     try {
         // Redirect to GitHub OAuth2 authorization endpoint
-        window.location.href = 'http://localhost:8080/oauth2/authorization/github';
-    } catch (error) {
+        window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/github`;
+      } catch (error) {
         console.error('GitHub login error:', error);
     }
   };
   const handleFacebookLogin = () => {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/facebook'
+    window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/facebook`;
   };
 
   useEffect(() => {
     document.title = "Login | FitFlow";
   }, []);
 
-  // Add this function to handle OAuth2 redirect
+  // Handle OAuth2 redirect after social login
 useEffect(() => {
-  // Check if we have query parameters from OAuth2 redirect
   const queryParams = new URLSearchParams(window.location.search);
   const token = queryParams.get('token');
   const userId = queryParams.get('userId');
   const email = queryParams.get('email');
   
   if (token && userId) {
-    // We have OAuth2 login data
     try {
-      // Store the token and user data
       localStorage.setItem('token', token);
-      
-      // Create a basic user object from redirect params
-      const user = {
-        id: userId,
-        email: email
-      };
-      
+      const user = { id: userId, email: email };
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('isAuthenticated', 'true');
-      
+
       if (onLoginSuccess) {
         onLoginSuccess();
       }
-      
-      // Clear the URL parameters and navigate to dashboard
       navigate('/dashboard', { replace: true });
     } catch (error) {
       console.error('Error handling OAuth redirect:', error);
@@ -69,86 +69,85 @@ useEffect(() => {
   }
 }, [navigate, onLoginSuccess]);
 
+// Clear stored login info on page load
 useEffect(() => {
-  // Clear any stored authentication tokens and role on page load
   localStorage.removeItem("token");
   localStorage.removeItem("user");
   localStorage.removeItem("isAuthenticated");
 }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
+const handleInputChange = (e) => {
+  const { name, value } = e.target;
+  setFormData(prevState => ({
+    ...prevState,
+    [name]: value
+  }));
+};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setErrorMessages([]);
+// Main form submit handler (email/password login)
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+  setErrorMessages([]);
 
-    try {
-      const response = await fetch('http://localhost:8080/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        email: formData.email,
+        password: formData.password,
+      }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (!response.ok) {
-        // Check if the error is related to admin credentials
-        if (data.error === 'Invalid credentials for admin') {
-          throw new Error('Admin login failed. Please check the credentials.');
-        }
-        throw new Error(data.error || 'Login failed');
+    if (!response.ok) {
+      if (data.error === 'Invalid credentials for admin') {
+        throw new Error('Admin login failed. Please check the credentials.');
       }
-
-      // Success case
-      if (data.token && data.user) {
-        localStorage.setItem('token', data.token); // Store token
-        localStorage.setItem('user', JSON.stringify(data.user));
-        localStorage.setItem('role', data.user.role); // Store the role
-        localStorage.setItem('isAuthenticated', 'true');
-
-        // Automatically store admin token if the role is ADMIN
-        if (data.user.role === 'ADMIN') {
-          localStorage.setItem('adminToken', data.token);
-        }
-        
-        if (onLoginSuccess) {
-          onLoginSuccess();
-        }
-
-        const storedToken = localStorage.getItem('token');
-        console.log('Stored token:', storedToken);
-        
-        // Navigate to the appropriate dashboard based on role
-        if (data.user.role === 'ADMIN') {
-          navigate('/admin-dashboard');
-        } else if (data.user.role === 'TRAINER') {
-          navigate('/trainer-dashboard');
-        } else {
-          navigate('/dashboard');
-        }
-      } else {
-        throw new Error('Invalid response format from server');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      setErrorMessages([error.message || 'Invalid email or password']);
-      setIsLoading(false);
+      throw new Error(data.error || 'Login failed');
     }
-  };
+
+    // Login success
+    if (data.token && data.user) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('role', data.user.role);
+      localStorage.setItem('isAuthenticated', 'true');
+
+      if (data.user.role === 'ADMIN') {
+        localStorage.setItem('adminToken', data.token);
+      }
+
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
+
+      const storedToken = localStorage.getItem('token');
+      console.log('Stored token:', storedToken);
+
+      // Navigate based on user role
+      if (data.user.role === 'ADMIN') {
+        navigate('/admin-dashboard');
+      } else if (data.user.role === 'TRAINER') {
+        navigate('/trainer-dashboard');
+      } else {
+        navigate('/dashboard');
+      }
+    } else {
+      throw new Error('Invalid response format from server');
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    setErrorMessages([error.message || 'Invalid email or password']);
+    setIsLoading(false);
+  }
+};
 
   const inputClasses = "w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition duration-200 placeholder:text-gray-500 placeholder:opacity-60";
 
@@ -165,7 +164,7 @@ useEffect(() => {
               muted
               playsInline
             >
-              <source src="/src/assets/videos/BodyBoostVideo.mp4" type="video/mp4" />
+               <source src={bodyBoostVideo} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
 
@@ -174,7 +173,7 @@ useEffect(() => {
                     background: 'linear-gradient(rgba(36, 36, 37, 0.7), rgba(19, 22, 47, 0.9))'
                   }}>
               <img
-                src="/src/assets/images/whiteWordsLogo.png"
+                src={whiteWordsLogo}
                 alt="FitFlow"
                 className="w-2/3 max-w-md"
               />
@@ -186,13 +185,13 @@ useEffect(() => {
         <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-8">
           <div className="w-full max-w-md">
             <img
-              src="/src/assets/images/logoFitFlow.png"
+              src={logoFitFlow}
               alt="Logo"
               className="h-24 mx-auto mb-3"
             />
 
             <div className="text-center mb-8">
-              <h1 className="text-2xl font-bold text-gray-900">Welcome back!</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Welcome back???!</h1>
               <p className="text-gray-600">Enter your login details.</p>
             </div>
 
@@ -200,7 +199,7 @@ useEffect(() => {
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <img
-                    src="/src/assets/images/userIcon.png"
+                    src={userIcon}
                     alt="User"
                     className="h-4 w-4 opacity-60"
                   />
@@ -225,7 +224,7 @@ useEffect(() => {
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <img
-                    src="/src/assets/images/lockIcon2.png"
+                    src={lockIcon}
                     alt="Password"
                     className="h-4 w-4 opacity-60"
                   />
@@ -315,7 +314,7 @@ useEffect(() => {
                   className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 cursor-pointer"
                 >
                   <img
-                    src="/src/assets/images/facebookIcon2.png"
+                    src={facebookIcon}
                     alt="Facebook"
                     className="h-7 w-7"
                   />
@@ -325,7 +324,7 @@ useEffect(() => {
                     className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 cursor-pointer"
                   >
                     <img
-                      src="/src/assets/images/github.png"
+                      src={githubIcon}
                       alt="Github"
                       className="h-7 w-7"
                     />
@@ -335,7 +334,7 @@ useEffect(() => {
                 className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 cursor-pointer"
                 >
                   <img
-                    src="/src/assets/images/googleIcon2.png"
+                    src={googleIcon}
                     alt="Google"
                     className="h-7 w-7"
                   />

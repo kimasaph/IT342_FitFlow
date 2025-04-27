@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import bodyBoostVideo from '../assets/videos/BodyBoostVideo.mp4';
+import whiteWordsLogo from '../assets/images/whiteWordsLogo.png';
+import logoFitFlow from '../assets/images/logoFitFlow.png';
+import emailIcon from '../assets/images/emailIcon.png';
+
 const ForgotPassPage1 = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -28,7 +33,7 @@ const ForgotPassPage1 = () => {
 
     try {
       // Step 1: Check if the email exists in the database
-      const checkEmailResponse = await fetch('http://localhost:8080/api/auth/forgot-password', {
+      const checkEmailResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +55,7 @@ const ForgotPassPage1 = () => {
       }
       
       // Step 2: Send verification email (similar to SignupPage)
-      const verificationResponse = await fetch('http://localhost:8080/api/verification/send-code', {
+      const verificationResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/verification/send-code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +98,7 @@ const ForgotPassPage1 = () => {
               muted
               playsInline
             >
-              <source src="/src/assets/videos/BodyBoostVideo.mp4" type="video/mp4" />
+              <source src={bodyBoostVideo} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
 
@@ -102,7 +107,7 @@ const ForgotPassPage1 = () => {
                     background: 'linear-gradient(rgba(36, 36, 37, 0.7), rgba(19, 22, 47, 0.9))'
                   }}>
               <img
-                src="/src/assets/images/whiteWordsLogo.png"
+                src={whiteWordsLogo}
                 alt="FitFlow"
                 className="w-2/3 max-w-md"
               />
@@ -124,7 +129,7 @@ const ForgotPassPage1 = () => {
             <span className="text-sm">Back</span>
           </button>
           <img
-            src="/src/assets/images/logoFitFlow.png"
+            src={logoFitFlow}
             alt="Logo"
             className="h-24 mx-auto mb-3"
           />
@@ -135,7 +140,7 @@ const ForgotPassPage1 = () => {
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <img
-                  src="/src/assets/images/emailIcon.png"
+                  src={emailIcon}
                   alt="Email"
                   className="h-4 w-4 opacity-60"
                 />
