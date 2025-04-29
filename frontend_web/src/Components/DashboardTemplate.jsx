@@ -31,6 +31,7 @@ import {
   import RestaurantIcon from "@mui/icons-material/Restaurant";
   import SearchIcon from "@mui/icons-material/Search";
   import SettingsIcon from "@mui/icons-material/Settings";
+
   
   // Import images
   import avatarWPhoto from "../assets/images/default-profile.png";
@@ -50,6 +51,7 @@ import {
       { text: "Progress", icon: <BarChartIcon />, route: "/progress", hasArrow: true },
     ]); // Manage menuItems as state
     const navigate = useNavigate(); // Initialize useNavigate
+    const [selectedSetting, setSelectedSetting] = useState('');
 
     const handleLogout = () => {
       // Clear any stored authentication tokens and role
@@ -59,7 +61,11 @@ import {
     
       // Redirect to login page
       navigate("/login");
-    };    
+    };   
+    
+    const handleSettingClick = (setting) => {
+      setSelectedSetting(setting);
+    };
 
     const features = [
       "Workout Tracker",
@@ -159,6 +165,7 @@ import {
                   borderRadius: 2,
                   mb: 1,
                   bgcolor: item.selected ? "#12417F" : "transparent", // Set background color to #12417F if selected
+                  cursor: "pointer",
                   "&:hover": {
                     bgcolor: "#12417F", // Consistent hover color
                     "& .MuiListItemIcon-root": { color: "white" }, // Change icon color to white
@@ -194,8 +201,12 @@ import {
           </List>
   
           <List sx={{ p: 2 }}>
-            <ListItem button onClick={() => {}} sx={{
+          <ListItem 
+            button 
+            onClick={() => navigate('/settings')} 
+            sx={{
               borderRadius: 2,
+              cursor: "pointer",
               "&:hover": {
                 bgcolor: "#12417f", // Consistent hover color
                 "& .MuiListItemIcon-root": { color: "white" }, // Change icon color to white

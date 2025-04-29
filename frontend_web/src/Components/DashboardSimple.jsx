@@ -123,6 +123,7 @@ import {
                   borderRadius: 2,
                   mb: 1,
                   bgcolor: item.selected ? "#12417F" : "transparent",
+                  cursor: "pointer",
                   "&:hover": {
                     bgcolor: "#12417F",
                     "& .MuiListItemIcon-root": { color: "white" },
@@ -158,8 +159,11 @@ import {
           </List>
   
           <List sx={{ p: 2 }}>
-            <ListItem button onClick={() => {}} sx={{
+            <ListItem button 
+            onClick={() => navigate('/settings')} 
+            sx={{
               borderRadius: 2,
+              cursor: "pointer",
               "&:hover": {
                 bgcolor: "#12417f",
                 "& .MuiListItemIcon-root": { color: "white" },
