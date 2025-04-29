@@ -7,6 +7,10 @@ import FlagIcon from "@mui/icons-material/Flag";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import alarmSoundFile from "/src/assets/sounds/sound2.mp3";
 
+import caloriesgif from "/src/assets/gif/calories.gif";
+import workoutgif from "/src/assets/gif/workouticon.gif";
+import greenstepsgif from "/src/assets/gif/greensteps.gif";
+
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [timer, setTimer] = useState(0);
@@ -166,7 +170,7 @@ const Dashboard = () => {
                 style={{ fontSize: "50px" }}
               />
               <img
-                src="/src/assets/gif/workouticon.gif"
+                src={workoutgif}
                 alt="Workout Animation"
                 className="hidden group-hover:block w-12 h-12 mx-auto"
               />
@@ -186,7 +190,7 @@ const Dashboard = () => {
                 style={{ fontSize: "50px" }}
               />
               <img
-                src="/src/assets/gif/greensteps.gif"
+                src={greenstepsgif}
                 alt="Steps Animation"
                 className="hidden group-hover:block w-14 h-14 mx-auto"
               />
@@ -206,7 +210,7 @@ const Dashboard = () => {
                 style={{ fontSize: "50px" }}
               />
               <img
-                src="/src/assets/gif/calories.gif"
+                src={caloriesgif}
                 alt="Calories Animation"
                 className="hidden group-hover:block w-12 h-12 mx-auto"
               />

@@ -12,6 +12,21 @@ import SearchIcon from "@mui/icons-material/Search"
 import FilterIcon from "@mui/icons-material/FilterList"
 import ChevronDownIcon from "@mui/icons-material/ExpandMore"
 import FlameIcon from "@mui/icons-material/Whatshot"
+import BBPress from "/src/assets/gif/Intermediate/Barbell Bench Press.gif?height=200&width=300"
+import BSquat from "/src/assets/gif/Intermediate/Barbell Squat.gif?height=200&width=300"
+import DLift from "/src/assets/gif/Advanced/Deadlift.gif?height=200&width=300"
+import DbCurl from "/src/assets/gif/Beginner/Dumbbell Curl.gif?height=200&width=300"
+import PullUp from "/src/assets/gif/Beginner/Pull-Up.gif?height=200&width=300"
+import PushUp from "/src/assets/gif/Beginner/Push-Up.gif?height=200&width=300"
+import Lunges from "/src/assets/gif/Beginner/Lunges.gif?height=200&width=300"
+import Plank from "/src/assets/gif/Beginner/Plank.gif?height=200&width=300"
+import OverheadPress from "/src/assets/gif/Intermediate/Overhead Press.gif?height=200&width=300"
+import BORow from "/src/assets/gif/Intermediate/Bent-Over Row.gif?height=200&width=300"
+import LegPress from "/src/assets/gif/Intermediate/Leg Press.gif?height=200&width=300"
+import IDPress from "/src/assets/gif/Advanced/Incline Dumbbell Press.gif?height=200&width=300"
+import Snatch from "/src/assets/gif/Advanced/Snatch.gif?height=200&width=300"
+import CJ from "/src/assets/gif/Advanced/Clean and Jerk.gif?height=200&width=300"
+import FSquat from "/src/assets/gif/Advanced/Front Squat.gif?height=200&width=300"
 
 export default function StrengthTraining() {
   const { user } = useContext(AuthContext) // Get the authenticated user from context
@@ -67,105 +82,105 @@ export default function StrengthTraining() {
       name: "Barbell Bench Press",
       muscleGroup: "chest",
       difficulty: "intermediate",
-      imageUrl: "/src/assets/gif/Intermediate/Barbell Bench Press.gif?height=200&width=300",
+      imageUrl: BBPress,
     },
     {
       id: "ex2",
       name: "Barbell Squat",
       muscleGroup: "legs",
       difficulty: "intermediate",
-      imageUrl: "/src/assets/gif/Intermediate/Barbell Squat.gif?height=200&width=300",
+      imageUrl: BSquat,
     },
     {
       id: "ex3",
       name: "Deadlift",
       muscleGroup: "back",
       difficulty: "advanced",
-      imageUrl: "/src/assets/gif/Advanced/Deadlift.gif?height=200&width=300",
+      imageUrl: DLift,
     },
     {
       id: "ex4",
       name: "Dumbbell Bicep Curl",
       muscleGroup: "arms",
       difficulty: "beginner",
-      imageUrl: "/src/assets/gif/Beginner/Dumbbell Curl.gif?height=200&width=300",
+      imageUrl: DbCurl,
     },
     {
       id: "ex5",
       name: "Pull-Up",
       muscleGroup: "back",
       difficulty: "beginner",
-      imageUrl: "/src/assets/gif/Beginner/Pull-Up.gif?height=200&width=300",
+      imageUrl: PullUp,
     },
     {
       id: "ex6",
       name: "Push-Up",
       muscleGroup: "chest",
       difficulty: "beginner",
-      imageUrl: "/src/assets/gif/Beginner/Push-Up.gif?height=200&width=300",
+      imageUrl: PushUp,
     },
     {
       id: "ex7",
       name: "Lunges",
       muscleGroup: "legs",
       difficulty: "beginner",
-      imageUrl: "/src/assets/gif/Beginner/Lunges.gif?height=200&width=300",
+      imageUrl: Lunges,
     },
     {
       id: "ex8",
       name: "Plank",
       muscleGroup: "core",
       difficulty: "beginner",
-      imageUrl: "/src/assets/gif/Beginner/Plank.gif?height=200&width=300",
+      imageUrl: Plank,
     },
     {
       id: "ex9",
       name: "Overhead Press",
       muscleGroup: "shoulders",
       difficulty: "intermediate",
-      imageUrl: "/src/assets/gif/Intermediate/Overhead Press.gif?height=200&width=300",
+      imageUrl: OverheadPress,
     },
     {
       id: "ex10",
       name: "Bent-Over Row",
       muscleGroup: "back",
       difficulty: "intermediate",
-      imageUrl: "/src/assets/gif/Intermediate/Bent-Over Row.gif?height=200&width=300",
+      imageUrl: BORow,
     },
     {
       id: "ex11",
       name: "Leg Press",
       muscleGroup: "legs",
       difficulty: "intermediate",
-      imageUrl: "/src/assets/gif/Intermediate/Leg Press.gif?height=200&width=300",
+      imageUrl: LegPress,
     },
     {
       id: "ex12",
       name: "Incline Dumbbell Press",
       muscleGroup: "chest",
       difficulty: "advanced",
-      imageUrl: "/src/assets/gif/Advanced/Incline Dumbbell Press.gif?height=200&width=300",
+      imageUrl: IDPress,
     },
     {
       id: "ex13",
       name: "Snatch",
       muscleGroup: "full body",
       difficulty: "advanced",
-      imageUrl: "/src/assets/gif/Advanced/Snatch.gif?height=200&width=300",
+      imageUrl: Snatch,
     },
     {
       id: "ex14",
       name: "Clean and Jerk",
       muscleGroup: "full body",
       difficulty: "advanced",
-      imageUrl: "/src/assets/gif/Advanced/Clean and Jerk.gif?height=200&width=300",
+      imageUrl: CJ,
     },
     {
       id: "ex15",
       name: "Front Squat",
       muscleGroup: "legs",
       difficulty: "advanced",
-      imageUrl: "/src/assets/gif/Advanced/Front Squat.gif?height=200&width=300",
+      imageUrl: FSquat,
     },
   ]
 
