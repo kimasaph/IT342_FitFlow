@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="20dp"
     android:layout_marginBottom="16dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp">
@@ -19,6 +22,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:padding="16dp"
+
             android:background="#FFF9E6">
 
             <TextView
@@ -60,5 +64,6 @@
             android:contentDescription="Delete meal"
             android:background="?android:selectableItemBackgroundBorderless"
             app:tint="#FF3B30" />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

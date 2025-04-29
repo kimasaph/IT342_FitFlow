@@ -26,6 +26,20 @@
     <color name="green">#1DB954</color>
     <color name="green_dark">#18A349</color>
 
+    <color name="search_background">#F5F5F5</color>
+    <color name="dark_gray">#757575</color>
+
+
+    <!-- Add these to your colors.xml file if they don't exist -->
+    <color name="red">#FF5722</color>
+    <color name="blue">#2196F3</color>
+
+    <color name="purple">#9C27B0</color>
+
+
+    <!-- Achievements -->
+    <color name="cyan">#00BCD4</color>
+
 
 
 
