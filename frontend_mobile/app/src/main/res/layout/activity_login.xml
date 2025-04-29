@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#2196F3"
-    tools:context=".Login">
+    tools:context=".login.Login">
 
 
     <VideoView
@@ -14,8 +14,10 @@
         android:layout_height="901dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.625"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -130,7 +132,9 @@
         android:inputType="textEmailAddress"
         android:paddingLeft="15dp"
         android:textColor="#FDFDFD"
+        android:textColorHint="#FFFFFF"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword3"
         app:layout_constraintEnd_toEndOf="@+id/txtView"
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="@+id/txtView"
@@ -149,6 +153,7 @@
         android:inputType="textPassword"
         android:paddingLeft="15dp"
         android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/btnLogin"
         app:layout_constraintEnd_toEndOf="parent"

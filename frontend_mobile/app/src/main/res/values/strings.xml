@@ -25,7 +25,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-
     <string name="strength_training">Strength Training</string>
     <string name="back">Back</string>
     <string name="history">History</string>
@@ -40,6 +39,92 @@
     <string name="use_template">Use Template</string>
     <string name="exercises_content">Exercises Tab Content</string>
     <string name="history_content">History Tab Content</string>
+
+
+    <string name="search">Search</string>
+    <string name="search_exercises">Search exercises…</string>
+    <string name="all_difficulties">All Difficulties</string>
+    <string name="filter">Filter</string>
+    <string name="sort">Sort</string>
+    <string name="completed">Completed</string>
+    <string name="view_details">View Details</string>
+    <string name="add">Add</string>
+    <string name="exercise_image">Exercise Image</string>
+
+    <string name="workout_history">Workout History</string>
+    <string name="summary_stats">Summary Stats</string>
+    <string name="total_workouts">Total Workouts</string>
+    <string name="total_sets">Total Sets</string>
+    <string name="calories_burned">Calories Burned</string>
+    <string name="muscle_groups">Muscle Groups</string>
+    <string name="legs">legs</string>
+    <string name="chest">chest</string>
+    <string name="all_completed_workouts">All Completed Workouts</string>
+
+    <string name="zero_cal">0 cal</string>
+    <string name="date_4_23_2025">4/23/2025</string>
+    <string name="no_exercises_recorded">No exercises recorded</string>
+    <string name="new_workout">New Workout</string>
+    <string name="fourteen_cal">14 cal</string>
+    <string name="date_4_22_2025">4/22/2025</string>
+    <string name="exercises_colon">Exercises:</string>
+    <string name="one_completed_exercise">1 completed exercise</string>
+    <string name="barbell_squat">Barbell Squat</string>
+    <string name="one_sets">1 sets</string>
+    <string name="set_1">Set\n1</string>
+    <string name="weight_14_kg">Weight\n14 kg</string>
+    <string name="reps_2">Reps\n2</string>
+
+    <string name="thirtyfive_cal">35 cal</string>
+    <string name="barbell_bench_press">Barbell Bench Press</string>
+    <string name="reps_5">Reps\n5</string>
+    <string name="calories">Calories</string>
+
+
+    <string name="add_exercise">Add Exercise</string>
+    <string name="workout_progress">Workout Progress</string>
+    <string name="percentage_100">100%</string>
+    <string name="calories_value">8 calories</string>
+    <string name="estimated_burn">Estimated burn</string>
+    <string name="rest_timer">Rest Timer</string>
+    <string name="timer_default">01:00</string>
+    <string name="start_timer">Start Timer</string>
+    <string name="timer_icon">Timer Icon</string>
+    <string name="timer_30s">0.5m</string>
+    <string name="timer_1m">1m</string>
+    <string name="timer_1m30s">1.5m</string>
+    <string name="timer_2m">2m</string>
+    <string name="complete_workout">Complete Workout</string>
+    <string name="delete">Delete</string>
+    <string name="hash_symbol">#</string>
+    <string name="weight_kg">Weight (kg)</string>
+    <string name="reps">Reps</string>
+    <string name="done">Done</string>
+    <string name="add_set">Add Set</string>
+    <string name="weight_hint">Weight</string>
+    <string name="reps_hint">Reps</string>
+
+    <string name="no_history">No History</string>
+    <string name="no_workout_history">No Workout History</string>
+    <string name="complete_workouts_to_see_history">Complete workouts to see your history and track your progress</string>
+
+
+    <string name="add_to_workout">Add to Workout</string>
+
+    <string name="cardio_instructions">Follow these instructions for an effective cardio workout:\n\n1. Start with a 2-minute warm-up\n2. Complete each exercise for the specified duration\n3. Rest for 15-30 seconds between exercises\n4. Maintain proper form throughout\n5. Stay hydrated during your workout\n6. Cool down with light stretching after completing all exercises</string>
+    <string name="cardio_workout_tips">• Breathe rhythmically throughout each exercise\n• Focus on form over speed\n• Modify exercises as needed for your fitness level\n• Increase intensity gradually over time\n• Listen to your body and take breaks when needed\n• For best results, complete this workout 3-4 times per week</string>
+    <string name="cardio_benefits">Regular cardio workouts provide numerous benefits:\n\n• Improved heart health\n• Increased lung capacity\n• Enhanced metabolism\n• Better mood and reduced stress\n• Improved sleep quality\n• Increased energy levels\n• Weight management\n• Lower blood pressure\n• Stronger immune system</string>
+
+
+    <string name="yoga_instructions">How to use this workout:\n\n1. Select your difficulty level before starting\n2. Press the play button to start the pose timer\n3. Follow the instructions for each pose\n4. Focus on proper form and breathing\n5. Use the navigation buttons to move between poses\n6. Complete all poses for maximum benefit</string>
+    <string name="yoga_tips">• Wear comfortable clothing that allows free movement\n• Practice on a non-slip yoga mat\n• Always warm up before attempting more difficult poses\n• Move slowly and mindfully between poses\n• Focus on your breath throughout the practice\n• Never force your body into painful positions\n• Modify poses as needed for your body\n• Practice regularly for best results</string>
+    <string name="yoga_benefits">Regular yoga practice provides numerous benefits:\n\n• Increased flexibility and range of motion\n• Improved strength and muscle tone\n• Better posture and body awareness\n• Reduced stress and anxiety\n• Enhanced balance and coordination\n• Improved breathing and energy levels\n• Better focus and mental clarity\n• Reduced risk of injury\n• Improved sleep quality</string>
+
+    <string name="category_nutrition">Nutrition</string>
+    <string name="category_health">Health</string>
+    <string name="category_workout">Workout</string>
+    <string name="category_general">General</string>
+    <string name="category_tracking">Tracking</string>
 
 
 </resources>

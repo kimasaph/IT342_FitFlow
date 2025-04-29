@@ -1,22 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/fitflowlogoblue"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/Theme.FitFlow"
         tools:targetApi="31">
+
+        <receiver android:name=".notification.ReminderReceiver" />
+
+
         <activity
-            android:name=".StrengthTraining"
+            android:name=".progress.ProgressActivity"
             android:exported="false" />
         <activity
-            android:name=".CurrentWorkoutFragment"
+            android:name=".achievementsPlan.GoalsAchievementsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".workoutPlan.yogaWorkout.YogaWorkoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".workoutPlan.cardioWorkout.CardioWorkoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".workoutPlan.WorkoutActivity"
+            android:exported="false"
+            android:label="Track Workout" />
+        <activity
+            android:name=".workoutPlan.StrengthTraining"
+            android:exported="false" />
+        <activity
+            android:name=".workoutPlan.CurrentWorkoutFragment"
             android:exported="false" />
         <activity
             android:name=".ActivityStrengthTraining"
@@ -25,31 +48,31 @@
             android:name=".Goals"
             android:exported="false" />
         <activity
-            android:name=".MealPlanActivity"
+            android:name=".mealPlan.MealPlanActivity"
             android:exported="false" />
         <activity
-            android:name=".WorkoutPlanActivity"
+            android:name=".workoutPlan.WorkoutPlanActivity"
             android:exported="false" />
         <activity
-            android:name=".BodyGoalSettings"
+            android:name=".settings.BodyGoalSettings"
             android:exported="false" />
         <activity
-            android:name=".NutritionSettings"
+            android:name=".settings.NutritionSettings"
             android:exported="false" />
         <activity
-            android:name=".WorkoutSettings"
+            android:name=".settings.WorkoutSettings"
             android:exported="false" />
         <activity
-            android:name=".MyGoals"
+            android:name=".goalPlan.MyGoals"
             android:exported="false" />
         <activity
-            android:name=".ProfileData"
+            android:name=".user.ProfileData"
             android:exported="false" />
         <activity
-            android:name=".Settings"
+            android:name=".settings.FitFlowSettings"
             android:exported="false" />
         <activity
-            android:name=".RegistrationForm2"
+            android:name=".registration.RegistrationForm2"
             android:exported="false" />
 
         <meta-data
@@ -69,19 +92,19 @@
             android:name=".FitFlowDashboard"
             android:exported="false" />
         <activity
-            android:name=".PasswordChangeSuccessful"
+            android:name=".forgotPassword.PasswordChangeSuccessful"
             android:exported="false" />
         <activity
-            android:name=".SetNewPassword"
+            android:name=".forgotPassword.SetNewPassword"
             android:exported="false" />
         <activity
-            android:name=".ForgotPasswordConfirmationCode"
+            android:name=".forgotPassword.ForgotPasswordConfirmationCode"
             android:exported="false" />
         <activity
-            android:name=".ForgotPassword1"
+            android:name=".forgotPassword.ForgotPassword1"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".login.Login"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -91,19 +114,21 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Add this line for your Registration activity -->
+        </activity>
+
+        <!-- Add this line for your Registration activity -->
         <activity
-            android:name=".Registration"
+            android:name=".registration.Registration"
             android:exported="true"
             tools:ignore="Instantiatable" />
         <activity
-            android:name=".RegistrationConfirmationCode"
+            android:name=".registration.RegistrationConfirmationCode"
             android:exported="true" />
         <activity
-            android:name=".RegistrationForm"
+            android:name=".registration.RegistrationForm"
             android:exported="true" />
         <activity
-            android:name=".RegistrationSuccess"
+            android:name=".registration.RegistrationSuccess"
             android:exported="true" />
     </application>
 

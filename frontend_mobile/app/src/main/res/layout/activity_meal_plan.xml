@@ -236,7 +236,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
                         android:scaleType="fitXY"
-                        android:src="@drawable/ic_meal"
                         android:background="#EBF5FF" />
 
                     <!-- Meal tags -->
@@ -386,6 +385,7 @@
                         android:gravity="center">
 
                         <TextView
+                            android:id="@+id/tv_current_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Wed, Apr 15"
@@ -402,6 +402,7 @@
                         android:gravity="center">
 
                         <TextView
+                            android:id="@+id/tv_total_protein"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="180"
@@ -410,6 +411,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Proteins"
@@ -425,6 +427,7 @@
                         android:gravity="center">
 
                         <TextView
+                            android:id="@+id/tv_total_fat"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="70"
@@ -433,6 +436,8 @@
                             android:textStyle="bold" />
 
                         <TextView
+
+
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Fat"
@@ -448,6 +453,7 @@
                         android:gravity="center">
 
                         <TextView
+                            android:id="@+id/tv_total_carbs"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="250"
@@ -456,6 +462,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Carbs"
@@ -470,7 +477,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="25dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -520,7 +527,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingBottom="16dp" />
+                    android:paddingBottom="16dp"
+                    android:divider="?android:attr/listDivider"
+                    android:showDividers="middle"
+                    android:dividerPadding="16dp" />
+
 
 
                 <!-- Breakfast Card -->

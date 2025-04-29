@@ -8,6 +8,8 @@ import android.widget.Button
 import android.widget.MediaController
 import android.widget.TextView
 import android.widget.VideoView
+import edu.cit.fitflow.login.Login
+import edu.cit.fitflow.registration.RegistrationForm
 
 class MainActivity : AppCompatActivity() {
 

@@ -60,11 +60,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/search_icon"
+            android:id="@+id/img_notification"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_search"
+            android:src="@drawable/ic_notification"
+            app:tint="#42C0FB"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/img_settings"
             app:layout_constraintTop_toTopOf="parent" />
@@ -284,6 +285,7 @@
                                 app:tint="#0021FD" />
 
                             <TextView
+                                android:id="@+id/workout_progress_count"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
@@ -366,6 +368,7 @@
                                 android:src="@drawable/ic_fire" />
 
                             <TextView
+                                android:id="@+id/calories_progress_count"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
@@ -572,59 +575,65 @@
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_1"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="1"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_2"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="2"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_3"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:background="@drawable/calendar_day_scheduled"
+                            android:gravity="center"
                             android:text="3"
                             android:textAlignment="center"
-                            android:gravity="center"
-                            android:textSize="12sp"
-                            android:background="@drawable/calendar_day_scheduled"
-                            android:textColor="#42C0FB" />
+                            android:textColor="#42C0FB"
+                            android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_4"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="4"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_5"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="5"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_6"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="6"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
                     </LinearLayout>
 
@@ -636,70 +645,77 @@
                         android:layout_marginBottom="8dp">
 
                         <TextView
+                            android:id="@+id/day_7"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="7"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_8"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:background="@drawable/calendar_day_scheduled"
+                            android:gravity="center"
                             android:text="8"
                             android:textAlignment="center"
-                            android:gravity="center"
-                            android:textSize="12sp"
-                            android:background="@drawable/calendar_day_scheduled"
-                            android:textColor="#42C0FB" />
+                            android:textColor="#42C0FB"
+                            android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_9"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="9"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_10"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="10"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_11"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="11"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_12"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:background="@drawable/calendar_day_scheduled"
+                            android:gravity="center"
                             android:text="12"
                             android:textAlignment="center"
-                            android:gravity="center"
-                            android:textSize="12sp"
-                            android:background="@drawable/calendar_day_scheduled"
-                            android:textColor="#42C0FB" />
+                            android:textColor="#42C0FB"
+                            android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_13"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="13"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
                     </LinearLayout>
 
@@ -711,70 +727,77 @@
                         android:layout_marginBottom="8dp">
 
                         <TextView
+                            android:id="@+id/day_14"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="14"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_15"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:background="@drawable/calendar_day_scheduled"
+                            android:gravity="center"
                             android:text="15"
                             android:textAlignment="center"
-                            android:gravity="center"
-                            android:textSize="12sp"
-                            android:background="@drawable/calendar_day_scheduled"
-                            android:textColor="#42C0FB" />
+                            android:textColor="#42C0FB"
+                            android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_16"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="16"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_17"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="17"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_18"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="18"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_19"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:background="@drawable/calendar_day_scheduled"
+                            android:gravity="center"
                             android:text="19"
                             android:textAlignment="center"
-                            android:gravity="center"
-                            android:textSize="12sp"
-                            android:background="@drawable/calendar_day_scheduled"
-                            android:textColor="#42C0FB" />
+                            android:textColor="#42C0FB"
+                            android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_20"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="20"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
                     </LinearLayout>
 
@@ -786,74 +809,81 @@
                         android:layout_marginBottom="8dp">
 
                         <TextView
+                            android:id="@+id/day_21"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
-                            android:text="21"
-                            android:textAlignment="center"
                             android:gravity="center"
+                            android:text="21"
 
+                            android:textAlignment="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_22"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="22"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_23"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="23"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_24"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:background="@drawable/calendar_day_scheduled"
+                            android:gravity="center"
                             android:text="24"
                             android:textAlignment="center"
-                            android:gravity="center"
-                            android:textSize="12sp"
-                            android:background="@drawable/calendar_day_scheduled"
-                            android:textColor="#42C0FB" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="32dp"
-                            android:layout_weight="1"
-                            android:text="25"
-                            android:textAlignment="center"
-                            android:gravity="center"
+                            android:textColor="#42C0FB"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_25"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
-                            android:text="26"
-                            android:textAlignment="center"
                             android:gravity="center"
-                            android:textSize="12sp"
-                            android:background="@drawable/calendar_day_current"
-                            android:textColor="#FFFFFF" />
+                            android:text="25"
+                            android:textAlignment="center"
+                            android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_26"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:background="@drawable/calendar_day_current"
+                            android:gravity="center"
+                            android:text="26"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/day_27"
+                            android:layout_width="0dp"
+                            android:layout_height="32dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/calendar_day_scheduled"
+                            android:gravity="center"
                             android:text="27"
                             android:textAlignment="center"
-                            android:gravity="center"
-                            android:textSize="12sp"
-                            android:background="@drawable/calendar_day_scheduled"
-                            android:textColor="#42C0FB" />
+                            android:textColor="#42C0FB"
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <!-- Calendar Grid (Fifth Row) -->
@@ -864,30 +894,33 @@
                         android:layout_marginBottom="12dp">
 
                         <TextView
+                            android:id="@+id/day_28"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="28"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_29"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="29"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/day_30"
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="30"
                             android:textAlignment="center"
-                            android:gravity="center"
                             android:textSize="12sp" />
 
                         <TextView
@@ -1028,94 +1061,7 @@
                     android:text="Recent" />
             </com.google.android.material.tabs.TabLayout>
 
-            <!-- Full Body Workout Card -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp"
-                android:layout_marginBottom="12dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
-
-                    <View
-                        android:id="@+id/blue_indicator"
-                        android:layout_width="4dp"
-                        android:layout_height="0dp"
-                        android:background="#3F51B5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginStart="16dp"
-                        app:layout_constraintStart_toEndOf="@id/blue_indicator"
-                        app:layout_constraintEnd_toStartOf="@id/arrow_right1"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_tiger"
-                            android:drawablePadding="8dp"
-                            android:drawableTint="#3F51B5"
-                            android:text="Workout Tracker"
-                            android:textColor="#3F51B5"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="8dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="45 min"
-                                android:textSize="14sp"
-                                android:textColor="#757575" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Intermediate"
-                                android:textSize="14sp"
-                                android:textColor="#757575"
-                                android:background="@drawable/rounded_tag_background"
-                                android:paddingStart="8dp"
-                                android:paddingEnd="8dp"
-                                android:paddingTop="2dp"
-                                android:paddingBottom="2dp"
-                                android:layout_marginStart="16dp" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="8 exercises"
-                            android:textSize="14sp"
-                            android:textColor="#757575"
-                            android:layout_marginTop="8dp" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/arrow_right1"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_arrow_right"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
 
             <!-- Upper Body Workout Card -->
             <androidx.cardview.widget.CardView
@@ -1154,7 +1100,7 @@
                             android:drawableLeft="@drawable/ic_flag"
                             android:drawablePadding="8dp"
                             android:drawableTint="#4CAF50"
-                            android:text="Goals Tracker"
+                            android:text="Achievements Tracker"
                             android:textColor="#4CAF50"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -1168,14 +1114,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="30 min"
+                                android:text="Real-time tracking"
                                 android:textSize="14sp"
                                 android:textColor="#757575" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Beginner"
+                                android:text="All levels"
                                 android:textSize="14sp"
                                 android:textColor="#757575"
                                 android:background="@drawable/rounded_tag_background"
@@ -1189,7 +1135,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="6 exercises"
+                            android:text="Loading achievements..."
                             android:textSize="14sp"
                             android:textColor="#757575"
                             android:layout_marginTop="8dp" />
@@ -1257,14 +1203,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="25 min"
+                                android:text="Real-time tracking"
                                 android:textSize="14sp"
                                 android:textColor="#757575" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Advanced"
+                                android:text="All levels"
                                 android:textSize="14sp"
                                 android:textColor="#757575"
                                 android:background="@drawable/rounded_tag_background"
@@ -1294,6 +1240,98 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardWorkout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/card_workout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <View
+                        android:id="@+id/purple_indicator"
+                        android:layout_width="4dp"
+                        android:layout_height="0dp"
+                        android:background="#3F51B5"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toStartOf="@id/arrow_right4"
+                        app:layout_constraintStart_toEndOf="@id/purple_indicator"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_dumbell"
+                            android:drawablePadding="8dp"
+                            android:drawableTint="#3F51B5"
+                            android:text="Track Workout"
+                            android:textColor="#3F51B5"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Real-time tracking"
+                                android:textColor="#757575"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:background="@drawable/rounded_tag_background"
+                                android:paddingStart="8dp"
+                                android:paddingTop="2dp"
+                                android:paddingEnd="8dp"
+                                android:paddingBottom="2dp"
+                                android:text="All levels"
+                                android:textColor="#757575"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/workout_count_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="0 workouts completed"
+                            android:textColor="#757575"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/arrow_right4"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
@@ -1622,9 +1660,28 @@
                         android:textSize="12sp"
                         android:layout_marginTop="4dp" />
                 </LinearLayout>
+                <!-- Below your meal/workout sections -->
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAchievementsDashboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:clipToPadding="false"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_dashboard_achievement" />
+
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
