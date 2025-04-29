@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import DashboardTemplate from '/src/Components/DashboardTemplate';
 import { Box } from '@mui/material'; // Import MUI Box
+import bg from '/src/assets/gif/consentbg.gif'; // Import background image
+import logoFF from '/src/assets/images/logoFitFlow.png'; // Import logo image
+import backButton from '/src/assets/images/LeftArrow.png'; // Import back button image
 
 const Waiver = () => {
     const navigate = useNavigate();
@@ -44,7 +47,7 @@ const Waiver = () => {
         <DashboardTemplate>
             <Box m={0} p={0} className="min-h-screen flex justify-center items-center relative"
                 style={{
-                    backgroundImage: "url('/src/assets/gif/consentbg.gif')",
+                    backgroundImage: bg,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
@@ -54,7 +57,7 @@ const Waiver = () => {
             >
                 {/* FitFlow Logo */}
                 <img
-                    src="/src/assets/images/logoFitFlow.png"
+                    src={logoFF}
                     alt="FitFlow Logo"
                     className="absolute top-4 right-4 w-16 h-16"
                 />
@@ -65,7 +68,7 @@ const Waiver = () => {
                         onClick={() => navigate(-1)}
                     >
                         <img
-                            src="/src/assets/images/LeftArrow.png"
+                            src={backButton}
                             alt="Back"
                             className="w-5 h-5 mr-2"
                         />

@@ -60,7 +60,7 @@ const UserMadeMeals = ({ onSelectMeal, onAddMeal, onDeleteMeal, userMealsData = 
       const parsedUser = JSON.parse(storedUser);
       const userId = parsedUser.id || parsedUser.userId;
       
-      const response = await axios.get(`http://localhost:8080/api/meals/user/${userId}`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/meals/user/${userId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -144,7 +144,7 @@ const UserMadeMeals = ({ onSelectMeal, onAddMeal, onDeleteMeal, userMealsData = 
       }
       
       // Send delete request to the API
-      await axios.delete(`http://localhost:8080/api/meals/${mealToDelete.id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/meals/${mealToDelete.id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

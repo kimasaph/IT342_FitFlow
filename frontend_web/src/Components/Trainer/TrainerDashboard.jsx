@@ -52,7 +52,7 @@ export default function TrainerDashboard() {
   const fetchClients = async () => {
     try {
       const token = localStorage.getItem("token"); // Retrieve token from localStorage
-      const response = await axios.get(`http://localhost:8080/trainer/clients`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/trainer/clients`, {
         headers: {
           Authorization: `Bearer ${token}`, // Pass token in Authorization header
         },
@@ -67,7 +67,7 @@ export default function TrainerDashboard() {
   const fetchTrainerStats = async () => {
     try {
       const token = localStorage.getItem("token"); // Retrieve token from localStorage
-      const response = await axios.get(`http://localhost:8080/trainer/stats`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/trainer/stats`, {
         headers: {
           Authorization: `Bearer ${token}`, // Pass token in Authorization header
         },
@@ -82,7 +82,7 @@ export default function TrainerDashboard() {
     try {
       const token = localStorage.getItem("token"); // Retrieve token from localStorage
       const userId = localStorage.getItem("userId");
-      const response = await axios.get(`http://localhost:8080/api/auth/user/${userId}`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`, // Pass token in Authorization header
         },
@@ -96,7 +96,7 @@ export default function TrainerDashboard() {
   const fetchWorkouts = async () => {
     try {
       const token = localStorage.getItem("token"); // Retrieve token from localStorage
-      const response = await axios.get(`http://localhost:8080/trainer/workouts`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/trainer/workouts`, {
         headers: {
           Authorization: `Bearer ${token}`, // Pass token in Authorization header
         },
@@ -114,7 +114,7 @@ export default function TrainerDashboard() {
       const token = localStorage.getItem("token"); // Retrieve token from localStorage
       const userId = localStorage.getItem("userId");
       await axios.put(
-        `http://localhost:8080/trainer/update-profile?trainerId=${userId}`,
+        `${import.meta.env.VITE_API_URL}/trainer/update-profile?trainerId=${userId}`,
         trainerDetails,
         {
           headers: {
