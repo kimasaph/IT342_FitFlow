@@ -54,7 +54,7 @@ const SidebarSettings = () => {
     { text: "Workout", icon: <FitnessCenterIcon />, route: "/workout" },
     { text: "Diet Plan", icon: <RestaurantIcon />, route: "/diet-plan" },
     { text: "Goals", icon: <FlagIcon />, route: "/goals" },
-    { text: "My Schedule", icon: <CalendarMonthIcon />, route: "/my-schedule" },
+    { text: "My Schedule", icon: <CalendarMonthIcon />, route: "/schedule" },
     { text: "Progress", icon: <BarChartIcon />, route: "/progress", hasArrow: true },
   ]);
 
@@ -158,6 +158,7 @@ const SidebarSettings = () => {
                 borderRadius: 2,
                 mb: 1,
                 bgcolor: item.selected ? "#12417F" : "transparent",
+                cursor: "pointer",
                 "&:hover": {
                   bgcolor: "#12417F",
                   "& .MuiListItemIcon-root": { color: "white" },
