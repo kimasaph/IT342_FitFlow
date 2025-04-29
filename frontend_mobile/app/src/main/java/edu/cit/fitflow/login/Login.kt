@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import edu.cit.fitflow.FitFlowDashboard
 import edu.cit.fitflow.forgotPassword.ForgotPassword1
 import edu.cit.fitflow.R
@@ -18,9 +22,25 @@ import retrofit2.Response
 
 class Login : AppCompatActivity() {
 
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private val GOOGLE_SIGN_IN_REQUEST_CODE = 1001
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        // Configure Google Sign-In
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        val btnGoogleSignIn = findViewById<Button>(R.id.btnGoogle2)
+        btnGoogleSignIn.setOnClickListener {
+            val signInIntent = googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE)
+        }
 
         // Video Background
         val videoView = findViewById<VideoView>(R.id.vidGetStarted1)
@@ -76,10 +96,9 @@ class Login : AppCompatActivity() {
                             putString("firstName", user.firstName)
                             putString("lastName", user.lastName)
                             putString("email", user.email)
-                            putString("profilePicturePath", user.profilePicturePath) // <-- ADD THIS
+                            putString("profilePicturePath", user.profilePicturePath)
                             apply()
                         }
-
 
                         Log.d("Login", "Saved User Data: ${user.firstName}, ${user.lastName}, ${user.email}")
 
@@ -104,7 +123,32 @@ class Login : AppCompatActivity() {
                 }
             })
         }
-
-        //History
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                if (account != null) {
+                    val email = account.email
+                    val name = account.displayName
+
+                    Toast.makeText(this, "Signed in as $name ($email)", Toast.LENGTH_SHORT).show()
+
+                    // ✅ Move to Dashboard after successful Google Sign-In
+                    val intent = Intent(this, FitFlowDashboard::class.java)
+                    intent.putExtra("FIRST_NAME", name)  // You can also split full name if needed
+                    intent.putExtra("EMAIL", email)
+                    startActivity(intent)
+                    finish()  // Close Login page
+                }
+            } catch (e: ApiException) {
+                Toast.makeText(this, "Google Sign-In failed: ${e.statusCode}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 }
